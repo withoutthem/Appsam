@@ -3,9 +3,9 @@ import './App.css';
 
 function App() {
   const testAPI = ()=>{
-    axios.get('/api/test')
+    axios.post('api/auth/signup',{userID:'테스트아이디이다', name:'빅터', userPassword:'0네개국룰'})
     .then((res)=>{
-      console.log(res.data)
+      console.log(res.data);
     })
     .catch((e)=>{
       console.log(e)
