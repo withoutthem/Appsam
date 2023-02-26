@@ -15,7 +15,7 @@ const ENV = process.env;
 // cors setting 
 const cors = require('cors'); 
 let corsOption = {
-    origin: `http://localhost:${ENV.PORT}`, // 허용 주소(8080)
+    origin: `http://localhost:${ENV.PORT}`, // 허용 주소
     credentials: true  // true시 설정 내용을 응답헤더에 추가해 줌
 }
 app.use(cors(corsOption)); // CORS 미들웨어 추가

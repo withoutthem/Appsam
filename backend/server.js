@@ -13,7 +13,7 @@ const nowServer = async ()=>{
         })
     }
     catch(e){
-        console.log('DB에러다'+e)
+        console.log('DB에러다 뿡'+e)
     }
 }
 
