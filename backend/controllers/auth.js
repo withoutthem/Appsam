@@ -11,7 +11,7 @@ const userWithEncoded = ({userID, name, userPassword})=>{ //암호화
     return user
 }
 
-const signUp = async (req, res)=>{
+const signUp = async (req, res, next)=>{
     try{
         const {userID} = req.body;
         //여기에 중복검사
@@ -19,7 +19,8 @@ const signUp = async (req, res)=>{
         res.status(201).send('생성 success!')
     }
     catch(err){
-        res.send(err)
+        res.send(err+'에러입니다.')
+        console.log('err: '+ err)
     }
 }
 

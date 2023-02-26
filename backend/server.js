@@ -2,7 +2,6 @@ const app = require('./app');
 const http = require('http');
 const mongoose = require('./db');
 
-
 const server = http.createServer(app);
 
 const nowServer = async ()=>{
