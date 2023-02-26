@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 mongoose.set('strictQuery', false);
-module.exports = mongoose.connect(process.env.DB_URL, {
+module.exports = mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   // useFindAndModify: false,

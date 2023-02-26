@@ -8,7 +8,6 @@ const cookieParser = require('cookie-parser');
 
 //environment variables setting
 require('dotenv').config(); 
-const ENV = process.env;
 
 app.use(logger);
 
