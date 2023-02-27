@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/User');
 
 const createUserData = async(userInput)=>{ //db에 저장하는 함수
     const user = await userWithEncoded(userInput);
