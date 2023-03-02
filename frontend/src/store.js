@@ -1,5 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit'
 
+
 const user = createSlice({
     name : 'user', //state 이름
     initialState : 'kim', //state 값
@@ -12,6 +13,7 @@ const user = createSlice({
     }
   })
 
+
 const objectExample = createSlice({
     name : 'objectExample',
     initialState : {obj : 'Victor'},
@@ -22,13 +24,16 @@ const objectExample = createSlice({
     }
 })
 
+
 //export 해줘야됨 
 export const { changeName } = user.actions 
 export const { changeNameByObject } = objectExample.actions
 //Slice이름.actions 하면 state 변경함수가 전부 그 자리에 출력 
 //그 중에 changeName을 변수에 담아 export하겠다는 뜻이다.
 
-export default configureStore({ //state 등록하기
+
+//state 등록하기
+export default configureStore({ 
   reducer: {
     user : user.reducer, //작명 : createSlice만든거.reducer
     objectExample : objectExample.reducer
