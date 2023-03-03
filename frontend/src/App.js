@@ -1,29 +1,38 @@
-// import axios from 'axios';
-import './style/main.css';
-import Header from './components/Header';
-import Footer from './components/Footer'
+//libs 
 import { Routes, Route, Link } from 'react-router-dom';
 
-function App() {
-  // const testAPI = ()=>{
-  //   axios.post('api/auth/signup',{userID:'테스트아이디이다', name:'빅터', userPassword:'0네개국룰'})
-  //   .then((res)=>{
-  //     console.log(res.data);
-  //   })
-  //   .catch((e)=>{
-  //     console.log(e)
-  //   })
-  // }
+// css
+import './style/main.css';
 
+// components
+import Header from './components/Header';
+import Footer from './components/Footer';
+
+// pages
+import Main from './pages/Main';
+import CompareAll from './pages/CompareAll';
+import CompareOne from './pages/CompareOne';
+import Apple from './pages/Apple';
+import Samsung from './pages/Samsung';
+import DonationPlease from './pages/DonationPlease';
+import WhosDev from './pages/WhosDev';
+import SagongSa from './pages/SagongSa';
+
+
+const App = () => {
 
   return (
     <div className="wrapper"> 
     <Header></Header>
 		<Routes> 
-			<Route path="/" element={ <div>메인페이지에</div> } />
-      <Route path="/detail" element={ <div>상세페이지</div> } />
-      <Route path="/about" element={ <div>어바웃페이지</div> } />
-      <Route path="*" element={ <div>404</div> } />
+			<Route path="/" element={ <Main/> } />
+      <Route path="/compareall" element={ <CompareAll/> } />
+      <Route path="/compareone" element={ <CompareOne/> } />
+      <Route path="/apple" element={ <Apple/> } />
+      <Route path="/samsung" element={ <Samsung/> } />
+      <Route path="/donation" element={ <DonationPlease/> } />
+      <Route path="/whosdev" element={ <WhosDev/> } />
+      <Route path="*" element={ <SagongSa/> } />
     </Routes>
     <Footer></Footer>
     </div>

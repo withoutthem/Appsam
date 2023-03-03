@@ -15,8 +15,12 @@ const Header = ()=>{
         <div className="headerWrap">
             <ul className="header">
                 <li><Link to='/'>홈</Link></li>
-                <li><Link to='/about'>홈</Link></li>
-                <li><Link to='/detail'>홈</Link></li>
+                <li><Link to='/compareall'>풀세트 비교</Link></li>
+                <li><Link to='/compareone'>제품 상세 비교</Link></li>
+                <li><Link to='/apple'>APPLE 전용관</Link></li>
+                <li><Link to='/samsung'>SAMSUNG 전용관</Link></li>
+                <li><Link to='/donation'>후원하기</Link></li>
+                <li><Link to='/whosdev'>개발자새끼누구임?</Link></li>
             </ul>
         </div>
     )
