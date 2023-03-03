@@ -1,4 +1,17 @@
- 
+@mixin flexCenter {display: flex; justify-content: center; align-items: center;}
+@mixin flexAlign {display: flex; align-items: center;}
+@mixin flexJust {display: flex; justify-content: center;}
 
-
- 
+// header 
+.headerWrap{@include flexAlign(); font-weight: 600; height:80px; width:100%; justify-content: space-between; padding:0 24px;}
+.headerWrap .logoWrap{@include flexAlign();}
+.headerWrap .logoWrap img:first-of-type{margin-right:12px}
+.headerWrap .header{@include flexCenter();}
+.headerWrap .header li{margin-right:22px;}
+.headerWrap .header li:last-of-type{margin-right:0px;}
+.headerWrap .header li a{color:#555454; font-size:18px; text-decoration: none; padding:10px; }
+.headerWrap .loginWrap{@include flexAlign()}
+.headerWrap .loginWrap .signWrap{@include flexAlign()}
+.headerWrap .loginWrap .signWrap .headerIcon{width:30px; height:30px;}
+.headerWrap .loginWrap .signWrap button{font-size:18px; font-weight: 600; margin-right:18px;}
+.headerWrap .loginWrap .signWrap button:last-of-type{margin-right:0;}

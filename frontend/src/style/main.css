@@ -1,1 +1,64 @@
-/*# sourceMappingURL=main.css.map */
+.headerWrap {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  height: 80px;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.headerWrap .logoWrap {
+  display: flex;
+  align-items: center;
+}
+
+.headerWrap .logoWrap img:first-of-type {
+  margin-right: 12px;
+}
+
+.headerWrap .header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerWrap .header li {
+  margin-right: 22px;
+}
+
+.headerWrap .header li:last-of-type {
+  margin-right: 0px;
+}
+
+.headerWrap .header li a {
+  color: #555454;
+  font-size: 18px;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.headerWrap .loginWrap {
+  display: flex;
+  align-items: center;
+}
+
+.headerWrap .loginWrap .signWrap {
+  display: flex;
+  align-items: center;
+}
+
+.headerWrap .loginWrap .signWrap .headerIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.headerWrap .loginWrap .signWrap button {
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 18px;
+}
+
+.headerWrap .loginWrap .signWrap button:last-of-type {
+  margin-right: 0;
+}/*# sourceMappingURL=main.css.map */

@@ -3,10 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 
 // css
 import './style/main.css';
-
-// components
-import Header from './components/Header';
-import Footer from './components/Footer';
+import './style/reset.css';
 
 // pages
 import Main from './pages/Main';
@@ -17,6 +14,11 @@ import Samsung from './pages/Samsung';
 import DonationPlease from './pages/DonationPlease';
 import WhosDev from './pages/WhosDev';
 import SagongSa from './pages/SagongSa';
+
+// components
+import Header from './components/Header';
+import Footer from './components/Footer';
+
 
 
 const App = () => {
