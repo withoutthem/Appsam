@@ -11,6 +11,7 @@ const Header = ()=>{
 
     const result = useSelector(state => state) // redux의 state 모두 불러오기
     
+
     return(
         <div className="headerWrap">
             <div className="logoWrap">
@@ -28,7 +29,7 @@ const Header = ()=>{
             </ul>
             <div className="loginWrap">
                 {
-                    result.user.nowSignInState ? 
+                    !result.user.nowSignInState ? 
                     <div className="signWrap">
                         <button onClick={signInTestClick}>Sign In</button>
                         <button>Sign Up</button>

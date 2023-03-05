@@ -2,6 +2,10 @@
 @mixin flexAlign {display: flex; align-items: center;}
 @mixin flexJust {display: flex; justify-content: center;}
 
+//globalAlarm
+.globalPop{position:fixed; top:0; left:0; right:0; bottom:0;width:100vw; height:100vh; background:rgba(0,0,0,0.5);}
+.globalPop_inner { width:20%; height:20%; background:#fff; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);}
+
 // header 
 .headerWrap{@include flexAlign(); font-weight: 600; height:80px; width:100%; justify-content: space-between; padding:0 24px;}
 .headerWrap .logoWrap{@include flexAlign();}
