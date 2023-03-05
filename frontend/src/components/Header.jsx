@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from "react-redux"
 import { signInTest } from "./../store.js"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+
 
 const Header = ()=>{
     let dispatch = useDispatch(); //store.js에 요청을 보내줌
+    const navigate = useNavigate(); //navigation router
 
     const signInTestClick = () =>{
         dispatch(signInTest());
@@ -32,7 +35,7 @@ const Header = ()=>{
                     !result.user.nowSignInState ? 
                     <div className="signWrap">
                         <button onClick={signInTestClick}>Sign In</button>
-                        <button>Sign Up</button>
+                        <button onClick={() => (navigate('/sign'))} >Sign Up</button>
                     </div> : 
                     <div className="signWrap">
                         <button><img className="headerIcon" src={process.env.PUBLIC_URL + 'images/icons/settingIcon.png'} alt="" /></button>

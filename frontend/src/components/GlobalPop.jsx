@@ -18,9 +18,7 @@ const GlobalPop = ()=>{
                 </div>
             </div>
         }
-
         </>
-
     )
 }
 
