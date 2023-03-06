@@ -6,13 +6,21 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    userPassword :{
+        type:String,
+        required:true
+    },
+    userEmail : {
+        type:String,
+        required: true
+    },
     name : {
         type:String,
         required: true
     },
-    userPassword :{
-        type:String,
-        required:true
+    userAorS : {
+        type: String,
+        required : true
     }
 },
 {versionKey : false}
