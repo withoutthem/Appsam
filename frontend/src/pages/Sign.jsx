@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react"
 import { validation } from '../util/validation'
 import axios from 'axios'
-import produce from "immer"
 
 const Sign = () =>{
     //임시 State
@@ -50,7 +49,6 @@ const Sign = () =>{
         <form className="signWrap" onSubmit={(e)=>{signUp(e)}}>
             <div className="idWrap formWrap">
                 <p>id : 5~15자 영문, 특수문자 제외</p>
-                {userInfo.id[0]}
                 <input type="id" value={userInfo.id[0]} onChange={(e)=>{setInfo('id', e.target.value)}} />
                 {userInfo.id[1] ? '가능' : '불가능'}
             </div>
