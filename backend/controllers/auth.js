@@ -1,14 +1,14 @@
 const User = require('../models/User');
 
+const userWithEncoded = ({id, ps, name, email, aors})=>{ //암호화
+    //여기에 암호화
+    const user = new User({id, ps, name, email, aors}); //schema에 집어넣기
+    return user
+}
+
 const createUserData = async(userInput)=>{ //db에 저장하는 함수
     const user = await userWithEncoded(userInput);
     return user.save();
-}
-
-const userWithEncoded = ({userID, name, userPassword})=>{ //암호화
-    //여기에 암호화
-    const user = new User({userID, name, userPassword}); //schema에 집어넣기
-    return user
 }
 
 const signUp = async (req, res, next)=>{

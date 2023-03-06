@@ -32,6 +32,7 @@
 .headerWrap .logoWrap {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .headerWrap .logoWrap img:first-of-type {
@@ -82,4 +83,9 @@
 
 .headerWrap .loginWrap .signWrap button:last-of-type {
   margin-right: 0;
+}
+
+.signWrap .formWrap {
+  display: flex;
+  align-items: center;
 }/*# sourceMappingURL=main.css.map */

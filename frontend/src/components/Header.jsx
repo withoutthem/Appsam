@@ -17,7 +17,7 @@ const Header = ()=>{
 
     return(
         <div className="headerWrap">
-            <div className="logoWrap">
+            <div className="logoWrap" onClick={()=>{navigate('/')}}>
                 <img src={process.env.PUBLIC_URL + 'images/AS.png'} alt="" />
                 <img src={process.env.PUBLIC_URL + 'images/AppSam.png'} alt="" />
             </div>
