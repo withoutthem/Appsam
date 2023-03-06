@@ -38,7 +38,7 @@ const Sign = () =>{
         e.preventDefault();
         if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1]){
             axios.post('/api/auth/signup', userInfo)
-            .then((result)=>{console.log(userInfo)})
+            .then((result)=>{console.log(result)})
         }
         else{
             alert('다 채워라')

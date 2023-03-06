@@ -1,26 +1,36 @@
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const { logEvents } = require('../middleware/logger');
 
-const userWithEncoded = ({id, ps, name, email, aors})=>{ //암호화
-    //여기에 암호화
-    const user = new User({id, ps, name, email, aors}); //schema에 집어넣기
-    return user
+// 해시함수로 암호화하여 스키마 생성 후 저장하는 함수
+const createUserData = async ({id, ps, name, email, aors})=>{ 
+    try{
+        const encryptedPS = await bcrypt.hash(ps[0].toString(),10)
+        const user = new User({id:id[0], ps:encryptedPS, name : name[0], email : email[0], aors: aors[0]}); //schema에 집어넣기
+        await user.save();
+    }
+    catch(e){
+        throw new Error(e + '생성')
+    }
 }
 
-const createUserData = async(userInput)=>{ //db에 저장하는 함수
-    const user = await userWithEncoded(userInput);
-    return user.save();
-}
-
+//메인 로직
 const signUp = async (req, res, next)=>{
     try{
-        const {userID} = req.body;
-        //여기에 중복검사
-        await createUserData(req.body);
-        res.status(201).send('생성 success!')
+        await User.find({id : req.body['id'][0]}) //db에서 id 중복값 찾기
+        .then((result)=>{
+            if(result[0]){ //찾은 값이 있으면
+                throw new Error('중복값'); //걍 에러 밖에 던져버림
+            }
+            else{ //중복값이 없으면
+                createUserData(req.body); //새 유저 db 생성
+                res.status(201).send('생성 success') //성공
+            }
+        })
     }
-    catch(err){
-        res.send(err+'에러입니다.')
-        console.log('err: '+ err)
+    catch(err){ 
+        res.status(409).send(err + '에러일걸요?'); //던진 에러 받아서 에러 보내기
+        logEvents(`${err}\t${req.url}\t${req.headers.origin}`,'errLog.log') //에러 로그에 기본적인거만 저장
     }
 }
 
