@@ -7,5 +7,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 *{box-sizing: border-box; font-family: 'SUIT-Regular';}
 a{text-decoration: none;}
-button{background:none; border: none; cursor: pointer;}
+button{background:lightskyblue; color:#545454; border: none; cursor: pointer;}
 input{display:block;}
+button:disabled{background:#fff; color:#efefef; cursor:not-allowed}

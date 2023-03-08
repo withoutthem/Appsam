@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux"
-import { signInTest } from "./../store.js"
 import { Link, useNavigate } from "react-router-dom";
 
 
@@ -7,10 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 const Header = ()=>{
     let dispatch = useDispatch(); //store.js에 요청을 보내줌
     const navigate = useNavigate(); //navigation router
-
-    const signInTestClick = () =>{
-        dispatch(signInTest());
-    }
 
     const result = useSelector(state => state) // redux의 state 모두 불러오기
     
@@ -34,14 +29,14 @@ const Header = ()=>{
                 {
                     !result.user.nowSignInState ? 
                     <div className="signWrap">
-                        <button onClick={signInTestClick}>Sign In</button>
+                        <button onClick={() => (navigate('/signin'))}>Sign In</button>
                         <button onClick={() => (navigate('/sign'))} >Sign Up</button>
                     </div> : 
                     <div className="signWrap">
                         <button><img className="headerIcon" src={process.env.PUBLIC_URL + 'images/icons/settingIcon.png'} alt="" /></button>
                         <button><img className="headerIcon" src={process.env.PUBLIC_URL + 'images/icons/userIcon.png'} alt="" /></button>
                         <p>NickName</p>
-                        <button onClick={signInTestClick}>Log Out</button>
+                        <button>Log Out</button>
                     </div>
                 }
             </div>

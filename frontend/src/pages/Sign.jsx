@@ -53,7 +53,8 @@ const Sign = () =>{
         }
     },[userInfo, resMessage])
 
-    const getDuplicate = useCallback((value)=>{ //중복확인 버튼
+    //중복확인 버튼
+    const getDuplicate = useCallback((value)=>{ 
         const nowKey = Object.keys(value)[0] // 현재 타입
         const nowVal = Object.values(value)[0] // 현재 값
 
@@ -89,7 +90,8 @@ const Sign = () =>{
 
     },[resMessage])
 
-    const signUp = (e)=>{ //submit 버튼
+    //submit 버튼
+    const signUp = (e)=>{ 
         e.preventDefault();
         if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1] && isDuplicatedID && isDuplicatedEmail){
             axios.post('/api/auth/signup', userInfo)
