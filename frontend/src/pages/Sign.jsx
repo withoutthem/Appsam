@@ -3,7 +3,15 @@ import { validation } from '../util/validation'
 import axios from 'axios'
 
 const Sign = () =>{
-    //임시 State
+    
+    const [isDuplicatedID, setIsDuplicatedID] = useState(false)
+    const [isDuplicatedEmail, setIsDuplicatedEmail] = useState(false)
+
+    const [resMessage, setResMessage] = useState({
+        id : '',
+        email : ''
+    });
+
     const [userInfo, setUserInfo] = useState({
         id: ['',false],
         ps: ['',false],
@@ -30,43 +38,112 @@ const Sign = () =>{
             tempInfo[type] = tempInfo_type;
             setUserInfo(tempInfo);
         }
-    },[userInfo])
 
+        if(type === 'id'){
+            setIsDuplicatedID(false);
+            let tempMessage = {...resMessage};
+            tempMessage.id = '';
+            setResMessage(tempMessage);
+        }
+        if(type === 'email'){
+            setIsDuplicatedEmail(false);
+            let tempMessage = {...resMessage};
+            tempMessage.email = '';
+            setResMessage(tempMessage);
+        }
+    },[userInfo, resMessage])
 
+    const getDuplicate = useCallback((value)=>{ //중복확인 버튼
+        const nowKey = Object.keys(value)[0] // 현재 타입
+        const nowVal = Object.values(value)[0] // 현재 값
 
-    const signUp = (e)=>{
-        e.preventDefault();
-        if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1]){
-            axios.post('/api/auth/signup', userInfo)
-            .then((result)=>{console.log(result)})
+        if(validation(nowKey, nowVal)){
+            axios.post('/api/auth/dupchk', value)
+            .then((result)=>{
+                if(nowKey === 'id'){
+                    if(result.data.stat){
+                        setIsDuplicatedID(result.data.stat)
+                    }
+                    else{
+                        let tempMessage = {...resMessage};
+                        tempMessage[`${nowKey}`] = result.data.message;
+                        setResMessage(tempMessage)
+                    }
+                }
+                else{
+                    if(result.data.stat){
+                        setIsDuplicatedEmail(result.data.stat)
+                    }
+                    else{
+                        let tempMessage = {...resMessage};
+                        tempMessage[`${nowKey}`] = result.data.message;
+                        setResMessage(tempMessage)
+                    }
+                }
+            })
+            .catch((e)=>{console.log(e)})
         }
         else{
-            alert('다 채워라')
+            alert('형식을 확인하세요.')
+        }
+
+    },[resMessage])
+
+    const signUp = (e)=>{ //submit 버튼
+        e.preventDefault();
+        if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1] && isDuplicatedID && isDuplicatedEmail){
+            axios.post('/api/auth/signup', userInfo)
+            .then((result)=>{
+                    alert(result.data.message);
+            })
+            .catch(e => alert(e.response.data.message))
+        }
+        else if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1]){
+            alert('중복검사를 진행하세요.')
+        }
+        else if(isDuplicatedID && isDuplicatedEmail){
+            alert('형식에 맞는지 확인해주세요.')
+        }
+        else{
+            alert('다시 한번 확인해주세요.')
         }
     }
 
     return (
         <form className="signWrap" onSubmit={(e)=>{signUp(e)}}>
+
             <div className="idWrap formWrap">
                 <p>id : 5~15자 영문, 특수문자 제외</p>
                 <input type="id" value={userInfo.id[0]} onChange={(e)=>{setInfo('id', e.target.value)}} />
+                {
+                    isDuplicatedID ? <div>사용 가능합니다</div> : <button type="button" onClick={()=>{getDuplicate({id : userInfo.id[0]})}}>중복 확인</button>
+                }
+                {resMessage.id}
                 {userInfo.id[1] ? '가능' : '불가능'}
             </div>
+
             <div className="psWrap formWrap">
                 <p>ps : 5~15자 아무문자, 특수문자1개이상 필요</p>
                 <input type="password" value={userInfo.ps[0]} onChange={(e)=>{setInfo('ps', e.target.value)}} />
                 {userInfo.ps[1] ? '가능' : '불가능'}
             </div>
+
             <div className="emailWrap formWrap">
                 <p>email : 이메일형식</p>
                 <input type="email" value={userInfo.email[0]} onChange={(e)=>{setInfo('email', e.target.value)}}/>
+                {
+                    isDuplicatedEmail ? <div>사용 가능합니다.</div> : <button type="button" onClick={()=>{getDuplicate({email : userInfo.email[0]})}}>중복 확인</button>
+                }
+                {resMessage.email}
                 {userInfo.email[1] ? '가능' : '불가능'}
             </div>
+
             <div className="nameWrap formWrap">
                 <p>name : 3~15자 한글,영문,숫자만 허용</p>
                 <input type="text" value={userInfo.name[0]} onChange={(e)=>{setInfo('name', e.target.value)}} />
                 {userInfo.name[1] ? '가능' : '불가능'}
             </div>
+
             <div className="aorsWrap">
                 <p>Apple or Samsung : 중립, 애플, 삼성 중 하나 선택</p>
                 <select name="" id="" onChange={(e)=>{setInfo('aors', e.target.value)}}>
@@ -75,6 +152,7 @@ const Sign = () =>{
                     <option value="Samsung">Samsung</option>
                 </select>            
             </div>
+
                 <button type="submit">submit</button>
         </form>
     )

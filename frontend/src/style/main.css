@@ -86,6 +86,6 @@
 }
 
 .signWrap .formWrap {
-  display: flex;
-  align-items: center;
+  margin: 20px;
+  padding: 20px;
 }/*# sourceMappingURL=main.css.map */

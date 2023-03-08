@@ -20,4 +20,4 @@
 .headerWrap .loginWrap .signWrap button{font-size:18px; font-weight: 600; margin-right:18px;}
 .headerWrap .loginWrap .signWrap button:last-of-type{margin-right:0;}
 
-.signWrap .formWrap{@include flexAlign()}
+.signWrap .formWrap{ margin: 20px; padding: 20px;}

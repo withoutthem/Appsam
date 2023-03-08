@@ -17,14 +17,23 @@ const createUserData = async ({id, ps, name, email, aors})=>{
 //메인 로직
 const signUp = async (req, res, next)=>{
     try{
-        await User.find({id : req.body['id'][0]}) //db에서 id 중복값 찾기
+        await User.find( //중복되는 id 혹은 email이 존재하는 경우
+            {
+                $or: [
+                  { id : req.body['id'][0] },
+                  { email : req.body['email'][0] }
+                ]
+              }
+        ) //db에서 id 중복값 찾기
         .then((result)=>{
             if(result[0]){ //찾은 값이 있으면
-                throw new Error('중복값'); //걍 에러 밖에 던져버림
+                res.status(409).send({stat:false, message: '이미 처리된 요청입니다. 서버에서 중복이 발생했습니다.'})
+                const error = new Error('서버에서 중복값 에러가 발생했습니다. 공격자일 수 있습니다.')
+                logEvents(`${error}\t${req.url}\t${req.headers.origin}`,'errLog.log') //에러 로그에 기본적인거만 저장
             }
             else{ //중복값이 없으면
                 createUserData(req.body); //새 유저 db 생성
-                res.status(201).send('생성 success') //성공
+                res.status(201).send({stat:true, message: '생성에 성공했습니다.'}) //성공
             }
         })
     }
