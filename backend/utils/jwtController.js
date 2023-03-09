@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
 const { logEvents } = require('../middleware/logger');
-
-const secretKey = preocess.env.SECRET;
-const options = {expiresIn: '3d', issuer: 'VictorLee', subject: 'userInfo'};
+require("dotenv").config();
+const secretKey = process.env.SECRET;
+const options = {expiresIn: '3d', issuer: 'VictorLeeAdmin', subject: 'userInfo'};
 
 // token check
 const checkJWT = (token)=>{

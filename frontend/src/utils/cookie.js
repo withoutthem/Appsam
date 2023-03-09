@@ -1,15 +1,27 @@
-import { Cookies } from 'react-cookie'
+import { Cookies } from 'react-cookie';
+let now = new Date();
+const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // 현재 시간에서 3일 후의 시간
+const options = {
+    path : '/',
+    expires: expires,
+    // httpOnly: true
+}
 
+// cookies.js 파일
 const cookies = new Cookies();
 
-// 쿠키 생성, 저장
-const setCookie = (name, value, option)=>{
-    return cookies.set(name, value, {...option})
-}
+//무적권 jwt 쿠키 가져오기
+export const getCookieJWT = () => {
+  return cookies.get('jwt');
+};
 
-// 겟쿠키
-const getCookie = (name)=>{
-    return cookies.get(name)
-}
+// 무적권 jwt만 세팅하는 셋쿠키
+export const setCookieJWT = (value) => {
+  cookies.set('jwt', value, options);
+};
 
-export { setCookie, getCookie };
+// 쿠키 제거하기
+export const removeCookie = (name, options) => {
+  cookies.remove(name, options);
+};
+
