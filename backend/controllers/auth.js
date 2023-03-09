@@ -44,11 +44,6 @@ const signUp = async (req, res, next)=>{
                     })
                     .catch(e => res.status(501).send({stat:false, message: '토큰생성 에러입니다. 마음이 아픕니다.'}))
                  })
-                // jwt용 데이터 가공 및 발급
-                // const jwtInfo = {id : req.body.id[0], email:req.body.email[0], name : req.body.name[0], aors: req.body.aors[0]};
-                //  createJWT(jwtInfo).then(token => {
-                //     res.status(201).send({stat:true, message:'생성에 성공했습니다.', userInfo : jwtInfo, jwt: token})
-                // })
                 .catch(e => {
                     res.status(501).send({stat:false, message: '서버 데이터 생성 오류입니다 마음이 아프네요.'})
                 })
