@@ -1,6 +1,8 @@
 const {checkJWT} = require('./jwtController');
 const {logEvents} = require('../middleware/logger');
 
+// /api/auth/jwt 로 get요청 시 
+
 const jwtValidator = (req, res)=>{
     if(req.headers.cookie && req.headers.cookie.length > 0){
     //jwt가 있는 경우 검사

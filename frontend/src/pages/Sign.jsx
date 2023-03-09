@@ -1,17 +1,24 @@
 import { useState, useCallback } from "react"
 import { validation } from '../utils/validation'
 import axios from 'axios'
+import { useDispatch } from 'react-redux';
+import { updateUserInfoTrue } from "../store";
+import { useNavigate } from 'react-router-dom';
+import { setCookieJWT } from '../utils/cookie';
 
 const Sign = () =>{
-    
+    //redux setting
+    const dispatch = useDispatch();
+    // navigate setting 
+    const navigate = useNavigate();
+
+    // Component 한정 state 모음 
     const [isDuplicatedID, setIsDuplicatedID] = useState(false)
     const [isDuplicatedEmail, setIsDuplicatedEmail] = useState(false)
-
     const [resMessage, setResMessage] = useState({
         id : '',
         email : ''
     });
-
     const [userInfo, setUserInfo] = useState({
         id: ['',false],
         ps: ['',false],
@@ -20,7 +27,7 @@ const Sign = () =>{
         aors: ['None', true]
     })
 
-    // onChange에 넣어 validate 후 임시state를 업데이트하는 함수
+    // onChange 시 validate 후 state를 업데이트하는 함수
     const setInfo = useCallback((type, nowVal)=>{ //type과 값을 받아 validation
         if(type !== 'email' && nowVal.length>15){
             return;
@@ -38,7 +45,6 @@ const Sign = () =>{
             tempInfo[type] = tempInfo_type;
             setUserInfo(tempInfo);
         }
-
         if(type === 'id'){
             setIsDuplicatedID(false);
             let tempMessage = {...resMessage};
@@ -57,7 +63,6 @@ const Sign = () =>{
     const getDuplicate = useCallback((value)=>{ 
         const nowKey = Object.keys(value)[0] // 현재 타입
         const nowVal = Object.values(value)[0] // 현재 값
-
         if(validation(nowKey, nowVal)){
             axios.post('/api/auth/dupchk', value)
             .then((result)=>{
@@ -94,11 +99,24 @@ const Sign = () =>{
     const signUp = (e)=>{ 
         e.preventDefault();
         if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1] && isDuplicatedID && isDuplicatedEmail){
+            //검증 완료 시
             axios.post('/api/auth/signup', userInfo)
-            .then((result)=>{
-                    alert(result.data.message);
+            .then(result=>{
+                dispatch(updateUserInfoTrue(result.data.userInfo));
+                setCookieJWT(result.data.jwt)
+                alert(result.data.message); 
             })
-            .catch(e => alert(e.response.data.message))
+            .then(()=>{
+                navigate('/')
+            })
+            .catch(e => {
+                if(e.response.message){
+                    alert(e.response.message)
+                }
+                else{
+                    alert(e)
+                }
+            })
         }
         else if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1]){
             alert('중복검사를 진행하세요.')

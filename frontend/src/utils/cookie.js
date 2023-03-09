@@ -25,3 +25,6 @@ export const removeCookie = (name, options) => {
   cookies.remove(name, options);
 };
 
+export const removeCookieJWT = ()=>{
+  cookies.remove('jwt');
+}

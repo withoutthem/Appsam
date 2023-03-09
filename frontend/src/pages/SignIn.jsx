@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { setCookieJWT } from "../utils/cookie";
-import {jwtValidator} from '../apis/jwtValidator';
-import { useSelector, useDispatch } from "react-redux";
-import { updateUserInfo } from "../store";
-import {useNavigate} from 'react-router-dom';
+import { jwtValidator } from '../apis/jwtValidator';
+import { useDispatch } from "react-redux";
+import { updateUserInfoTrue } from "../store";
+import { useNavigate } from 'react-router-dom';
 
 const SignIn = ()=>{
     //리덕스 세팅
     const dispatch = useDispatch();
-
     //navigate 세팅
     const navigate = useNavigate();
 
@@ -57,12 +56,12 @@ const SignIn = ()=>{
                 //받은 jwt를 쿠키에 저장
                 setCookieJWT(result.data.jwt)
                 //redux 글로벌에 userInfo 저장
-                dispatch(updateUserInfo(result.data.userInfo));
+                dispatch(updateUserInfoTrue(result.data.userInfo));
                 console.log('로그인 성공');
             })
             .then(()=>{
                 //navigateHook으로 이동
-                navigate(-1);
+                navigate('/');
             })
             .catch(e=>{
                 alert(e.response.data.message ? e.response.data.message : e)

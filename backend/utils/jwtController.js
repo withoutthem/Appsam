@@ -20,6 +20,7 @@ const checkJWT = (token)=>{
 }
 
 // create 
+//jwt 형식 {id:id, email:email, name:name. aors:aors}
 const createJWT = (info)=>{
     return new Promise((resolve, reject) =>{
         jwt.sign(info, secretKey, options, (err, token)=>{ //jwt.sign은 비동기 함수이다.

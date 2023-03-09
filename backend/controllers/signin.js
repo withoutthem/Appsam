@@ -17,7 +17,7 @@ const signIn = (req, res ,next) =>{
                     }
                     // id / ps 일치 확인 
                     if(same){
-                        const userData = {id : result.id, name : result.name, aors: result.aors}
+                        const userData = {id : result.id, email:result.email, name : result.name, aors: result.aors}
                         const jwt = ''
                         createJWT(userData)
                         .then((token)=>{

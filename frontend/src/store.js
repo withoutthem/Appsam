@@ -11,8 +11,11 @@ const user = createSlice({
       nowLogInState : false,
     }, //state 값
     reducers : { 
-      updateUserInfo(state, action){ 
-        return action.payload
+      updateUserInfoTrue(state, action){ 
+        return {...action.payload , nowLogInState:true}
+      },
+      updateUserInfoFalse(){
+        return {id:'', email:'', name:'', aors:'', nowLogInState:false}
       }
     }
   })
@@ -36,7 +39,7 @@ const user = createSlice({
 
 
 //reducers actions export
-export const { updateUserInfo } = user.actions 
+export const { updateUserInfoTrue, updateUserInfoFalse } = user.actions 
 export const { openPop, closePop } = globalPop.actions
 //Slice이름.actions 하면 state 변경함수가 전부 그 자리에 출력 
 //그 중에 changeName을 변수에 담아 export하겠다는 뜻이다.
