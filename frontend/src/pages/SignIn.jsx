@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getCookie, setCookie } from "../util/cookie";
+import { getCookie, setCookie } from "../utils/cookie";
 
 const SignIn = ()=>{
 
