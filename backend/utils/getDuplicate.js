@@ -14,7 +14,7 @@ const getDuplicate = (req, res, next )=>{
         })
     }
     catch(e){
-        console.log(e)
+        console.log(e + '예상하지 못한 에러당')
     }
 }
 

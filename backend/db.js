@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 mongoose.set('strictQuery', false);
 
+//db 연결모듈 싱글톤패턴
 const mongooseConnect = async ()=>{
   try{
     await mongoose.connect(process.env.DB_URI, {

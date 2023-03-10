@@ -7,35 +7,35 @@ const nameExp = /^[a-zA-Z0-9가-힣]{3,15}$/
 const validation = (type, value)=>{
     // validation 
     switch(type){
-        case 'id':
+        case 'id': //id
             if(idValExp.test(value)){
                 return true
             }
             else{
                 return false
             }
-        case 'ps':
+        case 'ps': //ps
             if(psValExp.test(value)){
                 return true
             }
             else{
                 return false
             }
-        case 'name':
+        case 'name': //name
             if(nameExp.test(value)){
                 return true
             }
             else{
                 return false
             }
-        case 'email':
+        case 'email': //email
             if(emailExp.test(value)){
                 return true
             }
             else{
                 return false
             }
-        case 'aors':
+        case 'aors': //aors
             return true
         default :
             console.log('Error!')

@@ -9,9 +9,10 @@ const cookieParser = require('cookie-parser');
 //environment variables setting
 require('dotenv').config(); 
 
+//logger middleware
 app.use(logger);
 
-// cors setting 
+// cors setting build 할 때 세팅 변경해야함
 const cors = require('cors'); 
 let corsOption = {
     origin: (origin, callback) =>{
@@ -37,8 +38,10 @@ app.use(cookieParser());
 // static path 
 app.use(express.static(path.join(__dirname, 'public'))) 
 
+//에러 핸들러 middleware
 app.use(errorHandler)
 
+//메인 라우터
 router(app);
 
 

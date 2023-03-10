@@ -32,25 +32,25 @@ import { removeCookieJWT } from './utils/cookie'
 import { updateUserInfoTrue, updateUserInfoFalse } from './store';
 
 const App = () => {
-  const location = useLocation();
-  const dispatch = useDispatch();
+  const location = useLocation(); //현재 location
+  const dispatch = useDispatch(); //store.js
 
   useEffect(()=>{
     if(location.pathname === '/signin' || location.pathname === '/sign'){ // auth관련 페이지들은 jwt토큰영향을 받지 않음.
     }
     else{
       jwtValidator().then(result =>{
-          dispatch(updateUserInfoTrue(result))
+          dispatch(updateUserInfoTrue(result)) //store의 user update (jwt토큰 기반)
       })
       .catch(e => { //에러 시 userInfo, jwt 삭제 
         if(e.etc !== 'No token'){ //토큰이 없으면 경고 창 없음. 조작된 토큰/만료 토큰은 경고를 띄워줌.
           alert(e.message)
         }        
-        dispatch(updateUserInfoFalse())
-        removeCookieJWT();
+        dispatch(updateUserInfoFalse()) //store의 user 삭제
+        removeCookieJWT(); //jwt 삭제
       })
     }
-  },[location, dispatch])
+  },[location, dispatch]) //location 이동 시마다 호출(signIn/signUp 제외)
 
   return (
     <div className="wrapper">

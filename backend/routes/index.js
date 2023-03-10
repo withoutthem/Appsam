@@ -1,3 +1,5 @@
+
+// 1 detph router
 const authRoutes = require('./auth');
 
 const router = (app)=>{

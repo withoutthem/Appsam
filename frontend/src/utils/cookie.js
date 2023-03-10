@@ -1,10 +1,12 @@
+// 쿠키 관리 유틸
+
 import { Cookies } from 'react-cookie';
 let now = new Date();
 const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // 현재 시간에서 3일 후의 시간
 const options = {
     path : '/',
     expires: expires,
-    // httpOnly: true 배포 시 true 테스트 할 것.
+    // httpOnly: true : 배포 시 true 테스트 할 것.
 }
 
 // cookies.js 파일
