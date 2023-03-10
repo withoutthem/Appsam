@@ -1,4 +1,4 @@
-
+// Strategy Pattern
 const idValExp = /^[a-zA-Z0-9]{5,15}$/
 const psValExp = /^(?=.*[!@#$%^&*()\-_=+{};:,<.>/?]).{5,15}$/
 const emailExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/

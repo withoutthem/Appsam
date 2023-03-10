@@ -1,5 +1,7 @@
 //libs 
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 // css
 import './style/main.css';
@@ -22,16 +24,40 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import GlobalPop from './components/GlobalPop';
 
+//module
+import { jwtValidator } from './utils/isLogin'
+import { removeCookieJWT } from './utils/cookie'
 
+//store 
+import { updateUserInfoTrue, updateUserInfoFalse } from './store';
 
 const App = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    if(location.pathname === '/signin' || location.pathname === '/sign'){ // auth관련 페이지들은 jwt토큰영향을 받지 않음.
+    }
+    else{
+      jwtValidator().then(result =>{
+          dispatch(updateUserInfoTrue(result))
+      })
+      .catch(e => { //에러 시 userInfo, jwt 삭제 
+        if(e.etc !== 'No token'){ //토큰이 없으면 경고 창 없음. 조작된 토큰/만료 토큰은 경고를 띄워줌.
+          alert(e.message)
+        }        
+        dispatch(updateUserInfoFalse())
+        removeCookieJWT();
+      })
+    }
+  },[location, dispatch])
 
   return (
     <div className="wrapper">
     <GlobalPop></GlobalPop>
     <Header></Header>
 		<Routes> 
-			<Route path="/" element={ <Main/> } />
+			<Route path="/" element={<Main/>} />
       <Route path="/compareall" element={ <CompareAll/> } />
       <Route path="/compareone" element={ <CompareOne/> } />
       <Route path="/apple" element={ <Apple/> } />

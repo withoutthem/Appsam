@@ -51,7 +51,7 @@ const signUp = async (req, res, next)=>{
         })
     }
     catch(err){ 
-        res.status(409).send(err + '에러일걸요?'); //던진 에러 받아서 에러 보내기
+        res.status(409).send({stat: false, message: err+'에러일거에요'}); //던진 에러 받아서 에러 보내기
         logEvents(`${err}\t${req.url}\t${req.headers.origin}`,'errLog.log') //에러 로그에 기본적인거만 저장
     }
 }

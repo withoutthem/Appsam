@@ -4,7 +4,7 @@ const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // 현재 시
 const options = {
     path : '/',
     expires: expires,
-    // httpOnly: true
+    // httpOnly: true 배포 시 true 테스트 할 것.
 }
 
 // cookies.js 파일
@@ -25,6 +25,7 @@ export const removeCookie = (name, options) => {
   cookies.remove(name, options);
 };
 
+// 무적권 jwt쿠키 없애기
 export const removeCookieJWT = ()=>{
   cookies.remove('jwt');
 }

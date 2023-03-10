@@ -5,16 +5,17 @@ const {logEvents} = require('../middleware/logger');
 
 const jwtValidator = (req, res)=>{
     if(req.headers.cookie && req.headers.cookie.length > 0){
-    //jwt가 있는 경우 검사
-    const nowJWT = req.headers.cookie.substring(4);
-    checkJWT(nowJWT)
-    .then(result=>{
-        res.send({stat:true, isValidJWT : true, message: '토큰 검증 성공입니다.', result :result})
-    })
-    .catch(error =>{
-        logEvents(`${error}유효하지 않은 토큰 접근\t${req.url}\t${req.headers.origin}`,'errLog.log')
-        res.status(401).send({stat: false, message: '유효하지 않은 토큰입니다.', etc: error});
-    })
+        //jwt가 있는 경우 검사
+        const nowJWT = req.headers.cookie.substring(4);
+        checkJWT(nowJWT)
+        .then(result=>{
+            const jwtInfo = {id: result.id, email : result.email, name : result.name, aors: result.aors}
+            res.send({stat:true, isValidJWT : true, message: '토큰 검증 성공입니다.', result :jwtInfo})
+        })
+        .catch(error =>{
+            logEvents(`${error}유효하지 않은 토큰 접근\t${req.url}\t${req.headers.origin}`,'errLog.log')
+            res.status(401).send({stat: false, message: '유효하지 않은 토큰입니다.', etc: error});
+        })
     }
     else{
         //jwt가 없는 경우  

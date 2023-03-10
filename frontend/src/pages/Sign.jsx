@@ -92,7 +92,6 @@ const Sign = () =>{
         else{
             alert('형식을 확인하세요.')
         }
-
     },[resMessage])
 
     //submit 버튼

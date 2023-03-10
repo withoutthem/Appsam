@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { setCookieJWT } from "../utils/cookie";
-import { jwtValidator } from '../apis/jwtValidator';
 import { useDispatch } from "react-redux";
 import { updateUserInfoTrue } from "../store";
 import { useNavigate } from 'react-router-dom';
@@ -11,13 +10,6 @@ const SignIn = ()=>{
     const dispatch = useDispatch();
     //navigate 세팅
     const navigate = useNavigate();
-
-    //auth 검증 test
-    const apiTest = ()=>{
-        jwtValidator(()=>{console.log('콜백1번 : 토큰 없음')}, ()=>{console.log('콜백2번 : 유효하지 않음')})
-        .then(result => console.log(result))
-        .catch(e => console.log(e))
-    }
 
     // temp state 
     const [userInput, setUserInput] = useState({
@@ -76,7 +68,6 @@ const SignIn = ()=>{
                 PASSWORD : <input type="password" value={userInput.ps} onChange={ e => onChange('ps', e.target.value) } />
                 <button type='submit' disabled={buttonState} >로그인버튼</button>
             </form>
-            <button onClick={()=>{apiTest()}}>API 테스트해서 받아보자</button>
         </div>
     )
 }
