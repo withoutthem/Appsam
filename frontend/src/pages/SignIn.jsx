@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { setCookieJWT } from "../utils/cookie";
 import { useDispatch } from "react-redux";
-import { updateUserInfoTrue } from "../store";
+import { updateUserInfoTrue, openPop } from "../store";
 import { useNavigate } from 'react-router-dom';
 
 const SignIn = ()=>{
@@ -40,7 +40,7 @@ const SignIn = ()=>{
     const submitBtn = (event, value)=>{
         event.preventDefault();
         if(buttonState){
-            alert('알 수 없는 에러입니다.')
+            dispatch(openPop('알 수 없는 에러입니다.'))
         }
         else{
             axios.post('/api/auth/signin', value)
@@ -56,7 +56,7 @@ const SignIn = ()=>{
                 navigate('/');
             })
             .catch(e=>{
-                alert(e.response.data.message ? e.response.data.message : e)
+                dispatch(openPop(e.response.data.message ? e.response.data.message : e))
             })
         }
     }

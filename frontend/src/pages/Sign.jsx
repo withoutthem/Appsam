@@ -2,7 +2,7 @@ import { useState, useCallback } from "react"
 import { validation } from '../utils/validation'
 import axios from 'axios'
 import { useDispatch } from 'react-redux';
-import { updateUserInfoTrue } from "../store";
+import { updateUserInfoTrue, openPop } from "../store";
 import { useNavigate } from 'react-router-dom';
 import { setCookieJWT } from '../utils/cookie';
 
@@ -90,9 +90,9 @@ const Sign = () =>{
             .catch((e)=>{console.log(e)})
         }
         else{
-            alert('형식을 확인하세요.')
+            dispatch(openPop('형식을 확인하세요'))
         }
-    },[resMessage])
+    },[resMessage, dispatch])
 
     //submit 버튼
     const signUp = (e)=>{ 
@@ -103,28 +103,28 @@ const Sign = () =>{
             .then(result=>{
                 dispatch(updateUserInfoTrue(result.data.userInfo));
                 setCookieJWT(result.data.jwt)
-                alert(result.data.message); 
+                dispatch(openPop(result.data.message)); 
             })
             .then(()=>{
                 navigate('/')
             })
             .catch(e => {
                 if(e.response.message){
-                    alert(e.response.message)
+                    dispatch(openPop(e.response.message))
                 }
                 else{
-                    alert(e)
+                    dispatch(openPop(e))
                 }
             })
         }
         else if(userInfo.id[1] && userInfo.ps[1] && userInfo.email[1] && userInfo.name[1] && userInfo.aors[1]){
-            alert('중복검사를 진행하세요.')
+            dispatch(openPop('중복검사를 진행하세요.'))
         }
         else if(isDuplicatedID && isDuplicatedEmail){
-            alert('형식에 맞는지 확인해주세요.')
+            dispatch(openPop('형식에 맞는지 확인해주세요.'))
         }
         else{
-            alert('다시 한번 확인해주세요.')
+            dispatch(openPop('다시 한번 확인해주세요.'))
         }
     }
 

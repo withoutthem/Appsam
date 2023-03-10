@@ -24,11 +24,13 @@ const user = createSlice({
   const globalPop = createSlice({
     name : 'globalPop',
     initialState : {
-      nowPopState: false
+      nowPopState: true,
+      nowMessage : '알림입니다.',
     },
     reducers :{
       openPop(state, action){
         state.nowPopState = true;
+        state.nowMessage = action.payload;
       },
       closePop(state, action){
         state.nowPopState = false

@@ -9,7 +9,7 @@
   background: rgba(0, 0, 0, 0.5);
 }
 
-.globalPop_inner {
+.globalPop .globalPop_inner {
   width: 20%;
   height: 20%;
   background: #fff;
@@ -17,6 +17,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.globalPop .globalPop_inner .globalPop_xBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 .headerWrap {

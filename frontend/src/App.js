@@ -29,7 +29,7 @@ import { jwtValidator } from './utils/isLogin'
 import { removeCookieJWT } from './utils/cookie'
 
 //store 
-import { updateUserInfoTrue, updateUserInfoFalse } from './store';
+import { updateUserInfoTrue, updateUserInfoFalse, openPop } from './store';
 
 const App = () => {
   const location = useLocation(); //현재 location
@@ -44,13 +44,13 @@ const App = () => {
       })
       .catch(e => { //에러 시 userInfo, jwt 삭제 
         if(e.etc !== 'No token'){ //토큰이 없으면 경고 창 없음. 조작된 토큰/만료 토큰은 경고를 띄워줌.
-          alert(e.message)
+          dispatch(openPop(e.message))
         }        
         dispatch(updateUserInfoFalse()) //store의 user 삭제
         removeCookieJWT(); //jwt 삭제
       })
     }
-  },[location, dispatch]) //location 이동 시마다 호출(signIn/signUp 제외)
+  },[location.pathname, dispatch]) //location 이동 시마다 호출(signIn/signUp 제외)
 
   return (
     <div className="wrapper">

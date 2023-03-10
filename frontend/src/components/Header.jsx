@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom";
 import { removeCookieJWT } from '../utils/cookie';
-import { updateUserInfoFalse } from '../store';
-
+import { updateUserInfoFalse, openPop } from '../store';
+import { getCookieJWT } from '../utils/cookie';
 
 const Header = ()=>{
     const dispatch = useDispatch(); //store.js에 요청을 보내줌
@@ -17,6 +17,11 @@ const Header = ()=>{
         dispatch(updateUserInfoFalse());
     }
 
+    const testButton = ()=>{
+        console.log(storeState.user);
+        console.log(getCookieJWT())
+        dispatch(openPop('test입니다'))
+    }
 
     return(
         <div className="headerWrap">
@@ -28,13 +33,13 @@ const Header = ()=>{
                 <li><Link to='/'>홈</Link></li>
                 <li><Link to='/compareall'>풀세트 비교</Link></li>
                 <li><Link to='/compareone'>제품 상세 비교</Link></li>
-                <li><Link to='/apple'>APPLE 전용관</Link></li>
-                <li><Link to='/samsung'>SAMSUNG 전용관</Link></li>
+                <li><Link to='/apple'>APPLE</Link></li>
+                <li><Link to='/samsung'>SAMSUNG</Link></li>
                 <li><Link to='/donation'>후원하기</Link></li>
                 <li><Link to='/whosdev'>개발자새끼누구임?</Link></li>
             </ul>
             <div className="loginWrap">
-                <button onClick={()=>{console.log(storeState.user)}} style={{background:'red', color: '#fff'}}>state 확인</button>
+                <button onClick={()=>{testButton()}} style={{background:'red', color: '#fff'}}>state 확인</button>
                 {
                     !storeState.user.nowLogInState ? 
                     <div className="signWrap">
