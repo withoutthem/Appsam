@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom";
-import { removeCookieJWT } from '../utils/cookie';
+import { removeCookieJWT, getCookieJWT } from '../utils/cookie';
 import { updateUserInfoFalse, openPop } from '../store';
-import { getCookieJWT } from '../utils/cookie';
+
 
 const Header = ()=>{
     const dispatch = useDispatch(); //store.js에 요청을 보내줌

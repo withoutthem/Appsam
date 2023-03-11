@@ -25,7 +25,7 @@ import Footer from './components/Footer';
 import GlobalPop from './components/GlobalPop';
 
 //module
-import { jwtValidator } from './utils/isLogin'
+import { jwtValidator } from './utils/jwtValidator'
 import { removeCookieJWT } from './utils/cookie'
 
 //store 

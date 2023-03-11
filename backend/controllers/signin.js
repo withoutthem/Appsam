@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const { logEvents } = require('../middleware/logger');
-const {createJWT} = require('../utils/jwtController');
+const { createJWT } = require('../utils/jwtController');
 
 // Sign In 메인 로직
 const signIn = (req, res ,next) =>{
