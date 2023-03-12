@@ -3,10 +3,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { tracking } = require('../controllers/tracking');
+const { firstSession } = require('../controllers/tracking');
 
 
-router.get('/', tracking) // /api/tracking/ (트래킹)
+router.get('/firstSession', firstSession) // /api/tracking/firstSession (트래킹)
 
 
 module.exports = router;
