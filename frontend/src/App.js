@@ -44,7 +44,8 @@ const App = () => {
     if(location.pathname === '/signin' || location.pathname === '/sign'){ // auth관련 페이지들은 jwt토큰영향을 받지 않음.
     }
     else{
-      jwtValidator().then(result =>{
+      jwtValidator()
+      .then(result =>{
           dispatch(updateUserInfoTrue(result)) //store의 user update (jwt토큰 기반)
       })
       .catch(e => { //에러 시 userInfo, jwt 삭제 
