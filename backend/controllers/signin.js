@@ -11,7 +11,7 @@ const signIn = (req, res ,next) =>{
             if(result){ //결과 있으면
                 bcrypt.compare(req.body.ps , result.ps, (err, same) => { //bcrypt로 클라이언트가 입력한 ps와 db의 해시ps를 비교함
                     if(err){ //알 수 없는 에러 발생 시 
-                        logEvents(`${err}\t${req.url}\t${req.headers.origin}`,'errLog.log')
+                        logEvents(`${err}\t${req.url}\t${req.headers.origin}\t ${req.ip}`,'errLog.log')
                         res.status(401).send({stat: false, message: '알 수 없는 에러입니다.', etc : 'unAuthorized'});
                         return // 중지
                     }
@@ -29,7 +29,7 @@ const signIn = (req, res ,next) =>{
                         })
                         .catch(err => {
                             res.status(501).send({stat:false, message: '토큰생성 에러입니다. 마음이 아픕니다.'}); // jwt생성 도중 발생한 에러
-                            logEvents(`${err}\t${req.url}\t${req.headers.origin}`,'errLog.log') //에러 로그에 기본적인거만 저장
+                            logEvents(`${err}\t${req.url}\t${req.headers.origin}\t ${req.ip}`,'errLog.log') //에러 로그에 기본적인거만 저장
                         })
                     }
                     else{ // ps 불일치
@@ -44,7 +44,7 @@ const signIn = (req, res ,next) =>{
     }
     catch(e){
         res.status(500).send({stat: false, message: '서버 에러입니다.'});
-        logEvents(`${e}\t${req.url}\t${req.headers.origin}`,'errLog.log');
+        logEvents(`${e}\t${req.url}\t${req.headers.origin}\t ${req.ip}`,'errLog.log');
     }
 }
 

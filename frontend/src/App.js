@@ -27,6 +27,7 @@ import GlobalPop from './components/GlobalPop';
 //module
 import { jwtValidator } from './utils/jwtValidator'
 import { removeCookieJWT } from './utils/cookie'
+import {tracking} from './utils/tracking';
 
 //store 
 import { updateUserInfoTrue, updateUserInfoFalse, openPop } from './store';
@@ -34,6 +35,10 @@ import { updateUserInfoTrue, updateUserInfoFalse, openPop } from './store';
 const App = () => {
   const location = useLocation(); //현재 location
   const dispatch = useDispatch(); //store.js
+
+  useEffect(()=>{
+    tracking()
+  },[])
 
   useEffect(()=>{
     if(location.pathname === '/signin' || location.pathname === '/sign'){ // auth관련 페이지들은 jwt토큰영향을 받지 않음.

@@ -9,7 +9,7 @@ const checkJWT = (token)=>{
     return new Promise((resolve, reject)=>{
         jwt.verify(token, secretKey, (err, decoded)=>{ //token 과 Key를 이용해 검증
             if(err){
-                logEvents(`${err}\t 유효하지 않은 토큰 에러입니다. `,'errLog.log');
+                logEvents(`${err}\t 유효하지 않은 토큰 에러입니다.\t ${req.ip} `,'errLog.log');
                 reject(err)
             }
             else{
@@ -25,7 +25,7 @@ const createJWT = (userInfo)=>{
     return new Promise((resolve, reject) =>{
         jwt.sign(userInfo, secretKey, options, (err, token)=>{ //userInfo를 받아 jwtToken 생성
             if (err){
-                logEvents(`${err}\t 토큰 생성 중 발생한 에러입니다. `,'errLog.log')
+                logEvents(`${err}\t 토큰 생성 중 발생한 에러입니다. \t ${req.ip} `,'errLog.log')
                 reject(err);
             }
             else resolve(token) //토큰 발급

@@ -32,7 +32,7 @@ const signUp = async (req, res, next)=>{
             if(result[0]){ //찾은 값이 있으면
                 res.status(409).send({stat:false, message: '이미 처리된 요청입니다. 서버에서 중복이 발생했습니다.'}) // signUp 두번 누른 것이므로 에러 보내줌
                 const error = new Error('서버에서 중복값 에러가 발생했습니다. 공격자일 수 있습니다.') //에러 던지기
-                logEvents(`${error}\t${req.url}\t${req.headers.origin}`,'errLog.log') //에러 로그에 기본적인거만 저장
+                logEvents(`${error}\t${req.url}\t${req.headers.origin}\t ${req.ip}`,'errLog.log') //에러 로그에 기본적인거만 저장
             }
             else{ //중복값이 없으면
                  createUserData(req.body) //새 유저 db 생성
@@ -52,7 +52,7 @@ const signUp = async (req, res, next)=>{
     }
     catch(err){ 
         res.status(409).send({stat: false, message: err+'에러일거에요'}); //던진 에러 받아서 에러 보내기
-        logEvents(`${err}\t${req.url}\t${req.headers.origin}`,'errLog.log') //에러 로그에 기본적인거만 저장
+        logEvents(`${err}\t${req.url}\t${req.headers.origin}\t ${req.ip}`,'errLog.log') //에러 로그에 기본적인거만 저장
     }
 }
 
