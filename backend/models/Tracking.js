@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const DailyDataSchema = new Schema({
-    date: Date,
+    date: String,
     data: {
       users: [String]
     },
@@ -10,3 +10,4 @@ const DailyDataSchema = new Schema({
   {timestamps: true}
   );
 
+  module.exports = mongoose.model('Daily', DailyDataSchema);

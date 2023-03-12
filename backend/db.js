@@ -9,8 +9,6 @@ const mongooseConnect = async ()=>{
       useUnifiedTopology: true,
       // useFindAndModify: false,
       // useCreateIndex: true,
-    }, ()=>{
-      console.log('연결되었습니다 db.js');
     })
   }
   catch(err){
