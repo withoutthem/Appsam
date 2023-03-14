@@ -1,10 +1,12 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import { openPop } from '../store'
+import { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { closeSnackBar, openSnackBar } from '../store'
+
 import deleteIcon from '../assets/images/icons/delete_24.png'
 import editIcon from '../assets/images/icons/edit_24.png'
 import like_no from '../assets/images/icons/like_no.png'
 import profileIMG  from '../assets/images/profile_img.jpeg' ;
+
 
 // 서버데이터 반영 이후 지울 것
 //api 목록
@@ -39,6 +41,19 @@ const MainChats = ({allData})=>{
         }]
     );
 
+    const snackBarTime = useRef(null);
+    const snackBar = (e, message) => {
+        e.preventDefault();
+        dispatch(openSnackBar(message));
+        if (snackBarTime.current !== null) {
+            clearTimeout(snackBarTime.current);
+        }
+        snackBarTime.current = setTimeout(() => {
+            dispatch(closeSnackBar());
+            snackBarTime.current = null;
+        }, 2000);
+    }
+
     return(
         <div className={`phoneWrap ${allData.type}`}>
             <img className="background" src={allData.background} alt="" />
@@ -56,8 +71,16 @@ const MainChats = ({allData})=>{
                     <Chat chatData = {chatData[0]}></Chat>
                 </ul>
                 <form className="chatInputForm">
-                    <input type="text" />
-                    <button onClick={(e)=>{e.preventDefault(); dispatch(openPop('진짜 보낼거임?'))}}>보내기</button>
+                    <div className="inputWrap">
+                        <div className="profileWrap">
+                                <img className="profileImg" src={profileIMG} alt="바인딩 해야함" />
+                                <p className="profileID">Victor</p>
+                        </div>
+                        <textarea maxLength="200" placeholder="댓글을 적어보세요." name="" id="" cols="30" rows="10" wrap="soft"></textarea>
+                        {/* 글쓰기 누르면 스낵바 뜨는 것 처럼 모든 버튼에 스낵바 알림 필요  */}
+                        <button className="submitBtn" onClick={(e)=>{snackBar(e, '글쓰기 스낵바 알림입니다.')}}>글쓰기</button> 
+                        <div className="limit">100자 제한 (10/200)</div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -66,6 +89,21 @@ const MainChats = ({allData})=>{
 
 //개별 chat 
 const Chat = ({chatData})=>{
+    const dispatch = useDispatch();
+    
+    const snackBarTime = useRef(null);
+    const snackBar = (e, message) => {
+        e.preventDefault();
+        dispatch(openSnackBar(message));
+        if (snackBarTime.current !== null) {
+            clearTimeout(snackBarTime.current);
+        }
+        snackBarTime.current = setTimeout(() => {
+            dispatch(closeSnackBar());
+            snackBarTime.current = null;
+        }, 2000);
+    }
+
     return(
         <li className="chat">
             <div className="chatDate">2023-02-10 15:24</div>
@@ -82,9 +120,9 @@ const Chat = ({chatData})=>{
                 </div>
             </div>
             <div className="chat_right">
-                <button><img src={editIcon} alt="" /></button>
-                <button><img src={deleteIcon} alt="" /></button>
-                <button><img src={like_no} alt="" /><span>{chatData.like}</span></button>
+                <button onClick={(e)=>{snackBar(e, '수정 완료 후 스낵바입니다.')}}><img src={editIcon} alt="" /></button>
+                <button onClick={(e)=>{snackBar(e, '삭제 완료 후 스낵바입니다.')}}><img src={deleteIcon} alt="" /></button>
+                <button onClick={(e)=>{snackBar(e, '좋아요 후 스낵바입니다.')}}><img src={like_no} alt="" /><span>{chatData.like}</span></button>
             </div>
         </li>
     )

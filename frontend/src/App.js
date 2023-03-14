@@ -23,6 +23,7 @@ import SignIn from './pages/SignIn';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import GlobalPop from './components/GlobalPop';
+import SnackBar from './components/SnackBar';
 
 //module
 import { jwtValidator } from './utils/jwtValidator'
@@ -61,6 +62,7 @@ const App = () => {
   return (
     <div className="wrapper">
     <GlobalPop></GlobalPop>
+    <SnackBar></SnackBar>
     <Header></Header>
 		<Routes> 
 			<Route path="/" element={<Main/>} />

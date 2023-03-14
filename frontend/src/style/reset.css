@@ -5,5 +5,5 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 *{box-sizing: border-box; font-family: 'NanumSquareNeo-Variable';}
 a{text-decoration: none;}
 button{border: none; cursor: pointer;}
-input{display:block;}
+input{display:block; padding:0; margin:0;}
 button:disabled{background:#fff; color:#efefef; cursor:not-allowed}

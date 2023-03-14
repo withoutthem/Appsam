@@ -1,6 +1,5 @@
 //libs
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 //images
 import IMG_mainVisual from '../assets/images/visual.png';
@@ -22,9 +21,6 @@ const Main = ()=>{
             background:IMG_mainGalaxy
         }
     })
-    useEffect(()=>{
-
-    },[])
 
     return (
         <div className="visualWrap">
