@@ -1,4 +1,11 @@
+.boxShadow {
+  box-shadow: 6px 7px 14px -2px rgba(0, 0, 0, 0.64);
+  -webkit-box-shadow: 6px 7px 14px -2px rgba(0, 0, 0, 0.64);
+  -moz-box-shadow: 6px 7px 14px -2px rgba(0, 0, 0, 0.64);
+}
+
 .globalPop {
+  z-index: 999;
   position: fixed;
   top: 0;
   left: 0;
@@ -94,4 +101,209 @@
 .signWrap .formWrap {
   margin: 20px;
   padding: 20px;
+}
+
+.visualWrap {
+  position: relative;
+  background: url("../assets/images/main_background.png");
+  background-size: cover;
+}
+
+.visualWrap .ratioBarWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.visualWrap .ratioBarWrap .appBar {
+  height: 20px;
+  background: #ff6868;
+}
+
+.visualWrap .ratioBarWrap .samBar {
+  height: 20px;
+  background: #5093f9;
+}
+
+.visualWrap .visual {
+  position: relative;
+  height: calc(100vh - 100px);
+}
+
+.visualWrap .visual img {
+  width: 100%;
+  padding: 40px;
+  padding-top: 70px;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  z-index: 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.visualWrap .visual .floatingBtnWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 25px;
+}
+
+.visualWrap .visual .floatingBtnWrap a {
+  font-size: 20px;
+  font-weight: 600;
+  display: block;
+  border-radius: 5px;
+  margin-right: 25px;
+  background: #2B2929;
+  padding: 15px 20px;
+  color: #fff;
+}
+
+.visualWrap .visual .floatingBtnWrap a:last-of-type {
+  margin-right: 0;
+}
+
+.phoneWrap {
+  position: absolute;
+  top: 40px;
+  z-index: 2;
+  height: 90%;
+}
+
+.phoneWrap.typeA {
+  left: 40px;
+}
+
+.phoneWrap.typeB {
+  right: 40px;
+}
+
+.phoneWrap img.background {
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
+.phoneWrap .chatsWrap {
+  padding: 70px 50px;
+  padding-left: 40px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.phoneWrap .chatsWrap .tabMenu button {
+  width: 100px;
+  height: 40px;
+  color: #000;
+  background: transparent;
+}
+
+.phoneWrap .chatsWrap .tabMenu button.active {
+  font-weight: 700;
+  color: #7D31DD;
+  border-bottom: 2px solid #7D31DD;
+}
+
+.phoneWrap .chatsWrap .chatsList {
+  margin-top: 5px;
+  overflow-y: scroll;
+  height: 70%;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat {
+  position: relative;
+  display: flex;
+  margin: 35px 0px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chatDate {
+  position: absolute;
+  top: -16px;
+  right: 16px;
+  font-size: 9px;
+  text-align: right;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_right {
+  margin-right: 10px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left {
+  height: 117px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap .profileImg {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap .profileID {
+  font-size: 14px;
+  padding: 0 10px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap .profileAors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  height: 20px;
+  padding: 4px 8px;
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 8px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap .profileAors.Apple {
+  background: #F16486;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap .profileAors.Samsung {
+  background: #1F78FF;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap .profileAors.None {
+  background: #555454;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left .txtWrap p {
+  font-size: 14px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_right button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 6px;
+  margin-bottom: 6px;
+  background: #fff;
+  border-radius: 10px;
+  width: 35px;
+  height: 35px;
+}
+
+.phoneWrap .chatsWrap .chatsList li.chat .chat_right button:last-of-type {
+  margin-bottom: 0;
 }/*# sourceMappingURL=main.css.map */

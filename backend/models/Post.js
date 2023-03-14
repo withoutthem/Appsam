@@ -31,4 +31,4 @@ postSchema.plugin(AutoIncrement, { //설정
     start_seq:500
 })
 
-module.exports = mongoose.model('Note', postSchema);
+module.exports = mongoose.model('POST', postSchema);
