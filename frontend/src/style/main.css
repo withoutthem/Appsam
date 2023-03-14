@@ -66,10 +66,12 @@
 
 .globalSnackBar.true {
   transform: translateY(0) translateX(-50%);
+  opacity: 1;
 }
 
 .globalSnackBar.false {
   transform: translateY(100px) translateX(-50%);
+  opacity: 0;
 }
 
 .headerWrap {
@@ -365,6 +367,7 @@
   height: 100%;
   width: 100%;
   padding: 15px 0 0;
+  padding-right: 16px;
 }
 
 .phoneWrap .chatsWrap .chatInputForm .inputWrap textarea {
@@ -379,6 +382,7 @@
 }
 
 .phoneWrap .chatsWrap .chatInputForm .inputWrap .submitBtn {
+  background: #fff;
   height: 100%;
   width: 75px;
   border-radius: 10px;
@@ -407,7 +411,7 @@
 .phoneWrap .chatsWrap .chatInputForm .inputWrap .limit {
   position: absolute;
   bottom: 8px;
-  right: 100px;
+  left: 15px;
   font-size: 10px;
   color: #5f5f5f;
 }/*# sourceMappingURL=main.css.map */

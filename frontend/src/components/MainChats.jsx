@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeSnackBar, openSnackBar } from '../store'
 
 import deleteIcon from '../assets/images/icons/delete_24.png'
@@ -26,10 +26,12 @@ import profileIMG  from '../assets/images/profile_img.jpeg' ;
 //chat껍데기 component
 const MainChats = ({allData})=>{
     const dispatch = useDispatch();
-
+    const storeState = useSelector(state => state.user)
+    console.log(storeState)
     //example Data Schema
     const [chatData, setChatData] = useState(
         [{
+            type: 'chatApp', // or 'chatSam'
             ticket:'11', // 문서 고유값
             id:'admin11', //작성자 아이디
             profile_img:'', //이미지 url
@@ -41,6 +43,7 @@ const MainChats = ({allData})=>{
         }]
     );
 
+    //snackBar 
     const snackBarTime = useRef(null);
     const snackBar = (e, message) => {
         e.preventDefault();
@@ -51,7 +54,7 @@ const MainChats = ({allData})=>{
         snackBarTime.current = setTimeout(() => {
             dispatch(closeSnackBar());
             snackBarTime.current = null;
-        }, 2000);
+        }, 1500);
     }
 
     return(
@@ -70,16 +73,21 @@ const MainChats = ({allData})=>{
                     <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
                 </ul>
+                {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
                 <form className="chatInputForm">
                     <div className="inputWrap">
                         <div className="profileWrap">
-                                <img className="profileImg" src={profileIMG} alt="바인딩 해야함" />
-                                <p className="profileID">Victor</p>
+                            {
+                                storeState.id ? <img className="profileImg" src={profileIMG} alt="바인딩 해야함" /> : null
+                            }
+                            {
+                                storeState.id ? <p className="profileID">{storeState.id}</p> : null
+                            }    
                         </div>
-                        <textarea maxLength="200" placeholder="댓글을 적어보세요." name="" id="" cols="30" rows="10" wrap="soft"></textarea>
+                        <textarea maxLength="100" placeholder={storeState.id ? '댓글을 적어보세요' : '로그인을 해야합니다.'} cols="30" rows="10" wrap="soft"></textarea>
                         {/* 글쓰기 누르면 스낵바 뜨는 것 처럼 모든 버튼에 스낵바 알림 필요  */}
                         <button className="submitBtn" onClick={(e)=>{snackBar(e, '글쓰기 스낵바 알림입니다.')}}>글쓰기</button> 
-                        <div className="limit">100자 제한 (10/200)</div>
+                        <div className="limit">100자 제한 (10/100)</div>
                     </div>
                 </form>
             </div>
