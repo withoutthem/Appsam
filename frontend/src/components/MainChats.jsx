@@ -21,11 +21,11 @@ import profileIMG  from '../assets/images/profile_img.jpeg' ;
 // :type : 'app' or 'sam' 으로 요청
 // 글쓰기 <POST> OK 
 // api/chatmain/:type/post, {type:'chatApp' or 'chatSam', text:내용, id: redux에 있는 id,} -> 응답: 수정 성공 시 dbPost, {stat:true, message:'댓글 포스팅 성공'} -> global SnackBar에 메시지 띄우기
-// 수정 <PUT> 
+// 수정 <PUT> OK
 // api/chatmain/:type/update/:ticket , {type:'chatApp' or 'chatSam', text:'내용', id:redux에 있는 id} -> 응답 : 수정 성공 시 db 내용 바꿈, {stat:true, message:'수정 성공'} -> global SnackBar에 메시지 띄우기
-// 삭제 <Delete>
+// 삭제 <Delete> OK
 // api/chatmain/:type/delete/:ticket , {type:'chatApp' or 'chatSam', id:redux에 있는 id} -> 응답 : 삭제 성공 시 db 글 삭제, {stat:true, message:'삭제 성공'} -> global SnackBar에 메시지 띄우기
-// 좋아요 <PATCH>
+// 좋아요 <PATCH> OK
 // api/chatmain/:type/like/:ticket , {type:'chatApp' or 'chatSam', id:redux에 있는 id} -> 응답 : 좋아요 성공 시 db 글 좋아요 내역 +1 {stat:true, message: '좋아요 성공'} -> global SnackBar에 메시지 띄우기
 
 //chat껍데기 component

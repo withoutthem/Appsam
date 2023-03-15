@@ -254,4 +254,99 @@ const chatUpdate = async (req, res, next) => {
 };
 
 
-module.exports = {popular, recent, chatPost, chatUpdate}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// api/chatmain/:type/delete/:ticket , {type:'chatApp' or 'chatSam', id:redux에 있는 id} -> 응답 : 삭제 성공 시 db 글 삭제, {stat:true, message:'삭제 성공'} -> global SnackBar에 메시지 띄우기
+
+const chatDelete = async (req, res, next) => {
+    try {
+        const ticket = req.params.ticket;
+        const type = req.params.type || 'none';
+        const nowMyId = await chatMainJwtValidatorToID(req); // jwt 검증해서 id로 만들기
+
+        if (nowMyId.stat === false) { // jwt 유효하지 않은 경우
+            res.status(401).send(nowMyId);
+        } else { // 유효한 경우
+            if (type === 'app' && req.body.type === 'chatApp') {
+                const post = await ChatApp.findOne({ ticket: ticket });
+
+                if (post && post.id === nowMyId) {
+                    await ChatApp.deleteOne({ ticket: ticket });
+                    res.status(200).send({ stat: true, message: '채팅 삭제 완료되었습니다.' });
+                } else {
+                    res.status(403).send({ stat: false, message: '채팅 삭제 권한이 없습니다.' });
+                }
+            } else if (type === 'sam' && req.body.type === 'chatSam') {
+                const post = await ChatSam.findOne({ ticket: ticket });
+
+                if (post && post.id === nowMyId) {
+                    await ChatSam.deleteOne({ ticket: ticket });
+                    res.status(200).send({ stat: true, message: '채팅 삭제 완료되었습니다.' });
+                } else {
+                    res.status(403).send({ stat: false, message: '채팅 삭제 권한이 없습니다.' });
+                }
+            } else {
+                res.status(404).send({ stat: false, message: '잘못된 요청 타입입니다. 타입을 확인해주세요.' });
+            }
+        }
+    } catch (err) {
+        logEvents(`chatDelete에서 ${err}\t${req.url}\t${req.headers.origin}\t ${req.ip}`, "errLog.log");
+        res.status(500).send({ stat: false, message: '예상치도 못한 에러가 발생했습니다. 다음번에는 좀 더 잘해보겠습니다.' });
+    }
+};
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// api/chatmain/:type/like/:ticket , {type:'chatApp' or 'chatSam', id:redux에 있는 id} 
+
+const chatLike = async (req, res, next) => {
+    try {
+        const ticket = req.params.ticket;
+        const type = req.params.type || 'none';
+        const nowMyId = await chatMainJwtValidatorToID(req); // jwt 검증해서 id로 만들기
+
+        if (nowMyId.stat === false) { // jwt 유효하지 않은 경우
+            res.status(401).send(nowMyId);
+        } else { // 유효한 경우
+            let post;
+
+            if (type === 'app') {
+                post = await ChatApp.findOne({ ticket: ticket });
+            } else if (type === 'sam') {
+                post = await ChatSam.findOne({ ticket: ticket });
+            } else {
+                res.status(404).send({ stat: false, message: '잘못된 요청 타입입니다.' });
+                return;
+            }
+
+            if (!post) {
+                res.status(404).send({ stat: false, message: '채팅이 존재하지 않습니다.' });
+                return;
+            }
+
+            const likeIndex = post.likes.indexOf(nowMyId);
+
+            if (likeIndex === -1) { // 좋아요를 누르지 않은 상태
+                post.likes.push(nowMyId);
+                post.like += 1;
+            } else { // 이미 좋아요를 누른 상태
+                post.likes.splice(likeIndex, 1);
+                post.like -= 1;
+            }
+
+            await post.save();
+            res.status(200).send({ stat: true, message: '좋아요 상태가 변경되었습니다.' });
+        }
+    } catch (err) {
+        console.error(`likePost에서 ${err}`);
+        res.status(500).send({ stat: false, message: '예상치 못한 에러가 발생했습니다. 다음 번에는 잘 해보겠습니다.' });
+    }
+};
+
+
+module.exports = {popular, recent, chatPost, chatUpdate, chatDelete, chatLike}
