@@ -36,9 +36,10 @@ const chatSamSchema = new Schema({
 },
 {
     timestamps: true, // 타임스탬프를 추가할 수 있다.
-    index: { createdAt: -1 }, //최근 챗 인덱싱
 }, 
 );
+
+chatSamSchema.index({ like: -1, createdAt: -1 }); // 복합인덱스 생성
 
 chatSamSchema.plugin(AutoIncrement, { //설정
 	inc_field:'ticket',
