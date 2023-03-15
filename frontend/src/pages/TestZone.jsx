@@ -51,6 +51,9 @@ const TestZone = ()=>{
 
     return (
         <div className='testZone'>
+            <p className="testText">코드 주석 읽어보고 테스트할 것 </p>
+            <p className="testText">코드 주석 읽어보고 테스트할 것 </p>
+            <p className="testText">코드 주석 읽어보고 테스트할 것 </p>
             <button onClick={()=>{postingTest()}}>포스팅테스트(통과)</button>
             <button onClick={()=>{updateTest()}}>수정테스트(통과)</button> 
             <button onClick={()=>{deleteTest()}}>삭제테스트(통과)</button> 
