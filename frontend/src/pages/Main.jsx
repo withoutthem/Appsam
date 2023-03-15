@@ -11,16 +11,6 @@ import MainChats from "../components/MainChats";
 const Main = ()=>{
     
     const [barState, setBarState]= useState([30,70])
-    const [typeData , setTypeData] = useState({
-        appleData:{
-            type:'typeA',
-            background:IMG_mainIphone
-        },
-        samsungData:{
-            type:'typeB',
-            background:IMG_mainGalaxy
-        }
-    })
 
     return (
         <div className="visualWrap">
@@ -36,8 +26,8 @@ const Main = ()=>{
                     <Link className="boxShadow" to='/donation'>후원하기</Link>
                 </div>                
             </div>
-            <MainChats allData={typeData.appleData}></MainChats>
-            <MainChats allData={typeData.samsungData}></MainChats>
+            <MainChats allData={{type:'typeA', background:IMG_mainIphone}}></MainChats>
+            <MainChats allData={{type:'typeB', background:IMG_mainGalaxy}}></MainChats>
         </div>
     )
 

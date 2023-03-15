@@ -5,11 +5,11 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const chatSamSchema = new Schema({
     type:{
-        type:String,
+        type:String, //'chatApp' or 'chatSam'
         required:true
     },
     id:{
-        type:String,
+        type:String, // id
         required: true
     },
     profile_img:{
@@ -26,24 +26,24 @@ const chatSamSchema = new Schema({
     },
     like:{
         type:Number,
-        required: true
+        required: true,
+        index: -1
     },
     likes:{
         type:[String],
         required: false
-    },
-    time : {
-        type:String,
-        required: true
     }
 },
-{timestamps: true}, // 타임스탬프를 추가할 수 있다.
+{
+    timestamps: true, // 타임스탬프를 추가할 수 있다.
+    index: { createdAt: -1 }, //최근 챗 인덱싱
+}, 
 );
 
 chatSamSchema.plugin(AutoIncrement, { //설정
 	inc_field:'ticket',
-    id:'ticketNums',
+    id:'ticketNumsSam',
     start_seq:1
 })
 
-module.exports = mongoose.model('CHATSAM', chatSamSchema);
+module.exports = mongoose.model('ChatSam', chatSamSchema);

@@ -10,24 +10,26 @@ import profileIMG  from '../assets/images/profile_img.jpeg' ;
 
 // 서버데이터 반영 이후 지울 것
 //api 목록
-// <GET>
-// /api/chatmain/popular : 초기요청, 인기순 4개
-// /api/chatmain/recent : 최신순 4개
-// /api/chatmain/popular/1 : 두번째요청, 첫 인기순 4개 이후 4개, 맨뒤 /:id 증가할수록 뒤에 요청 가능, 자료 없을 시 {stat:false, message:'더이상 없습니다' 반환}
-// /api/chatmain/recent/1 : 두번째요청, 첫 최신순 4개 이후 4개 ... 나머지 동일
+// <GET> // 서버구현 완료
+// /api/chatmain/app/popular/0 : 초기요청, 인기순 4개
+// /api/chatmain/sam/recent/0 : 최신순 4개
+// /api/chatmain/app/popular/1 : 두번째요청, 첫 인기순 4개 이후 4개, 맨뒤 /:id 증가할수록 뒤에 요청 가능, 자료 없을 시 {stat:false, message:'더이상 없습니다' 반환}
+// /api/chatmain/sam/recent/1 : 두번째요청, 첫 최신순 4개 이후 4개 ... 나머지 동일
 
+// 글쓰기 <POST>
+// api/chatmain/app/post, {type:'chatApp' or 'chatSam', text:내용, id: redux에 있는 id,} -> 응답: 수정 성공 시 dbPost, {stat:true, message:'댓글 포스팅 성공'} -> global SnackBar에 메시지 띄우기
 // 수정 <PUT>
-// api/chatmain/update/:ticket , {text:'내용', id:redux에 있는 id} -> 응답 : 수정 성공 시 db 내용 바꿈, {stat:true, message:'수정 성공'} -> global SnackBar에 메시지 띄우기
+// api/chatmain/app/update/:ticket , {text:'내용', id:redux에 있는 id} -> 응답 : 수정 성공 시 db 내용 바꿈, {stat:true, message:'수정 성공'} -> global SnackBar에 메시지 띄우기
 // 삭제 <Delete>
-// api/chatmain/delete/:ticket , {id:redux에 있는 id} -> 응답 : 삭제 성공 시 db 글 삭제, {stat:true, message:'삭제 성공'} -> global SnackBar에 메시지 띄우기
+// api/chatmain/app/delete/:ticket , {id:redux에 있는 id} -> 응답 : 삭제 성공 시 db 글 삭제, {stat:true, message:'삭제 성공'} -> global SnackBar에 메시지 띄우기
 // 좋아요 <PATCH>
-// api/chatmain/like/:ticket , {id:redux에 있는 id} -> 응답 : 좋아요 성공 시 db 글 좋아요 내역 +1 {stat:true, message: '좋아요 성공'} -> global SnackBar에 메시지 띄우기
+// api/chatmain/app/like/:ticket , {id:redux에 있는 id} -> 응답 : 좋아요 성공 시 db 글 좋아요 내역 +1 {stat:true, message: '좋아요 성공'} -> global SnackBar에 메시지 띄우기
 
 //chat껍데기 component
 const MainChats = ({allData})=>{
     const dispatch = useDispatch();
     const storeState = useSelector(state => state.user)
-    console.log(storeState)
+
     //example Data Schema
     const [chatData, setChatData] = useState(
         [{
