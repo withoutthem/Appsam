@@ -1,4 +1,9 @@
 
+//testZone
+.testZone {display:flex; justify-content:center; align-items: center; width:500px; height:500px; background:lightblue; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);}
+.testZone button{background:red; color:#fff; font-weight:600; font-size:20px; padding:20px;}
+
+
 //mixin
 @mixin flexCenter {display: flex; justify-content: center; align-items: center;}
 @mixin flexAlign {display: flex; align-items: center;}

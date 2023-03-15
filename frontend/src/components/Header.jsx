@@ -37,6 +37,7 @@ const Header = ()=>{
                 <li><Link to='/samsung'>SAMSUNG</Link></li>
                 <li><Link to='/donation'>후원하기</Link></li>
                 <li><Link to='/whosdev'>개발자새끼누구임?</Link></li>
+                <li><Link to='/testzone'>테스트존</Link></li>
             </ul>
             <div className="loginWrap">
                 <button onClick={()=>{testButton()}} style={{background:'red', color: '#fff'}}>state 확인</button>

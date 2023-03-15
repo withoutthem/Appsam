@@ -6,6 +6,11 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    profile_img:{
+        type: String,
+        required: false,
+        default:'none'
+    },
     ps :{
         type:String,
         required:true

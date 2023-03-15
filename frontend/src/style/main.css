@@ -1,3 +1,24 @@
+.testZone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 500px;
+  background: lightblue;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.testZone button {
+  background: red;
+  color: #fff;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 20px;
+}
+
 .boxShadow {
   box-shadow: 6px 7px 14px -2px rgba(0, 0, 0, 0.64);
   -webkit-box-shadow: 6px 7px 14px -2px rgba(0, 0, 0, 0.64);
