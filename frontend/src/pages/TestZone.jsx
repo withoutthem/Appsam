@@ -2,7 +2,8 @@ import axios from 'axios';
 
 
 const TestZone = ()=>{
-    
+
+
     // api/chatmain/app/post, {type:'chatApp' or 'chatSam', text:내용, id: redux에 있는 id,} 
     // 포스트를 게시하는데, admin6로 접속해있어야하며, 타입을 정확히 입력하여 요청해야함.
     const postingTest = async ()=>{
@@ -50,15 +51,15 @@ const TestZone = ()=>{
     };
 
     return (
+        <>
         <div className='testZone'>
-            <p className="testText">코드 주석 읽어보고 테스트할 것 </p>
-            <p className="testText">코드 주석 읽어보고 테스트할 것 </p>
             <p className="testText">코드 주석 읽어보고 테스트할 것 </p>
             <button onClick={()=>{postingTest()}}>포스팅테스트(통과)</button>
             <button onClick={()=>{updateTest()}}>수정테스트(통과)</button> 
             <button onClick={()=>{deleteTest()}}>삭제테스트(통과)</button> 
             <button onClick={()=>{likePostTest('app', 1)}}>좋아요테스트(통과)</button> 
         </div>
+        </>
     )
 }
 
