@@ -7,7 +7,7 @@
 //mixin
 @mixin flexCenter {display: flex; justify-content: center; align-items: center;}
 @mixin flexAlign {display: flex; align-items: center;}
-@mixin flexJust {display: flex; justify-content: center;}
+@mixin flexJust {display: flex; signWrap-content: center;}
 
 //global box shadow
 .boxShadow{
@@ -43,7 +43,40 @@
 .headerWrap .loginWrap .signWrap button{font-size:18px; font-weight: 600; margin-right:18px;}
 .headerWrap .loginWrap .signWrap button:last-of-type{margin-right:0;}
 
-.signWrap .formWrap{ margin: 20px; padding: 20px;}
+
+//Sign
+.signWrapBack {width: 100%; padding: 50px; background-color: #eee; box-sizing: border-box; color: #333;}
+.signWrapBack .mainTitle {font-size: 50px; font-weight: 800; margin-top: 60px; text-align: center;}
+.signWrapBack .signImgWrap {width: 1200px; display: flex; margin: 0px auto; border-radius: 30px; box-shadow: 10px 10px 10px rgb(0 0 0 /20%), -2px -2px 2px rgb(0 0 0/20%);}
+.signWrapBack .signBox {width:50%; height: 100%; border-radius: 30px 0px 0px 30px; background-color: #fff;}
+.signWrapBack .imgBox {width: 50%; height: 100%; border-radius: 0px 30px 30px 0px; background-color: lightcyan;}
+.signWrapBack .formWrap{ margin: 0px 20px; padding: 20px 20px 0px 20px; position: relative;}
+.signWrapBack .formWrap:nth-of-type(1) {margin: 20px 20px 0px 20px;}
+.signWrapBack .mainInputTex {font-weight: 800;}
+.signWrapBack .fillInput {width: 100%; padding: 15px; border-radius: 5px; border: 1px solid #7EB693; margin-top: 10px;}
+.signWrapBack .overlap {position: absolute; right: 30px; top: 55px; display: flex; height: 26px; align-items: center;}
+.signWrapBack .overlapCheck {background-color: #454545; color: #fff; padding: 5px 10px; border-radius: 5px;}
+.signWrapBack .possible {display: flex; align-items: center; margin-top: 5px; font-size: 14px;}
+.signWrapBack .assistanceTex {font-size: 12px; color: #A4A4A4; margin: 3px 0px 0px 10px;}
+.signWrapBack .flexBox {padding: 40px; display: flex; justify-content: space-between;}
+.signWrapBack .informationWrap {width: 38%; font-weight: 800;}
+.signWrapBack .informationWrap select {width: 100%; padding: 15px; text-align: center; border: 1px solid #7EB693; border-radius: 5px; margin: 10px 0px; appearance: red;}
+.signWrapBack .available {color: red; font-size: 14px;}
+.signWrapBack .submitWrap {width: 58%; margin-top: 20px; }
+.signWrapBack .submitWrap label {display: flex; align-items: flex-start; margin-bottom: 10px; cursor: pointer; font-weight: 800; font-size: 15px;}
+.signWrapBack .submitWrap label span {width: 98%;}
+.signWrapBack .view {margin-left: 24px; display: flex; align-items: center; cursor: pointer; font-size: 14px; font-weight: 800;}
+.signWrapBack .view::after {content: '>'; margin-left: 5px; font-size: 12px; color: #fff; display: flex; justify-content: center; align-items: center; width: 16px; height: 16px; background: #279F55; border-radius: 2px;}
+.signWrapBack .submitWrap input[type="checkbox"] { -webkit-appearance: none; margin-right: 10px; position: relative; width: 16px; height: 16px; cursor: pointer; outline: none !important; border: 1px solid #bbb; border-radius: 2px; background: #fbfbfb; }
+.signWrapBack .submitWrap input[type="checkbox"]::before { content: "\2713"; position: absolute; top: 50%; left: 50%; overflow: hidden; transform: scale(0) translate(-50%, -50%); line-height: 1;}
+.signWrapBack .submitWrap input[type="checkbox"]:hover {border-color: rgba(170, 170, 170, 0.5);}
+.signWrapBack .submitWrap input[type="checkbox"]:checked { background-color: #279F55; border-color: rgba(255, 255, 255, 0.3); color: white;}
+.signWrapBack .submitWrap input[type="checkbox"]:checked::before { border-radius: 2px; transform: scale(1) translate(-50%, -50%)}
+.signWrapBack .joinBtn {width: 200px; padding: 15px; display: flex; justify-content: center; align-items: center; background-color: #279F55; margin: 30px 0px 0px auto; color: #fff; font-size: 18px; border-radius: 10px; }
+.signWrapBack .deactivationBtn {width: 200px; padding: 15px; display: flex; justify-content: center; align-items: center; background-color: #bbb; margin: 10px 0px 0px auto; color: #fff; font-size: 18px; border-radius: 10px; }
+.signWrapBack .imgBox {width: 50%; height: auto; background: linear-gradient(to bottom right, #FFBCBC, #ACCDFF);}
+
+
 
 //main_visual
 .visualWrap{position:relative; background:url('../assets/images/main_background.png'); background-size:cover; }

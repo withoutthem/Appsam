@@ -129,51 +129,77 @@ const Sign = () =>{
     }
 
     return (
-        <form className="signWrap" onSubmit={(e)=>{signUp(e)}}>
-
-            <div className="idWrap formWrap">
-                <p>id : 5~15자 영문, 특수문자 제외</p>
-                <input type="id" value={userInfo.id[0]} onChange={(e)=>{setInfo('id', e.target.value)}} />
-                {
-                    isDuplicatedID ? <div>사용 가능합니다</div> : <button type="button" onClick={()=>{getDuplicate({id : userInfo.id[0]})}}>중복 확인</button>
-                }
-                {resMessage.id}
-                {userInfo.id[1] ? '가능' : '불가능'}
+        <div className="signWrapBack">
+            <div className="signImgWrap">
+                <form className="signBox" onSubmit={(e)=>{signUp(e)}}>
+                    <p className="mainTitle">Sign Up</p>
+                    <div className="idWrap formWrap">
+                        <p className="mainInputTex">아이디*</p>
+                        <input className="fillInput" type="id" placeholder="Your ID" value={userInfo.id[0]} onChange={(e)=>{setInfo('id', e.target.value)}} />
+                        <div className="overlap">
+                            {
+                                isDuplicatedID ? <div className="available">사용 가능합니다</div> : <button className="overlapCheck" type="button" onClick={()=>{getDuplicate({id : userInfo.id[0]})}}>중복 확인</button>
+                            }
+                        </div>
+                        <div className="possible">
+                            {resMessage.id}
+                            {userInfo.id[1] ? '가능' : '불가능'}
+                            <p className="assistanceTex">5자 이상 15자 이하, 영어와 숫자로 이루어져야 합니다.</p>
+                        </div>
+                    </div>
+                    <div className="psWrap formWrap">
+                        <p className="mainInputTex">비밀번호*</p>
+                        <input className="fillInput" type="password" placeholder="Password" value={userInfo.ps[0]} onChange={(e)=>{setInfo('ps', e.target.value)}} />
+                        <div className="possible">
+                            {userInfo.ps[1] ? '가능' : '불가능'}
+                            <p className="assistanceTex">5자 이상 15자 이하, 특수문자가 반드시 1개 이상 포함되어야 합니다.</p>
+                        </div>
+            
+                    </div>
+                    <div className="emailWrap formWrap">
+                        <p className="mainInputTex">이메일*</p>
+                        <input className="fillInput" type="email" placeholder="appsam@naver.com" value={userInfo.email[0]} onChange={(e)=>{setInfo('email', e.target.value)}}/>
+                        <div className="overlap">
+                            {
+                                isDuplicatedEmail ? <div className="available">사용 가능합니다.</div> : <button className="overlapCheck" type="button" onClick={()=>{getDuplicate({email : userInfo.email[0]})}}>중복 확인</button>
+                            }
+                        </div>
+                        <div className="possible">
+                            {resMessage.email}
+                            {userInfo.email[1] ? '가능' : '불가능'}
+                            <p className="assistanceTex">이메일 형식이어야 합니다.</p>
+                        </div>
+                    </div>
+                    <div className="nameWrap formWrap">
+                        <p className="mainInputTex">이름(닉네임)*</p>
+                        <input className="fillInput" type="text" placeholder="Your Name" value={userInfo.name[0]} onChange={(e)=>{setInfo('name', e.target.value)}} />
+                        <div className="possible">
+                            {userInfo.name[1] ? '가능' : '불가능'}
+                            <p className="assistanceTex">3자 이상, 15자 미만 문자만 가능합니다.</p>
+                        </div>
+                    </div>
+                    <div className="flexBox">
+                        <div className="aorsWrap informationWrap">
+                            <p>Apple or Samsung</p>
+                            <select name="" id="" onChange={(e)=>{setInfo('aors', e.target.value)}}>
+                                <option value="None">중립</option>
+                                <option value="Apple">Apple</option>
+                                <option value="Samsung">Samsung</option>
+                            </select>
+                        </div>
+                        <div className="submitWrap">
+                            <label><input className="checkBox" type="checkbox" /><span>회원가입 및 이용약관에 동의하겠습니다</span></label>
+                            <label><input className="checkBox" type="checkbox" /><span>마케팅은 발신도 하지 않지만 동의해보겠습니다.</span></label>
+                            <p className="view">이용약관 전문 보기</p>
+                            <button className="joinBtn" type="submit">회원가입</button>
+                            <button className="deactivationBtn" type="submit">비활성화 상태 버튼</button>
+                        </div>
+                    </div>
+                </form>
+                <div className="imgBox">
+                </div>
             </div>
-
-            <div className="psWrap formWrap">
-                <p>ps : 5~15자 아무문자, 특수문자1개이상 필요</p>
-                <input type="password" value={userInfo.ps[0]} onChange={(e)=>{setInfo('ps', e.target.value)}} />
-                {userInfo.ps[1] ? '가능' : '불가능'}
-            </div>
-
-            <div className="emailWrap formWrap">
-                <p>email : 이메일형식</p>
-                <input type="email" value={userInfo.email[0]} onChange={(e)=>{setInfo('email', e.target.value)}}/>
-                {
-                    isDuplicatedEmail ? <div>사용 가능합니다.</div> : <button type="button" onClick={()=>{getDuplicate({email : userInfo.email[0]})}}>중복 확인</button>
-                }
-                {resMessage.email}
-                {userInfo.email[1] ? '가능' : '불가능'}
-            </div>
-
-            <div className="nameWrap formWrap">
-                <p>name : 3~15자 한글,영문,숫자만 허용</p>
-                <input type="text" value={userInfo.name[0]} onChange={(e)=>{setInfo('name', e.target.value)}} />
-                {userInfo.name[1] ? '가능' : '불가능'}
-            </div>
-
-            <div className="aorsWrap">
-                <p>Apple or Samsung : 중립, 애플, 삼성 중 하나 선택</p>
-                <select name="" id="" onChange={(e)=>{setInfo('aors', e.target.value)}}>
-                    <option value="None">중립</option>
-                    <option value="Apple">Apple</option>
-                    <option value="Samsung">Samsung</option>
-                </select>            
-            </div>
-
-                <button type="submit">submit</button>
-        </form>
+        </div>
     )
 }
 
