@@ -18,7 +18,7 @@ const popular = async (req, res, next) =>{
     const type = req.params.type || 'none';
     const count = req.params.count || 0;
     const nowMyId = await chatMainJwtValidatorToID(req)
-
+    console.log('get test aadsfsf')
     //애플타입 챗
     if(type === 'app'){
         try{
