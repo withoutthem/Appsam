@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeSnackBar, openSnackBar } from '../store'
 
@@ -31,23 +31,34 @@ import profileIMG  from '../assets/images/profile_img.jpeg' ;
 //chat껍데기 component
 const MainChats = ({allData})=>{
     const dispatch = useDispatch();
-    const storeState = useSelector(state => state.user)
+    const storeState = useSelector(state => state.user);
 
     //example Data Schema
     const [chatData, setChatData] = useState(
-        [{
-            type: 'chatApp', // or 'chatSam'
-            ticket:'11', // 문서 고유값
-            id:'admin11', //작성자 아이디
-            profile_img:'', //이미지 url
-            aors : 'Apple', //Apple / Samsung / None 중 하나
-            text:'', //글내용
-            like : 4, // 좋아요 수,
-            likes : false, // 내가 이 글에 좋아요 했는 지 보내줌
-            time : '' //작성일, 시간
-        }]
+        [
+        //     {
+        //     type: 'chatApp', // or 'chatSam'
+        //     ticket:'11', // 문서 고유값
+        //     id:'admin11', //작성자 아이디
+        //     profile_img:'', //이미지 url
+        //     aors : 'Apple', //Apple / Samsung / None 중 하나
+        //     text:'', //글내용
+        //     like : 4, // 좋아요 수,
+        //     likes : false, // 내가 이 글에 좋아요 했는 지 보내줌
+        //     time : '' //작성일, 시간
+        // }
+    ]
     );
+    // textarea값 바꾸기 위한 state 
+    const [message, setMessage] = useState('');
+    const [currentTime, setCurrentTime] = useState(new Date());
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
     //snackBar 
     const snackBarTime = useRef(null);
     const snackBar = (e, message) => {
@@ -62,6 +73,17 @@ const MainChats = ({allData})=>{
         }, 1500);
     }
 
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        if (message.trim()) {
+          setChatData(prevChatData => [...prevChatData, message]);
+          setMessage('');
+        }
+      };
+    const handleTextareaChange = event => {
+        setMessage(event.target.value);
+    };
+
     return(
         <div className={`phoneWrap ${allData.type}`}>
             <img className="background" src={allData.background} alt="" />
@@ -73,10 +95,13 @@ const MainChats = ({allData})=>{
                     <button>최신순</button>
                 </div>
                 <ul className="chatsList">
+                {chatData.map((message,chat) => {
+                    return <Chat key={chat} chatData={chat} message={message} currentTime={currentTime} />;
+                    })}
+                    {/* <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
-                    <Chat chatData = {chatData[0]}></Chat>
-                    <Chat chatData = {chatData[0]}></Chat>
+                    <Chat chatData = {chatData[0]}></Chat> */}
                 </ul>
                 {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
                 <form className="chatInputForm">
@@ -89,9 +114,9 @@ const MainChats = ({allData})=>{
                                 storeState.id ? <p className="profileID">{storeState.id}</p> : null
                             }    
                         </div>
-                        <textarea maxLength="100" placeholder={storeState.id ? '댓글을 적어보세요' : '로그인을 해야합니다.'} cols="30" rows="10" wrap="soft"></textarea>
+                        <textarea maxLength="100" placeholder={storeState.id ? '댓글을 적어보세요' : '로그인을 해야합니다.'} cols="30" rows="10" wrap="soft" value={message} onChange={handleTextareaChange}></textarea>
                         {/* 글쓰기 누르면 스낵바 뜨는 것 처럼 모든 버튼에 스낵바 알림 필요  */}
-                        <button className="submitBtn" onClick={(e)=>{snackBar(e, '글쓰기 스낵바 알림입니다.')}}>글쓰기</button> 
+                        <button className="submitBtn" onClick={handleSendMessage}>글쓰기</button> 
                         <div className="limit">100자 제한 (10/100)</div>
                     </div>
                 </form>
@@ -101,7 +126,7 @@ const MainChats = ({allData})=>{
 }
 
 //개별 chat 
-const Chat = ({chatData})=>{
+const Chat = ({chatData,message,currentTime})=>{
     const dispatch = useDispatch();
     
     const snackBarTime = useRef(null);
@@ -119,7 +144,7 @@ const Chat = ({chatData})=>{
 
     return(
         <li className="chat">
-            <div className="chatDate">2023-02-10 15:24</div>
+            <div className="chatDate">{currentTime.toLocaleString()}</div>
             <div className="chat_left">
                 <div className="profileWrap">
                     <img className="profileImg" src={profileIMG} alt="바인딩 해야함" />
@@ -128,7 +153,7 @@ const Chat = ({chatData})=>{
                 </div>
                 <div className="txtWrap">
                     <p className="txt">
-                        Lorem ipsum dolor sit aas asdfasdfasdf asf asdf asd fdas
+                       {message}
                     </p>
                 </div>
             </div>
