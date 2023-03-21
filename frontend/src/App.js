@@ -19,6 +19,7 @@ import SagongSa from './pages/SagongSa';
 import Sign from './pages/Sign'
 import SignIn from './pages/SignIn';
 import TestZone from './pages/TestZone';
+import Admin from './pages/Admin';
 
 // components
 import Header from './components/Header';
@@ -76,6 +77,7 @@ const App = () => {
       <Route path="/signin" element={ <SignIn/> } />
       <Route path="/sign" element={ <Sign/> } />
       <Route path="/testzone" element={ <TestZone/> } />
+      <Route path="/admin" element={ <Admin/> } />
       <Route path="*" element={ <SagongSa/> } />
     </Routes>
     <Footer></Footer>

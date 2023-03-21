@@ -80,7 +80,7 @@ const MainChats = ({allData})=>{
           setMessage('');
         }
       };
-      
+
     const handleTextareaChange = event => {
         setMessage(event.target.value);
     };
