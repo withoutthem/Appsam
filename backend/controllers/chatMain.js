@@ -77,19 +77,20 @@ const popular = async (req, res, next) =>{
 
 
 // 최근순
-// /api/chatmain/:type/recent/:count
+// /api/chatmain/:type/recent?start=5&count=10  -> 최신순으로 정렬된 데이터에서 5부터 10개의 데이터를 가져옴.
 const recent = async (req, res)=>{ 
     const type = req.params.type || 'none';
-    const count = req.params.count || 0;
-    const nowMyId = await chatMainJwtValidatorToID(req)
-
+    const nowMyId = await chatMainJwtValidatorToID(req);
+    const start = req.query.start ? Math.max(parseInt(req.query.start), 0) : 0; //Math.max() 안에서 변환된 정수와 0 중에 큰 것을 가져오므로 음수를 제한한다.
+    const count = req.query.count ? Math.max(parseInt(req.query.count), 0) : pageSize;
+    
     if(type === 'app'){
         try{
-            let nowDataApp = await ChatApp.find({}).sort({ createdAt: -1 }).skip(count * pageSize).limit(pageSize);
+            let nowDataApp = await ChatApp.find({}).sort({ createdAt: -1 }).skip(start).limit(count);
             if(nowDataApp.length === 0){ //데이터가 없는 경우
                 res.send({stat:false, message: '데이터가 더 이상 없습니다.', etc:'No Data'})
             }
-            else{
+            else{ //데이터가 있는 경우
                 nowDataApp = nowDataApp.map(doc => {
                     const obj = doc.toObject(); // Mongoose Document를 일반 JS 객체로 변환
                     obj.isLike = obj.likes.includes(nowMyId); // isLike 속성 추가
@@ -105,7 +106,7 @@ const recent = async (req, res)=>{
     }
     else if(type === 'sam'){
         try{
-            let nowDataSam = await ChatSam.find({}).sort({ createdAt: -1 }).skip(count * pageSize).limit(pageSize);
+            let nowDataSam = await ChatSam.find({}).sort({ createdAt: -1 }).skip(start).limit(count);
             if(nowDataSam.length === 0){ //데이터가 없는 경우
                 res.send({stat:false, message: '데이터가 더 이상 없습니다.', etc:'No Data'})
             }
@@ -125,7 +126,7 @@ const recent = async (req, res)=>{
     }
     else{
         logEvents(`chatMain-recent에서 ${req.url}\t${req.headers.origin}\t ${req.ip}`, "errLog.log");
-        res.status(404).send({stat:false, message: '요청이 잘못되었습니다. 파라미터 에러입니다. 정상적인 요청을 해주세요.'})
+        res.status(400).send({stat:false, message: '요청이 잘못되었습니다. 파라미터 에러입니다. 정상적인 요청을 해주세요.'})
     }
 }
 
