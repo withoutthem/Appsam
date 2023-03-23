@@ -95,8 +95,8 @@ const Admin = () =>{
             onChange={(e) => specChange(e.target.value, key)}
           />
           <h4>eval</h4>
-          <input
-            type="text"
+          <textarea
+            type="textarea"
             value={spec.eval}
             onChange={(e) => specChangeEval(e.target.value, key)}
           />
