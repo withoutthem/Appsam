@@ -1,75 +1,45 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const specSchema = new Schema({
-  released :{
-    type:{String},
+const specValueSchema = new Schema({
+  value:{
+    type: String,
     required:true
   },
-  ap:{
-    type:{String},
-    required:true
-  },
-  memory:{
-    type:{String},
-    required:true
-  },
-  display:{
-    type:{String},
-    required:true
-  },
-  camera:{
-    type:{String},
-    required:true
-  },
-  battery:{
-    type:{String},
-    required:true
-  },
-  color:{
-    type:{String},
-    required:true
-  },
-  weight:{
-    type:{String},
-    required:true
-  },
-  bioAuth:{
-    type:{String},
-    required:true
-  },
-  etc:{
-    type:{String},
-    required:false,
-    default:[]
-  },
-  price:{
-    type:{String},
-    required:true
-  },
-  pros:{
-    type:{String},
-    required:true
-  },
-  cons:{
-    type:{String},
-    required:true
-  },
-  summary:{
-    type:{String},
-    required:true,
-    default:'딱히 없음'
+  eval: {
+    type : String,
+    required: false,
+    default : '평가가 없습니다.'
   }
+},{_id:false});
+
+const specSchema = new Schema({
+  released :specValueSchema,
+  ap:specValueSchema,
+  memory:specValueSchema,
+  display:specValueSchema,
+  camera:specValueSchema,
+  battery:specValueSchema,
+  color:specValueSchema,
+  weight:specValueSchema,
+  bioAuth:specValueSchema,
+  etc:specValueSchema,
+  price:specValueSchema,
+  pros:specValueSchema,
+  cons:specValueSchema,
+  summary:specValueSchema
 },{ _id: false })
 
 const productSchema = new Schema({
     companyType:{
         type:String, // 'app' or 'sam'
-        required:true
+        required:true,
+        index:true
     },
     productType:{
         type:String, // 'pc', 'mo', 'tablet', 'watch', 'laptop', 'earbuds'
-        required: true
+        required: true,
+        index:true
     },
     productName:{
       type:String,
@@ -81,7 +51,8 @@ const productSchema = new Schema({
     },
     badge:{
       type: Array,
-      required: true
+      required: true,
+      index: true
     },
     spec:{
       type:specSchema,
@@ -100,6 +71,9 @@ const productSchema = new Schema({
 }
 );
 
+//복합 인덱스
+productSchema.index({ companyType: 1, productType: 1 });
+productSchema.index({ companyType: 1, badge: 1 });
 
 // badge 이름
 
