@@ -3,34 +3,35 @@ import { useState, useCallback } from "react";
 
 const Admin = () =>{
 
+  const initialProduct = //제품정보 초기상태
+  {
+    companyType:'app', //'app' or 'sam'
+    productType:'pc', // 'pc', 'mo', 'tablet', 'watch', 'laptop', 'earbuds'
+    productName:'',
+    productImg:'', // img uri
+    badge:[],
+    spec:{ //{value : 값, eval: 값에 대한 평가}
+      released:{value:'', eval:''}, //출시일
+      ap:{value:'', eval:''}, //AP (칩셋)
+      memory:{value:'', eval:''}, //메모리
+      display:{value:'', eval:''}, //디스플레이스펙
+      camera:{value:'', eval:''}, //카메라스펙
+      battery:{value:'', eval:''}, //배터리용량
+      color:{value:'', eval:''}, //컬러 뭐뭐나왔음
+      weight:{value:'', eval:''}, // 제품 무게
+      bioAuth:{value:'', eval:''}, // 생체인증
+      etc:{value:'', eval:''}, //기타사항 나열
+      price:{value:'', eval:''}, // 예시 : {value : 값, eval: 너무 싸다 비싸다}
+      pros:{value:'', eval:''}, // 장점 나열
+      cons:{value:'', eval:''}, // 단점 나열
+      summary:{value:'', eval:''} // 제품에 대한 총평
+    },
+    like:0, //좋아요 누른 사람
+    likes:[], //좋아요 누른 사람들 목록
+  }
+
   // 제품정보 스키마
-  const [productInfo, setProductInfo] = useState(
-    {
-      companyType:'app', //'app' or 'sam'
-      productType:'pc', // 'pc', 'mo', 'tablet', 'watch', 'laptop', 'earbuds'
-      productName:'',
-      productImg:'', // img uri
-      badge:[],
-      spec:{ //{value : 값, eval: 값에 대한 평가}
-        released:{value:'', eval:''}, //출시일
-        ap:{value:'', eval:''}, //AP (칩셋)
-        memory:{value:'', eval:''}, //메모리
-        display:{value:'', eval:''}, //디스플레이스펙
-        camera:{value:'', eval:''}, //카메라스펙
-        battery:{value:'', eval:''}, //배터리용량
-        color:{value:'', eval:''}, //컬러 뭐뭐나왔음
-        weight:{value:'', eval:''}, // 제품 무게
-        bioAuth:{value:'', eval:''}, // 생체인증
-        etc:{value:'', eval:''}, //기타사항 나열
-        price:{value:'', eval:''}, // 예시 : {value : 값, eval: 너무 싸다 비싸다}
-        pros:{value:'', eval:''}, // 장점 나열
-        cons:{value:'', eval:''}, // 단점 나열
-        summary:{value:'', eval:''} // 제품에 대한 총평
-      },
-      like:0, //좋아요 누른 사람
-      likes:[], //좋아요 누른 사람들 목록
-    }
-  )
+  const [productInfo, setProductInfo] = useState(initialProduct)
 
   const inputChange = useCallback((e, key) => { //1뎁스 change
     setProductInfo(state => {
@@ -86,7 +87,7 @@ const Admin = () =>{
       return (
         <div className="specWrap" key={key}>
           <h4>
-            {key}: (YYYY-MM-DD)
+            {key}: 
           </h4>
           <input
             type="text"
@@ -94,8 +95,8 @@ const Admin = () =>{
             onChange={(e) => specChange(e.target.value, key)}
           />
           <h4>eval</h4>
-          <input
-            type="text"
+          <textarea
+            type="textarea"
             value={spec.eval}
             onChange={(e) => specChangeEval(e.target.value, key)}
           />
@@ -115,7 +116,8 @@ const Admin = () =>{
       console.log(result)
       if(result.data.stat){
         const consoleTest = result.data.message ? result.data.message : '메시지가 없다요'
-        console.log(consoleTest)
+        setProductInfo({...initialProduct});
+        alert('성공')
       }
       else{
         throw new Error('에러가 났다.')
@@ -186,13 +188,7 @@ const Admin = () =>{
             </div>
           ))}
         </div><br></br>
-        {/* <div className="specWrap">
-          <h4>released(출시일) : (YYYY-MM-DD)</h4>
-          <input type="text" value={productInfo.spec.released.value} onChange={(e)=>{specChange(e.target.value, 'released')}}/>
-          <h4>eval</h4>
-          <input type="text" value={productInfo.spec.released.eval} onChange={(e)=>{specChangeEval(e.target.value, 'released')}}/>
-          <br></br>
-        </div> */}
+        
         {
           renderSpecs()
         }
