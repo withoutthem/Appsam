@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { closeSnackBar, openSnackBar } from '../store'
+import { closeSnackBar, openSnackBar } from '../store';
+import axios from "axios";
 
 import deleteIcon from '../assets/images/icons/delete_24.png'
 import editIcon from '../assets/images/icons/edit_24.png'
@@ -34,24 +35,29 @@ const MainChats = ({allData})=>{
     const storeState = useSelector(state => state.user);
 
     //example Data Schema
-    const [chatData, setChatData] = useState(
-        [
-        //     {
-        //     type: 'chatApp', // or 'chatSam'
-        //     ticket:'11', // 문서 고유값
-        //     id:'admin11', //작성자 아이디
-        //     profile_img:'', //이미지 url
-        //     aors : 'Apple', //Apple / Samsung / None 중 하나
-        //     text:'', //글내용
-        //     like : 4, // 좋아요 수,
-        //     likes : false, // 내가 이 글에 좋아요 했는 지 보내줌
-        //     time : '' //작성일, 시간
-        // }
-    ]
-    );
+    const [chatData, setChatData] = useState([]);
+    //active 상태값 변경
+    const [activeIndex, setActiveIndex] = useState(0);
     // textarea값 바꾸기 위한 state 
     const [message, setMessage] = useState('');
     const [currentTime, setCurrentTime] = useState(new Date());
+
+    // 인기순,최신순 버튼을 누를때 get요청
+    useEffect(() => {
+        const url = activeIndex === 0 ? `/api/chatmain/app/popular/0` : `/api/chatmain/app/recent/0`;
+        axios.get(url)
+          .then(response => {
+            const newData = response.data.data;
+            setChatData(newData);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }, [activeIndex]);
+    
+      const handleClick = (i) => {
+        setActiveIndex(i);
+      };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -91,13 +97,13 @@ const MainChats = ({allData})=>{
             <div className="chatsWrap">
                 <div className="tabMenu">
                     {/* /api/chatmain/popular */}
-                    <button className="active">인기순</button> 
+                    <button className={activeIndex === 0 ? 'active' : ''} onClick={()=>handleClick(0)}>인기순</button> 
                     {/* /api/chatmain/recent */}
-                    <button>최신순</button>
+                    <button className={activeIndex === 1 ? 'active' : ''} onClick={()=>handleClick(1)}>최신순</button>
                 </div>
                 <ul className="chatsList">
-                {chatData.map((message,chat) => {
-                    return <Chat key={chat} chatData={chat} message={message} currentTime={currentTime} />;
+                {chatData.map((chat) => {
+                    return <Chat key={chat} chatData={chat} />;
                     })}
                     {/* <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
@@ -105,7 +111,7 @@ const MainChats = ({allData})=>{
                     <Chat chatData = {chatData[0]}></Chat> */}
                 </ul>
                 {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
-                <form className="chatInputForm">
+                <form className="chatInputForm" >
                     <div className="inputWrap">
                         <div className="profileWrap">
                             {
@@ -117,7 +123,7 @@ const MainChats = ({allData})=>{
                         </div>
                         <textarea maxLength="100" placeholder={storeState.id ? '댓글을 적어보세요' : '로그인을 해야합니다.'} cols="30" rows="10" wrap="soft" value={message} onChange={handleTextareaChange}></textarea>
                         {/* 글쓰기 누르면 스낵바 뜨는 것 처럼 모든 버튼에 스낵바 알림 필요  */}
-                        <button className="submitBtn" onClick={handleSendMessage}>글쓰기</button> 
+                        <button className="submitBtn">글쓰기</button> 
                         <div className="limit">100자 제한 (10/100)</div>
                     </div>
                 </form>
@@ -145,7 +151,7 @@ const Chat = ({chatData,message,currentTime})=>{
 
     return(
         <li className="chat">
-            <div className="chatDate">{currentTime.toLocaleString()}</div>
+            <div className="chatDate"></div>
             <div className="chat_left">
                 <div className="profileWrap">
                     <img className="profileImg" src={profileIMG} alt="바인딩 해야함" />
