@@ -7,7 +7,7 @@ const product = new Schema({
     type:String,
     index:true
   }
-})
+},{versionKey:false, _id:false})
 
 const productList = new Schema({
   companyType : {
@@ -23,7 +23,7 @@ const productList = new Schema({
     required: true,
     default:[]
   }
-})
+},{versionKey:false})
 
 module.exports = mongoose.model('ProductList', productList);
 
