@@ -78,7 +78,7 @@ const productSchema = new Schema({
 
 //복합 인덱스
 productSchema.index({ companyType: 1, productType: 1});
-productSchema.index({ companyType: 1, badge: 1 });
+productSchema.index({ badge : 1, companyType : 1 });
 
 // badge 이름
 
