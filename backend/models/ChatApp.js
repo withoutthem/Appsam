@@ -31,7 +31,8 @@ const chatAppSchema = new Schema({
     },
     likes:{
         type:[String],
-        required: false
+        required: false,
+        default: []
     }
 },
 {
@@ -39,12 +40,10 @@ const chatAppSchema = new Schema({
 }, 
 );
 
-chatAppSchema.index({ like: -1, createdAt: -1 }); // 복합인덱스 생성
-
-chatAppSchema.plugin(AutoIncrement, { //설정
-	inc_field:'ticket',
-    id:'ticketNumsApp',
-    start_seq:1
-})
+// chatAppSchema.plugin(AutoIncrement, { //설정
+// 	inc_field:'ticket',
+//     id:'ticketNumsApp',
+//     start_seq:1
+// })
 
 module.exports = mongoose.model('ChatApp', chatAppSchema);

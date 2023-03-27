@@ -5,14 +5,19 @@ const TestZone = ()=>{
 
 
     // api/chatmain/app/post, {type:'chatApp' or 'chatSam', text:내용, id: redux에 있는 id,} 
-    // 포스트를 게시하는데, admin6로 접속해있어야하며, 타입을 정확히 입력하여 요청해야함.
+    // 포스트를 게시하는데, admin1로 접속해있어야하며, 타입을 정확히 입력하여 요청해야함.
     const postingTest = async ()=>{
+      try{
         const result = await axios.post('/api/chatmain/app/post',{
-            type:'chatApp',
-            text: 'testZone에서 텍스트를 보냄',
-            id : 'admin6',
+          type:'chatApp',
+          text: '0326 testZone에서 텍스트를 보냄',
+          id : 'admin6',
         })
         console.log(result);
+      }
+      catch(e){
+        console.log(e)
+      }
     }
 
     // api/chatmain/:type/update/:ticket , {type:'chatApp' or 'chatSam', text:'내용', id:redux에 있는 id}

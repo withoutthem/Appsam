@@ -31,7 +31,8 @@ const chatSamSchema = new Schema({
     },
     likes:{
         type:[String],
-        required: false
+        required: false,
+        default:[]
     }
 },
 {
@@ -39,7 +40,6 @@ const chatSamSchema = new Schema({
 }, 
 );
 
-chatSamSchema.index({ like: -1, createdAt: -1 }); // 복합인덱스 생성
 
 chatSamSchema.plugin(AutoIncrement, { //설정
 	inc_field:'ticket',

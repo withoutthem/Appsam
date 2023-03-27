@@ -146,7 +146,7 @@ const chatPost = async (req, res, next)=>{
     //jwt 검증 -> type찾아서 post접근 -> text내용 스키마 만들어서 포스팅 -> 완료응답
     try{
         const nowMyId = await chatMainJwtValidatorToID(req); // jwt 검증해서 id로 만들기
-    
+        console.log(nowMyId)
         if(nowMyId.stat === false){ // jwt 유효하지 않은 경우
             res.status(401).send(nowMyId);
         }
@@ -167,7 +167,9 @@ const chatPost = async (req, res, next)=>{
                         like : 0,
                         likes : []
                     });
+                    console.log(nowPost)
                     await nowPost.save();
+                    console.log('save')
                     res.status(201).send({stat:true, message:'댓글 포스팅 완료되었습니다.'})
                 }
                 else if(type === 'chatSam' && req.params.type === 'sam'){
