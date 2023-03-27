@@ -1179,10 +1179,10 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-function-bind@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
-  integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
+"fsevents@~2.3.2":
+  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
+  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+  "version" "2.3.2"
 
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
@@ -1484,10 +1484,10 @@ function-bind@^1.1.1:
     "async" "^2.5.0"
     "lodash" "^4.17.20"
 
-"mongoose@^7.0.1", "mongoose@>=4":
-  "integrity" "sha512-fxm2bPRG457Hb8RLwN8cMCokK8HNem/7g+qp5SrHC7Pt4Z4jqn1+/3cuc8W7uqehKDWEtpirggI7uw08x2ZIjQ=="
-  "resolved" "https://registry.npmjs.org/mongoose/-/mongoose-7.0.1.tgz"
-  "version" "7.0.1"
+"mongoose@^7.0.3", "mongoose@>=4":
+  "integrity" "sha512-3n8vc1/mssuxKa6vfghSocp3MeiCFYzhX36Ok+PsDNNYzHC9tw3rNkAMLemIwZ2jgXqkZ7CfKOxkzjp/d/SWfg=="
+  "resolved" "https://registry.npmjs.org/mongoose/-/mongoose-7.0.3.tgz"
+  "version" "7.0.3"
   dependencies:
     "bson" "^5.0.1"
     "kareem" "2.5.1"
@@ -1546,10 +1546,10 @@ function-bind@^1.1.1:
   dependencies:
     "whatwg-url" "^5.0.0"
 
-"nodemon@^2.0.21":
-  "integrity" "sha512-djN/n2549DUtY33S7o1djRCd7dEm0kBnj9c7S9XVXqRUbuggN1MZH/Nqa+5RFQr63Fbefq37nFXAE9VU86yL1A=="
-  "resolved" "https://registry.npmjs.org/nodemon/-/nodemon-2.0.21.tgz"
-  "version" "2.0.21"
+"nodemon@^2.0.22":
+  "integrity" "sha512-B8YqaKMmyuCO7BowF1Z1/mkPqLk6cs/l63Ojtd6otKjMx47Dq1utxfRxcavH1I7VSaL8n5BUaoutadnsX3AAVQ=="
+  "resolved" "https://registry.npmjs.org/nodemon/-/nodemon-2.0.22.tgz"
+  "version" "2.0.22"
   dependencies:
     "chokidar" "^3.5.2"
     "debug" "^3.2.7"

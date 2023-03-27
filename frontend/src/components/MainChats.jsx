@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect,useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeSnackBar, openSnackBar } from '../store';
 import axios from "axios";
@@ -40,31 +40,107 @@ const MainChats = ({allData})=>{
     const [activeIndex, setActiveIndex] = useState(0);
     // textarea값 바꾸기 위한 state 
     const [message, setMessage] = useState('');
-    const [currentTime, setCurrentTime] = useState(new Date());
+    const [page, setPage] = useState(0);
+    const [load, setLoad] = useState(false);
+    const preventRef = useRef(true);
+    const obsRef = useRef(null);
+    const endRef = useRef(false);
+    
 
-    // 인기순,최신순 버튼을 누를때 get요청
-    useEffect(() => {
-        const url = activeIndex === 0 ? `/api/chatmain/app/popular/0` : `/api/chatmain/app/recent/0`;
-        axios.get(url)
+   
+    // 글쓰기를 누르면 post 요청
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        const url = "/api/chatmain/app/post";
+        axios.post(url, {type:'app', text: message, id: storeState.id})
           .then(response => {
-            const newData = response.data.data;
-            setChatData(newData);
+            const newData = response.data;
+            console.log(newData)
           })
           .catch(error => {
             console.error(error);
+            
+            console.log(error);
+            alert('메시지를 보내는 동안 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
           });
-      }, [activeIndex]);
+      };
+      
+    const handleTextareaChange = event => {
+        setMessage(event.target.value);
+    };
     
+    useEffect(() => {
+        if (activeIndex === 0) return;
+        const observer = new IntersectionObserver(obsHandler, { threshold: 1 });
+        if (obsRef.current) observer.observe(obsRef.current);
+        return () => { observer.disconnect(); }
+      }, [activeIndex]);
+      
+      const obsHandler = (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && !endRef.current) {
+          preventRef.current = true;
+          setPage((prev) => prev + 1);
+        }
+      };
+      
+      useEffect(() => {
+        const url = activeIndex === 0 ? "/api/chatmain/app/popular/0" : `/api/chatmain/app/recent?start=${page}&count=4`;
+        axios.get(url)
+          .then((response) => {
+            const newData = response.data.data;
+            setChatData(newData);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }, [activeIndex, page]);
+      
+      const getPosts = useCallback(() => {
+        setLoad(true);
+        const url = `/api/chatmain/app/recent?start=${page}&count=4`;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.end) {
+              endRef.current = true;
+              console.log(res.data);
+            } else {
+              const newData = res.data.data;
+              setChatData((prev) =>
+              Array.isArray(prev) ? [...prev, ...(Array.isArray(newData) ? newData : [newData])] : newData
+            );
+            }
+            console.log(res.data.data);
+          })
+          .catch((e) => {
+            console.error(e);
+          })
+          .finally(() => {
+            setLoad(false);
+          });
+      }, [page]);
+      
+      useEffect(() => {
+        if (page !== 1 && !endRef.current) {
+          getPosts();
+        }
+        console.log(page);
+      }, [page]);
+      
+      useEffect(() => {
+        if (!endRef.current) {
+          getPosts();
+        }
+      }, [getPosts]);
+      
       const handleClick = (i) => {
         setActiveIndex(i);
       };
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+      
+      
+    
+    
     //snackBar 
     const snackBarTime = useRef(null);
     const snackBar = (e, message) => {
@@ -79,17 +155,7 @@ const MainChats = ({allData})=>{
         }, 1500);
     }
 
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (message.trim()) {
-          setChatData(prevChatData => [...prevChatData, message]);
-          setMessage('');
-        }
-      };
-
-    const handleTextareaChange = event => {
-        setMessage(event.target.value);
-    };
+    
 
     return(
         <div className={`phoneWrap ${allData.type}`}>
@@ -102,16 +168,25 @@ const MainChats = ({allData})=>{
                     <button className={activeIndex === 1 ? 'active' : ''} onClick={()=>handleClick(1)}>최신순</button>
                 </div>
                 <ul className="chatsList">
-                {chatData.map((chat) => {
-                    return <Chat key={chat} chatData={chat} />;
+                {chatData && chatData.map((chat) => {
+                    return <Chat key={chat._id} chatData={chat} />;
                     })}
                     {/* <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat> */}
+                     {
+                        load &&
+                        <li className="spinner">
+                            loading...
+                        </li>
+                    }
+                    <li  ref={obsRef}>
+                        옵저버
+                    </li>
                 </ul>
                 {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
-                <form className="chatInputForm" >
+                <form className="chatInputForm" onSubmit={handleSendMessage} >
                     <div className="inputWrap">
                         <div className="profileWrap">
                             {
