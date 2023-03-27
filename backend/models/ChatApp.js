@@ -1,7 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const AutoIncrement = require('mongoose-sequence')(mongoose);
+
+//ticket 카운터 구현
+const counterSchema = new Schema({
+  _id: String,
+  seq: Number
+});
+const Counter = mongoose.model('Counter', counterSchema);
+
 
 const chatAppSchema = new Schema({
     type:{
@@ -33,6 +40,10 @@ const chatAppSchema = new Schema({
         type:[String],
         required: false,
         default: []
+    },
+    ticket:{
+      type : Number,
+      unique : true
     }
 },
 {
@@ -40,10 +51,21 @@ const chatAppSchema = new Schema({
 }, 
 );
 
-// chatAppSchema.plugin(AutoIncrement, { //설정
-// 	inc_field:'ticket',
-//     id:'ticketNumsApp',
-//     start_seq:1
-// })
+
+chatAppSchema.pre('save', async function (next) {
+  try {
+    const counter = await Counter.findByIdAndUpdate(
+      'ticketNumsApp',
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    this.ticket = counter.seq;
+    next();
+  } catch (error) {
+    console.error('Error in chatAppSchema pre save middleware:', error);
+    next(error);
+  }
+});
 
 module.exports = mongoose.model('ChatApp', chatAppSchema);
