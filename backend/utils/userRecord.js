@@ -11,8 +11,10 @@ const userRecord = async (nowID) => { // HTTP 응답 이후 추가작업(비동�
 
   if (getDailyDB) { //오늘날짜 DB가 이미 있으면
     const isDuplicates = await Daily.findOne({
+      date : getDailyDB.date,
       "data.users": nowID,
     });
+    console.log(getDailyDB.date)
     if (isDuplicates) { //이미 아이디 있으면
       console.log("토큰이 있으나 이미 오늘활동이 기록되었습니다.");
     } else { //아이디가 없는 경우
