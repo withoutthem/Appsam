@@ -2,6 +2,8 @@ import { useState, useRef, useEffect,useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeSnackBar, openSnackBar } from '../store';
 import axios from "axios";
+import debounce from 'lodash.debounce';
+
 
 import deleteIcon from '../assets/images/icons/delete_24.png'
 import editIcon from '../assets/images/icons/edit_24.png'
@@ -42,6 +44,7 @@ const MainChats = ({allData})=>{
     const [message, setMessage] = useState('');
     const [page, setPage] = useState(0);
     const [load, setLoad] = useState(false);
+    const [noData, setNoData] = useState(false);
     const preventRef = useRef(true);
     const obsRef = useRef(null);
     const endRef = useRef(false);
@@ -71,20 +74,21 @@ const MainChats = ({allData})=>{
     
     useEffect(() => {
         if (activeIndex === 0) return;
-        const observer = new IntersectionObserver(obsHandler, { threshold: 1 });
+        const observer = new IntersectionObserver(obsHandler, { threshold: 0.4 });
         if (obsRef.current) observer.observe(obsRef.current);
         return () => { observer.disconnect(); }
       }, [activeIndex]);
       
       const obsHandler = (entries) => {
         const target = entries[0];
-        if (target.isIntersecting && !endRef.current) {
-          preventRef.current = true;
-          setPage((prev) => prev + 1);
-        }
+        if (target.isIntersecting && !endRef.current && preventRef.current) {
+          preventRef.current = false;
+          setPage((prev) => prev + 4);
+        } 
       };
       
       useEffect(() => {
+        setLoad(true);
         const url = activeIndex === 0 ? "/api/chatmain/app/popular/0" : `/api/chatmain/app/recent?start=${page}&count=4`;
         axios.get(url)
           .then((response) => {
@@ -93,10 +97,17 @@ const MainChats = ({allData})=>{
           })
           .catch((error) => {
             console.error(error);
+          })
+          .finally(() => {
+            setLoad(false);
           });
-      }, [activeIndex, page]);
+      }, [activeIndex]);
       
       const getPosts = useCallback(() => {
+        if (preventRef.current) {
+          setLoad(false);
+          return;
+        }
         setLoad(true);
         const url = `/api/chatmain/app/recent?start=${page}&count=4`;
         axios
@@ -106,12 +117,18 @@ const MainChats = ({allData})=>{
               endRef.current = true;
               console.log(res.data);
             } else {
-              const newData = res.data.data;
-              setChatData((prev) =>
-              Array.isArray(prev) ? [...prev, ...(Array.isArray(newData) ? newData : [newData])] : newData
-            );
+                if(res.data.stat){
+                    const newData = res.data.data;
+                    setChatData((prev) =>
+                      Array.isArray(prev) ? [...prev, ...(Array.isArray(newData) ? newData : [newData])] : newData
+                    );
+                    preventRef.current = true;
+                    setNoData(false);
+                } else{
+                    setNoData(true);
+                    obsRef.current.textContent = "더 이상 데이터가 없습니다.";
+                }
             }
-            console.log(res.data.data);
           })
           .catch((e) => {
             console.error(e);
@@ -120,19 +137,26 @@ const MainChats = ({allData})=>{
             setLoad(false);
           });
       }, [page]);
+      const debouncedGetPosts = useCallback(
+        debounce(() => {
+          getPosts();
+        }, 1000),
+        [getPosts]
+      );
       
       useEffect(() => {
-        if (page !== 1 && !endRef.current) {
-          getPosts();
-        }
-        console.log(page);
+        debouncedGetPosts();
       }, [page]);
       
-      useEffect(() => {
-        if (!endRef.current) {
-          getPosts();
-        }
-      }, [getPosts]);
+      
+      
+      
+      
+      
+      
+      
+      
+
       
       const handleClick = (i) => {
         setActiveIndex(i);
@@ -178,11 +202,11 @@ const MainChats = ({allData})=>{
                      {
                         load &&
                         <li className="spinner">
-                            loading...
+                            
                         </li>
                     }
-                    <li  ref={obsRef}>
-                        옵저버
+                   <li  ref={obsRef} className={noData ? 'obs no-data' : 'obs hide'}>
+                   {noData ? '데이터가 더 이상 없습니다.' : '옵저버'}
                     </li>
                 </ul>
                 {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
