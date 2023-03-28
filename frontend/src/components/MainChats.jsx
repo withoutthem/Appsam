@@ -89,6 +89,7 @@ const MainChats = ({allData})=>{
       
       useEffect(() => {
         setLoad(true);
+        setPage(0);
         const url = activeIndex === 0 ? "/api/chatmain/app/popular/0" : `/api/chatmain/app/recent?start=${page}&count=4`;
         axios.get(url)
           .then((response) => {
@@ -205,9 +206,9 @@ const MainChats = ({allData})=>{
                             
                         </li>
                     }
-                   <li  ref={obsRef} className={noData ? 'obs no-data' : 'obs hide'}>
+                  {activeIndex === 1 ?  <li  ref={obsRef} className={noData ? 'obs no-data' : 'obs hide'}>
                    {noData ? '데이터가 더 이상 없습니다.' : '옵저버'}
-                    </li>
+                    </li> : ''}
                 </ul>
                 {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
                 <form className="chatInputForm" onSubmit={handleSendMessage} >
