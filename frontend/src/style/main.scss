@@ -2,8 +2,8 @@
 //testZone
 .testZone {display:flex; height:500px; justify-content:center; flex-direction: column; align-items: center; width:1000px; background:lightblue;}
 .testZone button{background:red; margin:20px; color:#fff; font-weight:600; font-size:20px; padding:20px;}
-
-
+.badgeAdmin{color:#101010 !important; font-size:15px !important;}
+textarea{height:200px;}
 //mixin
 @mixin flexCenter {display: flex; justify-content: center; align-items: center;}
 @mixin flexAlign {display: flex; align-items: center;}
@@ -158,12 +158,36 @@ button.badge:hover{background:#fff; color:#101010;}
 .nowSelected .inner .closeBtn{padding:0; width:100%; position:absolute;bottom:0; background:transparent; left:50%; transform:translateX(-50%)}
 .nowSelected .inner .closeBtn.upsideDown{transform:translateX(-50%) rotate(180deg)}
 
-.compareAllWrap{position: relative; @include flexAlign();}
+.compareAllWrap{position: relative; @include flexAlign(); margin-bottom:60px;}
 .compareAllWrap .fast{position: relative;flex-grow:1; @include flexCenter(); flex-direction: column;}
-.compareAllWrap .fast .logoSizer{@include flexCenter(); position: relative; margin-bottom:20px; height:130px;}
+.compareAllWrap .fast .logoSizer{@include flexCenter(); position: relative; width:237px; margin-bottom:20px; height:130px;}
 .compareAllWrap .fast .badgeWrap .badge{margin-right:5px}
 .compareAllWrap .fast .badgeWrap .badge:last-of-type{margin-right:0px}
 .compareAllWrap .disclaimer{padding-left:20px;width:320px; font-size:12px; color:#555454; line-height: 1.2;}
+.compareAllTable .type{@include flexAlign(); margin-bottom:60px;}
+.compareAllTable .type h3{font-size:50px; width:320px; @include flexCenter();}
+.compareAllTable .type .productWrap{flex:1; @include flexCenter(); flex-direction: column;}
+.compareAllTable .type .productWrap img{margin-bottom:15px;}
+.compareAllTable .type .productWrap .badgeWrap{margin-bottom:15px}
+.compareAllTable .type .productWrap .badgeWrap .badge{margin-right:5px;}
+.compareAllTable .type .productWrap .badgeWrap .badge:last-of-type{margin-right:0px;}
+.compareAllTable .type .productWrap .dropdown_product{@include flexAlign()}
+.compareAllTable .type .productWrap .dropdown_product p{margin-right:10px;}
+.compareAllTable .type .productWrap .dropdown-menu.show{width:100%;}
+.compareAllTable .tableSet .table_header{@include flexAlign(); margin-bottom:40px;}
+.compareAllTable .tableSet .table_header .info{padding-left:100px;}
+.compareAllTable .tableSet .table_header .eval{padding-right:100px;}
+.compareAllTable .tableSet .table_header div{width:320px;}
+.compareAllTable .tableSet .table_header .grow{flex:1; @include flexCenter();}
+.compareAllTable .tableSet .table_body{@include flexAlign(); margin-bottom:40px;}
+.compareAllTable .tableSet .table_body div{@include flexCenter()}
+.compareAllTable .tableSet .table_body .grow{flex:1;}
+.compareAllTable .tableSet .table_body .head{width:320px;}
+.compareAllTable .tableSet .table_body .app_val{padding-left:100px;}
+.compareAllTable .tableSet .table_body .sam_val{padding-left:100px;}
+.compareAllTable .tableSet .table_body .app_edit{padding-right:100px;}
+.compareAllTable .tableSet .table_body .sam_edit{padding-right:100px;}
+
 /*무한 스크롤 css*/
 .obs{text-align: center;}
 .typeA .obs{color: #FFBCBC;}

@@ -17,7 +17,7 @@ import axios from 'axios';
 
 // 단, 들어온 데이터를 메모이제이션 하여 제품이 로컬에 존재하지 않을 경우에만 get요청을 한다. 로컬 캐시에 존재할 경우 그 데이터를 가져온다. useMemo를 활용하면 될듯하다.
 
-// 현재 고른 제품을 state로 저장하여 CompareAllHeader에 props로 내려서 상단 팝업과 동기화한다. 상단 팝업에서 선택할 경우에도 현재 비교중인 제품 변경이 가능하다.
+// 현재 고른 제품을 state로 저장하여 CompareAllHead er에 props로 내려서 상단 팝업과 동기화한다. 상단 팝업에서 선택할 경우에도 현재 비교중인 제품 변경이 가능하다.
 
 const CompareAll = ()=>{
 
@@ -52,6 +52,7 @@ const CompareAll = ()=>{
                 <img src={appLogo} alt="" />
               </div>
               <div className="badgeWrap">
+                {/* 클릭 한번에 모든 셋을 대입하는 컨트롤러 */}
                 <button className="badge flagship">플래그쉽</button>
                 <button className="badge latest_release">가장최신</button>
                 <button className="badge masterpiece">명작</button>
@@ -63,6 +64,7 @@ const CompareAll = ()=>{
                 <img src={samLogo} alt="" />
               </div>
               <div className="badgeWrap">
+                {/* 클릭 한번에 모든 셋을 대입하는 컨트롤러 */}
                 <button className="badge flagship">플래그쉽</button>
                 <button className="badge latest_release">가장최신</button>
                 <button className="badge masterpiece">명작</button>

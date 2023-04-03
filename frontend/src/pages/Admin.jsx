@@ -161,7 +161,7 @@ const Admin = () =>{
           <h4>ImgUri</h4> 
           <input type="text" value={productInfo.productImg} onChange={(e)=>{inputChange(e.target.value, 'productImg')}}/>
         </div><br></br>
-        <div className="badge">
+        <div className="badge badgeAdmin">
           <h4>badge 설명</h4>
           가성비급: value_for_money<br/>
           엔트리급: entry_level<br/>
@@ -171,7 +171,7 @@ const Admin = () =>{
           명작: masterpiece<br/>
           가성비: cost_effectiveness<br/>
         </div><br></br>
-        <div className="badge">
+        <div className="badge badgeAdmin">
           <h4>Badge</h4>
           {badgeOptions.map((option) => (
             <div key={option}>
