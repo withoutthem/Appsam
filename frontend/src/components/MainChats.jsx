@@ -48,35 +48,55 @@ const MainChats = ({allData})=>{
     const preventRef = useRef(true);
     const obsRef = useRef(null);
     const endRef = useRef(false);
-    
+    const [refresh, setRefresh] = useState(false);
+    const MAX_LENGTH = 100; // 최대 글자수
 
    
     // 글쓰기를 누르면 post 요청
     const handleSendMessage = (e) => {
         e.preventDefault();
+        const data = {type:'chatApp', text: message, id: storeState.id};
+        console.log('전송 데이터:', data); // 추가
         const url = "/api/chatmain/app/post";
-        axios.post(url, {type:'app', text: message, id: storeState.id})
+        axios.post(url, data)
           .then(response => {
             const newData = response.data;
-            console.log(newData)
+            console.log(newData);
+            setMessage('');
+            setRefresh(!refresh);
+            if(activeIndex !== 1){
+                setActiveIndex(1);
+            } else{
+                setRefresh(!refresh);
+            }
+            
+            console.log(refresh)
+            setChatData((prev) =>
+            Array.isArray(prev) ? [...prev, ...(Array.isArray(newData) ? newData : [newData])] : newData
+          );
           })
           .catch(error => {
             console.error(error);
-            
             console.log(error);
             alert('메시지를 보내는 동안 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
           });
       };
-      
+   
     const handleTextareaChange = event => {
-        setMessage(event.target.value);
+        const value = event.target.value;
+        if (value.length > MAX_LENGTH) {
+          return; // 최대 글자수를 초과하면 입력을 막음
+        }
+        setMessage(value);
     };
     
+    // 무한스크롤
     useEffect(() => {
         if (activeIndex === 0) return;
-        const observer = new IntersectionObserver(obsHandler, { threshold: 0.4 });
+        const observer = new IntersectionObserver(obsHandler, { threshold: 0.2 }); 
         if (obsRef.current) observer.observe(obsRef.current);
         return () => { observer.disconnect(); }
+        
       }, [activeIndex]);
       
       const obsHandler = (entries) => {
@@ -88,8 +108,8 @@ const MainChats = ({allData})=>{
       };
       
       useEffect(() => {
-        setLoad(true);
         setPage(0);
+        console.log("포스트성곧");
         const url = activeIndex === 0 ? "/api/chatmain/app/popular/0" : `/api/chatmain/app/recent?start=${page}&count=4`;
         axios.get(url)
           .then((response) => {
@@ -99,12 +119,9 @@ const MainChats = ({allData})=>{
           .catch((error) => {
             console.error(error);
           })
-          .finally(() => {
-            setLoad(false);
-          });
-      }, [activeIndex]);
+      }, [activeIndex,refresh]);
       
-      const getPosts = useCallback(() => {
+      const getPosts = useCallback(() => { //page추가
         if (preventRef.current) {
           setLoad(false);
           return;
@@ -134,31 +151,21 @@ const MainChats = ({allData})=>{
           .catch((e) => {
             console.error(e);
           })
-          .finally(() => {
+          .finally(()=>{
             setLoad(false);
-          });
+          })
       }, [page]);
       const debouncedGetPosts = useCallback(
         debounce(() => {
           getPosts();
-        }, 1000),
+          console.log(load)
+        }, 1500),
         [getPosts]
       );
       
       useEffect(() => {
         debouncedGetPosts();
       }, [page]);
-      
-      
-      
-      
-      
-      
-      
-      
-      
-
-      
       const handleClick = (i) => {
         setActiveIndex(i);
       };
@@ -179,7 +186,7 @@ const MainChats = ({allData})=>{
             snackBarTime.current = null;
         }, 1500);
     }
-
+    
     
 
     return(
@@ -200,16 +207,16 @@ const MainChats = ({allData})=>{
                     <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat> */}
-                     {
-                        load &&
-                        <li className="spinner">
-                            
-                        </li>
-                    }
                   {activeIndex === 1 ?  <li  ref={obsRef} className={noData ? 'obs no-data' : 'obs hide'}>
                    {noData ? '데이터가 더 이상 없습니다.' : '옵저버'}
                     </li> : ''}
                 </ul>
+                {
+                        load &&
+                        <div className="spinner">
+                            
+                        </div>
+                    }
                 {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
                 <form className="chatInputForm" onSubmit={handleSendMessage} >
                     <div className="inputWrap">
@@ -224,7 +231,7 @@ const MainChats = ({allData})=>{
                         <textarea maxLength="100" placeholder={storeState.id ? '댓글을 적어보세요' : '로그인을 해야합니다.'} cols="30" rows="10" wrap="soft" value={message} onChange={handleTextareaChange}></textarea>
                         {/* 글쓰기 누르면 스낵바 뜨는 것 처럼 모든 버튼에 스낵바 알림 필요  */}
                         <button className="submitBtn">글쓰기</button> 
-                        <div className="limit">100자 제한 (10/100)</div>
+                        <div className="limit">{MAX_LENGTH}자 제한 ({message.length}/{MAX_LENGTH})</div>
                     </div>
                 </form>
             </div>
@@ -260,7 +267,7 @@ const Chat = ({chatData,message,currentTime})=>{
                 </div>
                 <div className="txtWrap">
                     <p className="txt">
-                       {message}
+                    {chatData.text}
                     </p>
                 </div>
             </div>
