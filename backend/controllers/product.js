@@ -1,6 +1,8 @@
 const Product = require('../models/Product');
 const ProductList = require('../models/ProductList');
 
+const { checkJWT } = require('../utils/jwtController');
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9,7 +11,6 @@ const ProductList = require('../models/ProductList');
 const getProductList = async (req, res, next) =>{
   try{
     const result = await ProductList.find().select('-_id -list._id') //제공된 데이터의 _id제외, 그리고 list안의 _id도 제외
-
     result.forEach(productList => {
       productList.list.sort((a, b) => b.released - a.released); //최신이 위로 올라옴(내림차순)
     });
@@ -25,30 +26,20 @@ const getProductList = async (req, res, next) =>{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // POST요청, 제품추가 : /api/product/add 
-const addProduct = async (req, res, next) => {
-  const {
-    companyType,
-    productType,
-    productName,
-    productImg,
-    badge,
-    spec,
-    like,
-    likes
-  } = req.body.productInfo;
-
-  // productList에 추가해야함
-  const nowListItem = {
-    companyType : req.body.productInfo.companyType,
-    productType : req.body.productInfo.productType,
-    product : {
-      name : req.body.productInfo.productName,
-      released : req.body.productInfo.spec.released.value
-    }
-  }
-
+const addProduct = async (req, res, next) => { //관리자용
+  const token = req.headers.cookie.substring(4);
   try{
-    const nowProduct = new Product({
+    if(!token){ //admin만 접근 허용
+      throw {stat:false, status:401, message:'Unauthorized'}
+    }
+    else{
+      const {id} = await checkJWT(token);
+      if(id !== 'admin'){
+        throw {stat:false, status:401, message:'you are not ADMIN'}
+      }
+    }
+
+    const {
       companyType,
       productType,
       productName,
@@ -57,31 +48,41 @@ const addProduct = async (req, res, next) => {
       spec,
       like,
       likes
-    })
-    await nowProduct.save()
+    } = req.body.productInfo;
+  
+    // productList에 추가해야함
+    const nowListItem = {
+      companyType : req.body.productInfo.companyType,
+      productType : req.body.productInfo.productType,
+      product : {
+        name : req.body.productInfo.productName,
+        released : req.body.productInfo.spec.released.value
+      }
+    }
 
-    let productList = await ProductList.findOne({
-      companyType: nowListItem.companyType,
-      productType: nowListItem.productType
+    const nowProduct = new Product({
+      companyType,
+      productType,
+      productName,
+      productImg,
+      badge,
+      spec,
+      like,
+      likes,
     });
-    
-    if(productList){ // 리스트가 있으면
-      productList.list.push(nowListItem.product)      
-    }
-    else{ //리스트가 없으면 생성
-      productList = new ProductList({
-        companyType : nowListItem.companyType,
-        productType : nowListItem.productType,
-        list : [nowListItem.product]
-      })
-    }
+    await nowProduct.save();
 
-    await productList.save();
+    await ProductList.findOneAndUpdate(
+      { companyType: nowListItem.companyType, productType: nowListItem.productType },
+      { $push: { list: nowListItem.product } },
+      { upsert: true, new: true }
+    );
 
-    res.send({stat:true, message:'성공해써요'})
+    res.send({ stat: true, message: '성공해써요' });
+
   }
   catch(e){
-    res.status(500).send({stat:false, message:'저장 안됬습니다', error : e})
+    res.status(e.status || 500).send({ stat: false, message: '저장 안됬습니다', error: e.message });
   }
 }
 
@@ -149,5 +150,63 @@ const getOneProduct = async (req, res) =>{
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = {getAllProduct, getProductList, addProduct, getGrade, getOneProduct};
+const patchOneProduct = async (req, res)=>{ //관리자용
+  try{
+      const token = req.headers.cookie.substring(4);
+      if(!token){ //admin만 접근 허용
+        throw {stat:false, status:401, message:'Unauthorized'}
+      }
+      else{
+        const {id} = await checkJWT(token);
+        if(id !== 'admin'){
+          throw {stat:false, status:401, message:'you are not ADMIN'}
+        }
+      }
+
+    const product = await Product.findOne({productName : req.body.productName})
+    if(!product){
+      throw {status : 500, stat:false, message:'제품이 없는디요?'}
+    }
+    //필드 업데이트
+    if (req.body.companyType) product.companyType = req.body.companyType;
+    if (req.body.productType) product.productType = req.body.productType;
+    if (req.body.productName) product.productName = req.body.productName;
+    if (req.body.productImg) product.productImg = req.body.productImg;
+    if (req.body.badge) product.badge = req.body.badge;
+    if (req.body.spec) {
+      if (req.body.spec.released) product.spec.released = req.body.spec.released;
+      if (req.body.spec.ap) product.spec.ap = req.body.spec.ap;
+      if (req.body.spec.memory) product.spec.memory = req.body.spec.memory;
+      if (req.body.spec.display) product.spec.display = req.body.spec.display;
+      if (req.body.spec.camera) product.spec.camera = req.body.spec.camera;
+      if (req.body.spec.battery) product.spec.battery = req.body.spec.battery;
+      if (req.body.spec.color) product.spec.color = req.body.spec.color;
+      if (req.body.spec.weight) product.spec.weight = req.body.spec.weight;
+      if (req.body.spec.bioAuth) product.spec.bioAuth = req.body.spec.bioAuth;
+      if (req.body.spec.etc) product.spec.etc = req.body.spec.etc;
+      if (req.body.spec.price) product.spec.price = req.body.spec.price;
+      if (req.body.spec.pros) product.spec.pros = req.body.spec.pros;
+      if (req.body.spec.cons) product.spec.cons = req.body.spec.cons;
+      if (req.body.spec.summary) product.spec.summary = req.body.spec.summary;
+    }
+    if (req.body.like) product.like = req.body.like;
+    if (req.body.likes) product.likes = req.body.likes;
+    
+    await product.save()
+    res.send({stat:true, message:'수정 성공', data:product})
+    
+  }
+  catch(e){
+    console.log(e)
+    res.status(e.status || 500).send({stat:false, message:e.status? e.message:'서버에러인디요'})
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+module.exports = {getAllProduct, getProductList, addProduct, getGrade, getOneProduct, patchOneProduct};

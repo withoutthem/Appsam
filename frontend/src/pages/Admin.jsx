@@ -1,7 +1,20 @@
 import axios from "axios";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () =>{
+
+  const storeState = useSelector(state => state) 
+  // redux의 state 모두 불러오기
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(storeState.user.id !== 'admin'){      
+      alert('admin 로그인을 해야합니다.');
+      navigate('/')
+    }
+  },[storeState.user.id, navigate])
 
   const initialProduct = //제품정보 초기상태
   {
@@ -32,6 +45,9 @@ const Admin = () =>{
 
   // 제품정보 스키마
   const [productInfo, setProductInfo] = useState(initialProduct)
+
+  //제품하나 불러오기 name state
+  const [oneProductName, setOneProductName] = useState('')
 
   const inputChange = useCallback((e, key) => { //1뎁스 change
     setProductInfo(state => {
@@ -115,7 +131,6 @@ const Admin = () =>{
       const result = await axios.post('/api/product/add', {productInfo})
       console.log(result)
       if(result.data.stat){
-        const consoleTest = result.data.message ? result.data.message : '메시지가 없다요'
         setProductInfo({...initialProduct});
         alert('성공')
       }
@@ -128,13 +143,44 @@ const Admin = () =>{
     }
   }
 
+  const getOneProduct = async (e, product)=>{
+    e.preventDefault();
+    try{
+      const result = await axios.get(`/api/product/getoneproduct?name=${product}`);
+      if(!result){
+        throw new Error(result)
+      }
+      setProductInfo(result.data.data)
+    }
+    catch(e){
+      alert(e.response.data.message)
+    }
+  }
 
+  const patchOneProduct = async ()=>{
+    try{
+      const result = await axios.patch(`/api/product/patchoneproduct`, productInfo)
+      if(!result.data.stat){
+        throw new Error(result)
+      }
+      setProductInfo(initialProduct);
+      alert('수정되었습니다.')
+    }
+    catch(e){
+      alert(e.response.data.message)
+    }
+  }
 
 
   return(
     <div className="adminTest" style={{padding:20}}>
       <h1>제품 등록 페이지 (관리자용)</h1><br></br>
       <button style={{background:'lightblue', padding:20, color:'#101010'}} onClick={()=>{console.log(productInfo)}}>현재 state 확인버튼(콘솔)</button>
+      <button style={{background:'red', padding:20, color:'#fff'}} onClick={()=>{setProductInfo(initialProduct); setOneProductName('')}}>State All Clear</button>
+      <form action="GET" onSubmit={(e)=>{getOneProduct(e, oneProductName)}} className="getone">
+        제품하나 가져오기: <input type="text" value={oneProductName} onChange={(e)=>{setOneProductName(e.target.value)}}/>
+        <button type="submit" style={{background:'lightpink', padding:20, color:'#101010'}}>제품 하나 가져오기</button>
+      </form>
       <br></br><br></br>
       <form action="POST" onSubmit={(e)=>{onSubmitTest(e)}}>
         <h4>companyType :</h4>
@@ -192,8 +238,9 @@ const Admin = () =>{
         {
           renderSpecs()
         }
-        <button type='submit' style={{background:'lightblue', color:'#101010', padding:10}}>제출해서 등록하기</button>
+        <button type='submit' style={{background:'lightblue', color:'#101010', padding:10, marginBottom:20}}>제출해서 등록하기</button>
       </form>
+      <button style={{background:'lightpink', color:'#101010', padding:10}} onClick={()=>{patchOneProduct()}}>수정하기</button>
     </div>
   )
 }
