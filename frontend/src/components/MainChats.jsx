@@ -69,8 +69,6 @@ const MainChats = ({allData})=>{
             } else{
                 setRefresh(!refresh);
             }
-            
-            console.log(refresh)
             setChatData((prev) =>
             Array.isArray(prev) ? [...prev, ...(Array.isArray(newData) ? newData : [newData])] : newData
           );
@@ -81,6 +79,32 @@ const MainChats = ({allData})=>{
             alert('메시지를 보내는 동안 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
           });
       };
+
+      // 글 살제 로직
+      const handleDelete = (ticket) => {
+        
+        const idx = chatData.findIndex(chat => chat.ticket === ticket);
+        const data = { type: 'chatApp', id: storeState.id };
+        const url = `/api/chatmain/app/delete/${ticket}`;
+        axios.delete(url, data)
+          .then(response => {
+            const newData = response.data;
+            console.log(newData);
+            // 삭제한 데이터를 chatData 배열에서 제거
+            const updatedChatData = [...chatData];
+            updatedChatData.splice(idx, 1);
+            setChatData(updatedChatData);
+          })
+          .catch(error => {
+            console.error(error);
+            console.log(error);
+            console.log(chatData);
+            console.log(idx);
+            console.log(ticket);
+            alert('메시지를 보내는 동안 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+          });
+      };
+      
    
     const handleTextareaChange = event => {
         const value = event.target.value;
@@ -157,6 +181,7 @@ const MainChats = ({allData})=>{
       }, [page]);
       const debouncedGetPosts = useCallback(
         debounce(() => {
+          // setLoad(true);
           getPosts();
           console.log(load)
         }, 1500),
@@ -201,7 +226,7 @@ const MainChats = ({allData})=>{
                 </div>
                 <ul className="chatsList">
                 {chatData && chatData.map((chat) => {
-                    return <Chat key={chat._id} chatData={chat} />;
+                    return <Chat key={chat._id} chatData={chat} handleDelete={handleDelete} />;
                     })}
                     {/* <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
@@ -240,7 +265,7 @@ const MainChats = ({allData})=>{
 }
 
 //개별 chat 
-const Chat = ({chatData,message,currentTime})=>{
+const Chat = ({chatData,message,currentTime,handleDelete})=>{
     const dispatch = useDispatch();
     
     const snackBarTime = useRef(null);
@@ -264,6 +289,7 @@ const Chat = ({chatData,message,currentTime})=>{
                     <img className="profileImg" src={profileIMG} alt="바인딩 해야함" />
                     <p className="profileID">{chatData.id}</p>
                     <div className={`profileAors ${chatData.aors}`}>{chatData.aors}</div>
+                    <div>{chatData.ticket}</div>
                 </div>
                 <div className="txtWrap">
                     <p className="txt">
@@ -273,7 +299,7 @@ const Chat = ({chatData,message,currentTime})=>{
             </div>
             <div className="chat_right">
                 <button onClick={(e)=>{snackBar(e, '수정 완료 후 스낵바입니다.')}}><img src={editIcon} alt="" /></button>
-                <button onClick={(e)=>{snackBar(e, '삭제 완료 후 스낵바입니다.')}}><img src={deleteIcon} alt="" /></button>
+                <button onClick={()=>{handleDelete(chatData.ticket)}}><img src={deleteIcon} alt="" /></button>
                 <button onClick={(e)=>{snackBar(e, '좋아요 후 스낵바입니다.')}}><img src={like_no} alt="" /><span>{chatData.like}</span></button>
             </div>
         </li>

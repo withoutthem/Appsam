@@ -204,9 +204,16 @@ button.badge:hover{background:#fff; color:#101010;}
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
     position: absolute;
-    bottom: -185px;
-    transform: translateX(-50%);
-    left: 50%;
+    bottom: 207px;
+    left: 43%;
     z-index: 2;
 }
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
 
