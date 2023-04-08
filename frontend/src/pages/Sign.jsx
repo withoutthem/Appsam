@@ -145,8 +145,9 @@ const Sign = () =>{
                             }
                         </div>
                         <div className="possible">
-                            {resMessage.id}
-                            {userInfo.id[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>}
+                            {
+                                resMessage.id.length>0 ? <div className="resMessage">{resMessage.id}</div> : userInfo.id[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>
+                            }
                             <p className="assistanceTex">5자 이상 15자 이하, 영어와 숫자로 이루어져야 합니다.</p>
                         </div>
                     </div>
@@ -156,8 +157,7 @@ const Sign = () =>{
                         <div className="possible">
                             {userInfo.ps[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>}
                             <p className="assistanceTex">5자 이상 15자 이하, 특수문자가 반드시 1개 이상 포함되어야 합니다.</p>
-                        </div>
-            
+                        </div>            
                     </div>
                     <div className="emailWrap formWrap">
                         <p className="mainInputTex">이메일*</p>
@@ -168,8 +168,9 @@ const Sign = () =>{
                             }
                         </div>
                         <div className="possible">
-                            {resMessage.email}
-                            {userInfo.email[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>}
+                            {
+                                resMessage.email.length>0 ? <div className="resMessage">{resMessage.email}</div> : userInfo.email[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>
+                            }
                             <p className="assistanceTex">이메일 형식이어야 합니다.</p>
                         </div>
                     </div>
