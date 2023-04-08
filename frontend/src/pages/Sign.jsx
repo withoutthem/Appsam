@@ -5,6 +5,9 @@ import { useDispatch } from 'react-redux';
 import { updateUserInfoTrue, openPop } from "../store";
 import { useNavigate } from 'react-router-dom';
 import { setCookieJWT } from '../utils/cookie';
+import IMG_mainGalaxy from '../assets/images/signUpImg.png';
+
+
 
 const Sign = () =>{
     //redux setting
@@ -143,7 +146,7 @@ const Sign = () =>{
                         </div>
                         <div className="possible">
                             {resMessage.id}
-                            {userInfo.id[1] ? '가능' : '불가능'}
+                            {userInfo.id[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>}
                             <p className="assistanceTex">5자 이상 15자 이하, 영어와 숫자로 이루어져야 합니다.</p>
                         </div>
                     </div>
@@ -151,7 +154,7 @@ const Sign = () =>{
                         <p className="mainInputTex">비밀번호*</p>
                         <input className="fillInput" type="password" placeholder="Password" value={userInfo.ps[0]} onChange={(e)=>{setInfo('ps', e.target.value)}} />
                         <div className="possible">
-                            {userInfo.ps[1] ? '가능' : '불가능'}
+                            {userInfo.ps[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>}
                             <p className="assistanceTex">5자 이상 15자 이하, 특수문자가 반드시 1개 이상 포함되어야 합니다.</p>
                         </div>
             
@@ -166,7 +169,7 @@ const Sign = () =>{
                         </div>
                         <div className="possible">
                             {resMessage.email}
-                            {userInfo.email[1] ? '가능' : '불가능'}
+                            {userInfo.email[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>}
                             <p className="assistanceTex">이메일 형식이어야 합니다.</p>
                         </div>
                     </div>
@@ -174,7 +177,7 @@ const Sign = () =>{
                         <p className="mainInputTex">이름(닉네임)*</p>
                         <input className="fillInput" type="text" placeholder="Your Name" value={userInfo.name[0]} onChange={(e)=>{setInfo('name', e.target.value)}} />
                         <div className="possible">
-                            {userInfo.name[1] ? '가능' : '불가능'}
+                            {userInfo.name[1] ? <p className="possibleIcon">가능<span></span></p> : <p className="unpossibleIcon">불가능<span></span></p>}
                             <p className="assistanceTex">3자 이상, 15자 미만 문자만 가능합니다.</p>
                         </div>
                     </div>
@@ -192,11 +195,18 @@ const Sign = () =>{
                             <label><input className="checkBox" type="checkbox" /><span>마케팅은 발신도 하지 않지만 동의해보겠습니다.</span></label>
                             <p className="view">이용약관 전문 보기</p>
                             <button className="joinBtn" type="submit">회원가입</button>
-                            <button className="deactivationBtn" type="submit">비활성화 상태 버튼</button>
+                            {/* <button className="deactivationBtn" type="submit">비활성화 상태 버튼</button> */}
                         </div>
                     </div>
                 </form>
                 <div className="imgBox">
+                    <img className="signImg" src={IMG_mainGalaxy} />
+                    <ul className="signList">
+                        <li>회원가입 시 댓글과 별점기능을 이용하실 수 있습니다.</li>
+                        <li>가나다라마바사 이것은 디스클레이머 표시입니다.</li>
+                        <li>혹시나 내가 뭔말을 하고싶으면 이곳에다가 적을 것입니다. <br></br>길이는 딱히 제한이 있는 것은 아닙니다.</li>
+                        <li>법적문제 등을 회피하기 위한 목적도 있습니다. 그렇게 눈에 띄지는 않을겁니다..</li>
+                    </ul>
                 </div>
             </div>
         </div>

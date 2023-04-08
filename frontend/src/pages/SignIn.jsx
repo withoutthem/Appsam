@@ -4,6 +4,10 @@ import { setCookieJWT } from "../utils/cookie";
 import { useDispatch } from "react-redux";
 import { updateUserInfoTrue, openPop } from "../store";
 import { useNavigate } from 'react-router-dom';
+import IMG_mainLogin from '../assets/images/image 14.png';
+
+
+
 
 const SignIn = ()=>{
     //리덕스 세팅
@@ -62,12 +66,43 @@ const SignIn = ()=>{
     }
 
     return(
-        <div>
-            <form onSubmit={(e)=>{submitBtn(e, userInput)}}>
-                ID : <input type="id" value={userInput.id} onChange={ e => onChange('id', e.target.value)} />
-                PASSWORD : <input type="password" value={userInput.ps} onChange={ e => onChange('ps', e.target.value) } />
-                <button type='submit' disabled={buttonState} >로그인버튼</button>
-            </form>
+        <div className="signInWrapBack">
+            <div className="signImgWrap">
+                <form className="signBox" onSubmit={(e)=>{submitBtn(e, userInput)}}>
+                    <p className="mainTitle">Sign In</p>
+                    <div className="idWrap formWrap">
+                        <p className="idPs">ID :</p>
+                        <input className="fillInput" type="id" value={userInput.id} onChange={ e => onChange('id', e.target.value)} />
+                        <a href="#" className="assistanceTex">아이디를 잊으셨나요? 안알랴줌</a>
+                    </div>
+                    <div className="psWrap formWrap">
+                        <p className="idPs">PASSWORD :</p>
+                        <input className="fillInput" type="password" value={userInput.ps} onChange={ e => onChange('ps', e.target.value) } />
+                        <a href="#" className="assistanceTex">비밀번호를 잊으셨나요? 안알랴줌2</a>
+                    </div>
+                    <div className="formWrap login">
+                        <button className="logIn" type='submit' disabled={buttonState} >로그인</button>
+                    </div>
+                    <div className="orLine">
+                        <div className="line"></div>
+                    </div>
+                    <div className="SubWrap">
+                        <button className="loginBtn git">Login with Github</button>
+                        <button className="loginBtn kakao">Login with Kakao</button>
+                        <button className="loginBtn google">Login with Google</button>
+                        <button className="loginBtn naver">Login with Naver</button>
+                    </div>
+                    <div className="orLine">
+                        <div className="line"></div>
+                    </div>
+                    <div className="SubWrap joinWrap">
+                        <button className="join">회원가입</button>
+                    </div>
+                </form>
+            
+                <div className="imgBox"></div>
+            </div>
+
         </div>
     )
 }
