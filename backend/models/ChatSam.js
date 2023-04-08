@@ -1,7 +1,14 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
-const AutoIncrement = require('mongoose-sequence')(mongoose);
+//ticket 카운터 구현
+const counterSchemaSam = new Schema({
+  _id: String,
+  seq: Number
+});
+const CounterSam = mongoose.model('CounterSam', counterSchemaSam);
+
 
 const chatSamSchema = new Schema({
     type:{
@@ -31,7 +38,12 @@ const chatSamSchema = new Schema({
     },
     likes:{
         type:[String],
-        required: false
+        required: false,
+        default:[]
+    },
+    ticket:{
+      type:Number,
+      unique : true
     }
 },
 {
@@ -39,12 +51,24 @@ const chatSamSchema = new Schema({
 }, 
 );
 
-chatSamSchema.index({ like: -1, createdAt: -1 }); // 복합인덱스 생성
 
-chatSamSchema.plugin(AutoIncrement, { //설정
-	inc_field:'ticket',
-    id:'ticketNumsSam',
-    start_seq:1
-})
+
+chatSamSchema.pre('save', async function (next) {
+  try {
+    const counterSam = await CounterSam.findByIdAndUpdate(
+      'ticketNumsSam',
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    );
+
+    this.ticket = counterSam.seq;
+    next();
+  } catch (error) {
+    console.error('Error in chatSamSchema pre save middleware:', error);
+    next(error);
+  }
+});
+
+
 
 module.exports = mongoose.model('ChatSam', chatSamSchema);

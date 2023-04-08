@@ -2,8 +2,9 @@
 //testZone
 .testZone {display:flex; height:500px; justify-content:center; flex-direction: column; align-items: center; width:1000px; background:lightblue;}
 .testZone button{background:red; margin:20px; color:#fff; font-weight:600; font-size:20px; padding:20px;}
-
-
+.badgeAdmin{color:#101010 !important; font-size:15px !important;}
+.adminTest textarea{height:200px; width:500px;}
+.adminTest input{ width:500px;}
 //mixin
 @mixin flexCenter {display: flex; justify-content: center; align-items: center;}
 @mixin flexAlign {display: flex; align-items: center;}
@@ -29,8 +30,20 @@
 .globalSnackBar.true{transform:translateY(0) translateX(-50%); opacity:1;}
 .globalSnackBar.false{transform:translateY(100px) translateX(-50%); opacity:0}
 
+//global badge 
+.btn .badge{top:0;}
+button.badge:hover{background:#fff; color:#101010;}
+.badge{font-size:8px; color:#fff; padding:5px 6px; box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15); }
+.badge.flagship{background:rgba(28, 191, 242, 1)}
+.badge.value_for_money{background:rgba(214, 155, 100, 1)}
+.badge.entry_level{background:rgba(165, 187, 195, 1)}
+.badge.mid_high_level{background:rgba(241, 167, 8, 1)}
+.badge.latest_release{background:rgba(36, 186, 60, 1)}
+.badge.masterpiece{background:rgba(202, 98, 154, 1)}
+.badge.cost_effectiveness{background:rgba(51, 48, 203, 1)}
+
 // header 
-.headerWrap{@include flexAlign(); font-weight: 600; height:80px; width:100%; justify-content: space-between; padding:0 24px;}
+.headerWrap{@include flexAlign(); position: relative; z-index: 2; background:#fff; font-weight: 600; height:80px; width:100%; justify-content: space-between; padding:0 24px;}
 .headerWrap .logoWrap{@include flexAlign(); cursor:pointer;}
 .headerWrap .logoWrap img:first-of-type{margin-right:12px}
 .headerWrap .header{@include flexCenter();}
@@ -44,10 +57,18 @@
 .headerWrap .loginWrap .signWrap button:last-of-type{margin-right:0;}
 
 
+<<<<<<< HEAD
 //Sign Up
 .signWrapBack {width: 100%; padding: 50px 0px; background-color: #eee; box-sizing: border-box; color: #333;}
 .signWrapBack .mainTitle {font-size: 45px; font-weight: 800; margin-top: 45px; text-align: center;}
 .signWrapBack .signImgWrap {width: 1200px; display: flex; margin: 0px auto; border-radius: 30px; box-shadow: 10px 10px 10px rgb(0 0 0 /20%), -2px -2px 2px rgb(0 0 0/20%);}
+=======
+//Sign
+.signWrapBack {width: 100%; padding: 50px; background-color: #eee; box-sizing: border-box; color: #333;}
+.signWrapBack .mainTitle {font-size: 50px; font-weight: 800; margin-top: 60px; text-align: center;}
+.signWrapBack .signImgWrap {width: 1200px; display: flex; margin: 0px auto; border-radius: 30px; box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2), -2px -2px 2px rgba(0, 0, 0, 0.2);
+}
+>>>>>>> cbe7df64b113b7f1cb71c2e60859072bdc8e85c8
 .signWrapBack .signBox {width:50%; height: 100%; border-radius: 30px 0px 0px 30px; background-color: #fff;}
 .signWrapBack .imgBox {width: 50%; height: 100%; border-radius: 0px 30px 30px 0px; background-color: lightcyan;}
 .signWrapBack .formWrap{ margin: 0px 20px; padding: 15px 20px 0px 20px; position: relative;}
@@ -119,7 +140,6 @@
 .visualWrap .visual .floatingBtnWrap{@include flexCenter(); z-index:3; position:absolute; left:50%; transform:translateX(-50%); top:25px;}
 .visualWrap .visual .floatingBtnWrap a{font-size:20px; font-weight:600; display:block; border-radius:5px; margin-right:25px; background:#2B2929; padding:15px 20px; color:#fff; }
 .visualWrap .visual .floatingBtnWrap a:last-of-type{margin-right:0;}
-
 .phoneWrap{position: absolute; top:40px; z-index: 2; height: 90%}
 .phoneWrap.typeA{left:40px}
 .phoneWrap.typeB{right:40px}
@@ -127,7 +147,7 @@
 .phoneWrap .chatsWrap{display:flex; flex-direction: column; padding:60px 50px 85px; padding-left:40px; width: 100%; height: 100%; position: absolute; top:0; left:0; bottom:0; right:0; }
 .phoneWrap .chatsWrap .tabMenu button{width:100px; height:40px;color:#000; background:transparent}
 .phoneWrap .chatsWrap .tabMenu button.active{font-weight:700; color:#7D31DD; border-bottom:2px solid #7D31DD}
-.phoneWrap .chatsWrap .chatsList{margin-top:5px; overflow-y: scroll; flex:1;}
+.phoneWrap .chatsWrap .chatsList{margin-top:5px; overflow-y: scroll; flex:1; position: relative;}
 .phoneWrap .chatsWrap .chatsList li.chat{ position:relative; display:flex; margin:35px 0px}
 .phoneWrap .chatsWrap .chatsList li.chat .chatDate{position:absolute; top:-16px; right:16px; font-size:9px; text-align: right;}
 .phoneWrap .chatsWrap .chatsList li.chat .chat_left{height:117px; background:#fff; border-radius:10px; padding:16px;}
@@ -151,10 +171,87 @@
 .phoneWrap .chatsWrap .chatInputForm .inputWrap .profileWrap .profileID{font-size:14px; padding:0 10px; font-weight:600;}
 .phoneWrap .chatsWrap .chatInputForm .inputWrap .limit{position:absolute; bottom:8px; left:15px; font-size:10px; color:#5f5f5f;}
 
-.nowSelected{width:100%; height:40px; background:#1c1c1c;}
-.nowSelected .buttonWrap{@include flexCenter(); height:100%;}
-.nowSelected .buttonWrap p{ color:#fff; font-size:18px;}
-.nowSelected .buttonWrap .downButton{@include flexCenter(); background:transparent}
+
+
+//compareAll
+.nowSelected{width:100%; height:40px; position:relative;}
+.nowSelected .buttonWrap{width:100%; height:40px; background:#1c1c1c;@include flexCenter(); height:100%; position:relative; z-index: 2;}
+.nowSelected .buttonWrap p{ color:#fff; font-size:18px; margin-right:10px;}
+.nowSelected .buttonWrap .downButton{@include flexCenter(); background:transparent; transition:0.5s all;}
+.nowSelected .buttonWrap .downButton.upsideDown{transform:rotate(180deg)}
 .nowSelected .buttonWrap .downButton img{width:22px; height:22px;}
-.nowSelected .inner{}
+.nowSelected .inner{@include flexAlign(); max-height:400px; z-index: 1; transition:0.5s all; transform:translateY(-400px); background:#fff; position:absolute; width:100%; padding-top:10px; padding-bottom:40px; justify-content: space-around; border-bottom:1px solid #e4e4e4;}
+.nowSelected .inner.active{transform:none;}
+.nowSelected .inner .inner_logoWrap{@include flexAlign(); flex-direction: column; margin:0 20px;}
+.nowSelected .inner .inner_logoWrap .logoSizer{@include flexCenter(); width:100px; height:100px; margin-bottom:30px;}
+.nowSelected .inner .inner_logoWrap img.logo{width:100%;}
+.nowSelected .inner .inner_logoWrap .priceWrap{text-align: center;}
+.nowSelected .inner .inner_logoWrap .priceWrap p{margin-bottom:15px; font-size:20px; }
+.nowSelected .inner .tableWrap{border-spacing:8px;border-collapse: separate; width:70%}
+.nowSelected .inner .tableWrap .tHead{font-size:20px; text-align: center;}
+.nowSelected .inner .tableWrap td{text-align: center;}
+.nowSelected .inner .tableWrap .dropdown_product{@include flexCenter(); background:#fff; color:#101010; width:100%; border:1px solid #e4e4e7; border-radius:5px;}
+.nowSelected .inner .tableWrap .dropdown_product p{margin-right:10px;}
+.nowSelected .inner .tableWrap .dropdown-menu.show{width:100%;}
+.nowSelected .inner .tableWrap .dropdown-toggle::after{margin-left:10px;}
+.nowSelected .inner .closeBtn{padding:0; width:100%; position:absolute;bottom:0; background:transparent; left:50%; transform:translateX(-50%)}
+.nowSelected .inner .closeBtn.upsideDown{transform:translateX(-50%) rotate(180deg)}
+
+.compareAllWrap{position: relative; @include flexAlign(); margin-bottom:60px;}
+.compareAllWrap .fast{position: relative;flex-grow:1; @include flexCenter(); flex-direction: column;}
+.compareAllWrap .fast .logoSizer{@include flexCenter(); position: relative; width:237px; margin-bottom:20px; height:130px;}
+.compareAllWrap .fast .badgeWrap .badge{margin-right:5px}
+.compareAllWrap .fast .badgeWrap .badge:last-of-type{margin-right:0px}
+.compareAllWrap .disclaimer{padding-left:20px;width:320px; font-size:12px; color:#555454; line-height: 1.2;}
+.compareAllTable .type{@include flexAlign(); margin-bottom:60px;}
+.compareAllTable .type h3{font-size:50px; width:320px; @include flexCenter();}
+.compareAllTable .type .productWrap{flex:1; @include flexCenter(); flex-direction: column;}
+.compareAllTable .type .productWrap img{margin-bottom:15px;}
+.compareAllTable .type .productWrap .badgeWrap{margin-bottom:15px}
+.compareAllTable .type .productWrap .badgeWrap .badge{margin-right:5px;}
+.compareAllTable .type .productWrap .badgeWrap .badge:last-of-type{margin-right:0px;}
+.compareAllTable .type .productWrap .dropdown_product{@include flexAlign()}
+.compareAllTable .type .productWrap .dropdown_product p{margin-right:10px;}
+.compareAllTable .type .productWrap .dropdown-menu.show{width:100%;}
+.compareAllTable .tableSet .table_header{@include flexAlign(); margin-bottom:40px;}
+.compareAllTable .tableSet .table_header .info{padding-left:100px;}
+.compareAllTable .tableSet .table_header .eval{padding-right:100px;}
+.compareAllTable .tableSet .table_header div{width:320px;}
+.compareAllTable .tableSet .table_header .grow{flex:1; @include flexCenter();}
+.compareAllTable .tableSet .table_body{@include flexAlign(); margin-bottom:40px;}
+.compareAllTable .tableSet .table_body div{@include flexCenter()}
+.compareAllTable .tableSet .table_body .grow{flex:1;}
+.compareAllTable .tableSet .table_body .head{width:320px;}
+.compareAllTable .tableSet .table_body .app_val{padding-left:100px;}
+.compareAllTable .tableSet .table_body .sam_val{padding-left:100px;}
+.compareAllTable .tableSet .table_body .app_edit{padding-right:100px;}
+.compareAllTable .tableSet .table_body .sam_edit{padding-right:100px;}
+
+/*무한 스크롤 css*/
+.obs{text-align: center;}
+.typeA .obs{color: #FFBCBC;}
+.typeB .obs{color: #ACCDFF;}
+.typeA .no-data, .typeB .no-data{color: #000; font-size: 14px; position: relative; top: -10px;}
+.spinner{
+    width: 30px;
+    height: 30px;
+    border: 3px solid #FFF;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    position: absolute;
+    bottom: 207px;
+    left: 43%;
+    z-index: 2;
+}
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
 

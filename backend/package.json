@@ -9,9 +9,8 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.1.0",
-    "mongoose": "^7.0.1",
+    "mongoose": "^7.0.3",
     "mongoose-sequence": "^5.3.1",
-    "nodemon": "^2.0.21",
     "uuid": "^9.0.0"
   },
   "scripts": {
@@ -23,5 +22,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }
