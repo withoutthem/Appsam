@@ -103,6 +103,29 @@ const MainChats = ({ allData }) => {
       });
   };
 
+   // 좋아요버튼을 누르면 patch 요청
+  const handleSendLike  = (ticket) => {
+    const idx = chatData.findIndex((chat) => chat.ticket === ticket);
+    const data = { type: "chatApp", id: storeState.id };
+    const url = `/api/chatmain/app/like/${ticket}`;
+    axios
+      .patch(url, { data: data })
+      .then((response) => {
+        const newData = response.data;
+        const updatedChatData = [...chatData];
+        if (newData.stat === false) {
+          console.log("좋아요 처리에 실패했습니다.");
+          updatedChatData[idx].like = updatedChatData[idx].like - 1;
+        }
+        
+        updatedChatData[idx].like = updatedChatData[idx].like + 1; // 좋아요 수 증가
+        setChatData(updatedChatData);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   // 최대 글자수를 초과하면 입력을 막음
   const handleTextareaChange = (event) => {
     const value = event.target.value;
@@ -240,7 +263,7 @@ const MainChats = ({ allData }) => {
         <ul className='chatsList'>
           {chatData &&
             chatData.map((chat) => {
-              return <Chat key={chat._id} chatData={chat} handleDelete={handleDelete} />;
+              return <Chat key={chat._id} chatData={chat} handleDelete={handleDelete} handleSendLike={handleSendLike} />;
             })}
           {/* <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
@@ -286,7 +309,7 @@ const MainChats = ({ allData }) => {
 };
 
 //개별 chat
-const Chat = ({ chatData, message, currentTime, handleDelete }) => {
+const Chat = ({ chatData, message, currentTime, handleDelete,handleSendLike }) => {
   const dispatch = useDispatch();
 
   const snackBarTime = useRef(null);
@@ -332,7 +355,7 @@ const Chat = ({ chatData, message, currentTime, handleDelete }) => {
         </button>
         <button
           onClick={(e) => {
-            snackBar(e, "좋아요 후 스낵바입니다.");
+            handleSendLike(chatData.ticket)
           }}
         >
           <img src={like_no} alt='' />
