@@ -51,8 +51,6 @@ const MainChats = ({ allData }) => {
   const endRef = useRef(false);
   const [refresh, setRefresh] = useState(false);
   const MAX_LENGTH = 100; // 최대 글자수
-  // 좋아요 state
-  const [heart, setHeart] = useState(false);
   // 글쓰기를 누르면 post 요청
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -118,12 +116,12 @@ const MainChats = ({ allData }) => {
         if (newData.stat === false) {
           console.log("이미 좋아요를 누른 상태입니다.");
           updatedChatData[idx].like = updatedChatData[idx].like - 1;
+          updatedChatData[idx].isLike = false;
           setChatData(updatedChatData);
-          setHeart(false);
         } else {
           updatedChatData[idx].like = updatedChatData[idx].like + 1; // 좋아요 수 증가
+          updatedChatData[idx].isLike = true;
           setChatData(updatedChatData);
-          setHeart(true);
         }
 
         console.log(updatedChatData[idx].like);
@@ -276,7 +274,6 @@ const MainChats = ({ allData }) => {
                   chatData={chat}
                   handleDelete={handleDelete}
                   handleSendLike={handleSendLike}
-                  heart={heart}
                 />
               );
             })}
@@ -324,7 +321,7 @@ const MainChats = ({ allData }) => {
 };
 
 //개별 chat
-const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike, heart }) => {
+const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike }) => {
   const dispatch = useDispatch();
 
   const snackBarTime = useRef(null);
@@ -373,7 +370,7 @@ const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike, he
             handleSendLike(chatData.ticket);
           }}
         >
-          <img src={heart ? like_yes : like_no} alt='' />
+          <img src={chatData.isLike ? like_yes : like_no} alt='' />
           <span>{chatData.like}</span>
         </button>
       </div>
