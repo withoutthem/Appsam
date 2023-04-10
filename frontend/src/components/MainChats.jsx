@@ -114,7 +114,6 @@ const MainChats = ({ allData }) => {
         const newData = response.data;
         const updatedChatData = [...chatData];
         if (newData.stat === false) {
-          console.log("이미 좋아요를 누른 상태입니다.");
           updatedChatData[idx].like = updatedChatData[idx].like - 1;
           updatedChatData[idx].isLike = false;
           setChatData(updatedChatData);
@@ -123,8 +122,6 @@ const MainChats = ({ allData }) => {
           updatedChatData[idx].isLike = true;
           setChatData(updatedChatData);
         }
-
-        console.log(updatedChatData[idx].like);
       })
       .catch((error) => {
         console.error(error);
