@@ -339,7 +339,7 @@ const chatLike = async (req, res, next) => {
           { ticket: ticket },
           {
             $addToSet: { likes: nowMyId },
-            $inc: { like: 1 },
+            $inc: { like: +1 },
           }
         );
         res.send({stat:true, message : '좋아요가 올라갔어요'})
@@ -351,7 +351,7 @@ const chatLike = async (req, res, next) => {
             $inc: { like: -1 },
           }
         );
-        res.send({stat:true, message : '좋아요를 취소했어요'})
+        res.send({stat:false, message : '좋아요를 취소했어요'})
       }
     }
   } catch (err) {

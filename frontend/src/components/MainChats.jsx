@@ -9,6 +9,7 @@ import debounce from "lodash.debounce";
 import deleteIcon from "../assets/images/icons/delete_24.png";
 import editIcon from "../assets/images/icons/edit_24.png";
 import like_no from "../assets/images/icons/like_no.png";
+import like_yes from "../assets/images/icons/like_yes.png";
 import profileIMG from "../assets/images/profile_img.jpeg";
 
 // 서버데이터 반영 이후 지울 것
@@ -50,7 +51,8 @@ const MainChats = ({ allData }) => {
   const endRef = useRef(false);
   const [refresh, setRefresh] = useState(false);
   const MAX_LENGTH = 100; // 최대 글자수
-
+  // 좋아요 state
+  const [heart, setHeart] = useState(false);
   // 글쓰기를 누르면 post 요청
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -103,8 +105,8 @@ const MainChats = ({ allData }) => {
       });
   };
 
-   // 좋아요버튼을 누르면 patch 요청
-  const handleSendLike  = (ticket) => {
+  // 좋아요버튼을 누르면 patch 요청
+  const handleSendLike = (ticket) => {
     const idx = chatData.findIndex((chat) => chat.ticket === ticket);
     const data = { type: "chatApp", id: storeState.id };
     const url = `/api/chatmain/app/like/${ticket}`;
@@ -114,13 +116,17 @@ const MainChats = ({ allData }) => {
         const newData = response.data;
         const updatedChatData = [...chatData];
         if (newData.stat === false) {
-          console.log("좋아요 처리에 실패했습니다.");
+          console.log("이미 좋아요를 누른 상태입니다.");
           updatedChatData[idx].like = updatedChatData[idx].like - 1;
+          setChatData(updatedChatData);
+          setHeart(false);
+        } else {
+          updatedChatData[idx].like = updatedChatData[idx].like + 1; // 좋아요 수 증가
+          setChatData(updatedChatData);
+          setHeart(true);
         }
-        
-        updatedChatData[idx].like = updatedChatData[idx].like + 1; // 좋아요 수 증가
-        setChatData(updatedChatData);
-        console.log(response.data.message)
+
+        console.log(updatedChatData[idx].like);
       })
       .catch((error) => {
         console.error(error);
@@ -264,7 +270,15 @@ const MainChats = ({ allData }) => {
         <ul className='chatsList'>
           {chatData &&
             chatData.map((chat) => {
-              return <Chat key={chat._id} chatData={chat} handleDelete={handleDelete} handleSendLike={handleSendLike} />;
+              return (
+                <Chat
+                  key={chat._id}
+                  chatData={chat}
+                  handleDelete={handleDelete}
+                  handleSendLike={handleSendLike}
+                  heart={heart}
+                />
+              );
             })}
           {/* <Chat chatData = {chatData[0]}></Chat>
                     <Chat chatData = {chatData[0]}></Chat>
@@ -310,7 +324,7 @@ const MainChats = ({ allData }) => {
 };
 
 //개별 chat
-const Chat = ({ chatData, message, currentTime, handleDelete,handleSendLike }) => {
+const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike, heart }) => {
   const dispatch = useDispatch();
 
   const snackBarTime = useRef(null);
@@ -356,10 +370,10 @@ const Chat = ({ chatData, message, currentTime, handleDelete,handleSendLike }) =
         </button>
         <button
           onClick={(e) => {
-            handleSendLike(chatData.ticket)
+            handleSendLike(chatData.ticket);
           }}
         >
-          <img src={like_no} alt='' />
+          <img src={heart ? like_yes : like_no} alt='' />
           <span>{chatData.like}</span>
         </button>
       </div>
