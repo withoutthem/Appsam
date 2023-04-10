@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeSnackBar, openSnackBar } from "../store";
 import axios from "axios";
 import debounce from "lodash.debounce";
-
+import { openPop } from "../store";
 import deleteIcon from "../assets/images/icons/delete_24.png";
 import editIcon from "../assets/images/icons/edit_24.png";
 import like_no from "../assets/images/icons/like_no.png";
@@ -51,6 +51,8 @@ const MainChats = ({ allData }) => {
   const endRef = useRef(false);
   const [refresh, setRefresh] = useState(false);
   const MAX_LENGTH = 100; // 최대 글자수
+  // 수정레이어팝업 state
+  const [isEditing, setIsEditing] = useState(false); 
   // 글쓰기를 누르면 post 요청
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -126,6 +128,12 @@ const MainChats = ({ allData }) => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  // 글숴정버튼을 누르면 update 요청
+  const handleEdit = (id, text) => {
+    // 수정된 채팅 데이터를 서버로 전송하는 코드
+    setIsEditing(false);
   };
 
   // 최대 글자수를 초과하면 입력을 막음
@@ -249,76 +257,89 @@ const MainChats = ({ allData }) => {
   };
 
   return (
-    <div className={`phoneWrap ${allData.type}`}>
-      <img className='background' src={allData.background} alt='' />
-      <div className='chatsWrap'>
-        <div className='tabMenu'>
-          {/* /api/chatmain/popular */}
-          <button className={activeIndex === 0 ? "active" : ""} onClick={() => handleClick(0)}>
-            인기순
-          </button>
-          {/* /api/chatmain/recent */}
-          <button className={activeIndex === 1 ? "active" : ""} onClick={() => handleClick(1)}>
-            최신순
-          </button>
-        </div>
-        <ul className='chatsList'>
-          {chatData &&
-            chatData.map((chat) => {
-              return (
-                <Chat
-                  key={chat._id}
-                  chatData={chat}
-                  handleDelete={handleDelete}
-                  handleSendLike={handleSendLike}
-                />
-              );
-            })}
-          {/* <Chat chatData = {chatData[0]}></Chat>
-                    <Chat chatData = {chatData[0]}></Chat>
-                    <Chat chatData = {chatData[0]}></Chat>
-                    <Chat chatData = {chatData[0]}></Chat> */}
-          {activeIndex === 1 ? (
-            <li ref={obsRef} className={noData ? "obs no-data" : "obs hide"}>
-              {noData ? "데이터가 더 이상 없습니다." : "옵저버"}
-            </li>
-          ) : (
-            ""
-          )}
-        </ul>
-        {load && <div className='spinner'></div>}
-        {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
-        <form className='chatInputForm' onSubmit={handleSendMessage}>
-          <div className='inputWrap'>
-            <div className='profileWrap'>
-              {storeState.id ? (
-                <img className='profileImg' src={profileIMG} alt='바인딩 해야함' />
-              ) : null}
-              {storeState.id ? <p className='profileID'>{storeState.id}</p> : null}
-            </div>
-            <textarea
-              maxLength='100'
-              placeholder={storeState.id ? "댓글을 적어보세요" : "로그인을 해야합니다."}
-              cols='30'
-              rows='10'
-              wrap='soft'
-              value={message}
-              onChange={handleTextareaChange}
-            ></textarea>
-            {/* 글쓰기 누르면 스낵바 뜨는 것 처럼 모든 버튼에 스낵바 알림 필요  */}
-            <button className='submitBtn'>글쓰기</button>
-            <div className='limit'>
-              {MAX_LENGTH}자 제한 ({message.length}/{MAX_LENGTH})
-            </div>
+    <> 
+      <div className={`phoneWrap ${allData.type}`}>
+        <img className='background' src={allData.background} alt='' />
+        <div className='chatsWrap'>
+          <div className='tabMenu'>
+            {/* /api/chatmain/popular */}
+            <button className={activeIndex === 0 ? "active" : ""} onClick={() => handleClick(0)}>
+              인기순
+            </button>
+            {/* /api/chatmain/recent */}
+            <button className={activeIndex === 1 ? "active" : ""} onClick={() => handleClick(1)}>
+              최신순
+            </button>
           </div>
-        </form>
+          <ul className='chatsList'>
+            {chatData &&
+              chatData.map((chat) => {
+                return (
+                  <Chat
+                    key={chat._id}
+                    chatData={chat}
+                    handleDelete={handleDelete}
+                    handleSendLike={handleSendLike}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                  />
+                );
+              })}
+            {/* <Chat chatData = {chatData[0]}></Chat>
+                      <Chat chatData = {chatData[0]}></Chat>
+                      <Chat chatData = {chatData[0]}></Chat>
+                      <Chat chatData = {chatData[0]}></Chat> */}
+            {activeIndex === 1 ? (
+              <li ref={obsRef} className={noData ? "obs no-data" : "obs hide"}>
+                {noData ? "데이터가 더 이상 없습니다." : "옵저버"}
+              </li>
+            ) : (
+              ""
+            )}
+          </ul>
+          {load && <div className='spinner'></div>}
+          {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
+          <form className='chatInputForm' onSubmit={handleSendMessage}>
+            <div className='inputWrap'>
+              <div className='profileWrap'>
+                {storeState.id ? (
+                  <img className='profileImg' src={profileIMG} alt='바인딩 해야함' />
+                ) : null}
+                {storeState.id ? <p className='profileID'>{storeState.id}</p> : null}
+              </div>
+              <textarea
+                maxLength='100'
+                placeholder={storeState.id ? "댓글을 적어보세요" : "로그인을 해야합니다."}
+                cols='30'
+                rows='10'
+                wrap='soft'
+                value={message}
+                onChange={handleTextareaChange}
+              ></textarea>
+              {/* 글쓰기 누르면 스낵바 뜨는 것 처럼 모든 버튼에 스낵바 알림 필요  */}
+              <button className='submitBtn'>글쓰기</button>
+              <div className='limit'>
+                {MAX_LENGTH}자 제한 ({message.length}/{MAX_LENGTH})
+              </div>
+            </div>
+          </form>
+        </div>
+      
       </div>
-    </div>
+      {isEditing && (
+        <EditModal
+          chatData={chatData}
+          handleEdit={handleEdit}
+          setIsEditing={setIsEditing}
+        />
+      )}
+    </>
+    
   );
 };
 
 //개별 chat
-const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike }) => {
+const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike,setIsEditing}) => {
   const dispatch = useDispatch();
 
   const snackBarTime = useRef(null);
@@ -348,11 +369,7 @@ const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike }) 
         </div>
       </div>
       <div className='chat_right'>
-        <button
-          onClick={(e) => {
-            snackBar(e, "수정 완료 후 스낵바입니다.");
-          }}
-        >
+      <button onClick={() => setIsEditing(true)}>
           <img src={editIcon} alt='' />
         </button>
         <button
@@ -375,4 +392,30 @@ const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike }) 
   );
 };
 
+const EditModal = ({ chatData, handleEdit }) => {
+  const [text, setText] = useState(chatData.text);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleEdit(chatData._id, text);
+  };
+
+  const handleCancel = () => {
+    handleEdit(false);
+  };
+
+  return (
+    <div className="edit-modal">
+      <form onSubmit={handleSubmit}>
+        <textarea value={text} onChange={(e) => setText(e.target.value)} />
+        <div className="edit-modal-buttons">
+          <button type="submit">수정</button>
+          <button type="button" onClick={handleCancel}>
+            취소
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 export default MainChats;

@@ -4,7 +4,7 @@ import { setCookieJWT } from "../utils/cookie";
 import { useDispatch } from "react-redux";
 import { updateUserInfoTrue, openPop } from "../store";
 import { useNavigate } from 'react-router-dom';
-import IMG_mainLogin from '../assets/images/image 14.png';
+import IMG_mainLogin from '../assets/images/image14.png';
 
 
 

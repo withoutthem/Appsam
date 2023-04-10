@@ -60,7 +60,7 @@ button.badge:hover{background:#fff; color:#101010;}
 //Sign Up
 .signWrapBack {width: 100%; padding: 50px 0px; background-color: #eee; box-sizing: border-box; color: #333;}
 .signWrapBack .mainTitle {font-size: 45px; font-weight: 800; margin-top: 45px; text-align: center;}
-.signWrapBack .signImgWrap {width: 1200px; display: flex; margin: 0px auto; border-radius: 30px; box-shadow: 10px 10px 10px rgb(0 0 0 /20%), -2px -2px 2px rgb(0 0 0/20%);}
+.signWrapBack .signImgWrap {width: 1200px; display: flex; margin: 0px auto; border-radius: 30px; box-shadow: 10px 10px 10px rgba(0,0,0,0.2), -2px -2px 2px rgba(0,0,0,0.2);}
 .signWrapBack .signBox {width:50%; height: 100%; border-radius: 30px 0px 0px 30px; background-color: #fff;}
 .signWrapBack .imgBox {width: 50%; height: 100%; border-radius: 0px 30px 30px 0px; background-color: lightcyan;}
 .signWrapBack .formWrap{ margin: 0px 20px; padding: 15px 20px 0px 20px; position: relative;}
@@ -98,7 +98,7 @@ button.badge:hover{background:#fff; color:#101010;}
 
 //Sign In
 .signInWrapBack {width: 100%; padding: 50px 0px; background-color: #eee; box-sizing: border-box; color: #333;}
-.signInWrapBack .signImgWrap {width: 1200px; display: flex; margin: 0px auto; border-radius: 30px; box-shadow: 10px 10px 10px rgb(0 0 0 /20%), -2px -2px 2px rgb(0 0 0/20%);}
+.signInWrapBack .signImgWrap {width: 1200px; display: flex; margin: 0px auto; border-radius: 30px; box-shadow: 10px 10px 10px rgba(0,0,0,0.2), -2px -2px 2px rgba(0,0,0,0.2);}
 .signInWrapBack .signBox {width:50%; height: 100%; border-radius: 30px 0px 0px 30px; background-color: #fff;}
 .signInWrapBack .mainTitle {font-size: 50px; font-weight: 800; margin-top: 60px; text-align: center;}
 .signInWrapBack .formWrap { margin: 0px 20px; padding: 15px 20px 0px 20px; position: relative;}
@@ -106,20 +106,20 @@ button.badge:hover{background:#fff; color:#101010;}
 .signInWrapBack .idPs { margin-bottom: 10px; font-weight: 800; position: relative;}
 .signInWrapBack .assistanceTex {text-align: end; display: block; font-size: 12px; color: #4B52EB; margin: 8px 0px 0px 10px; text-decoration: underline; text-underline-offset: 4px;}
 .signInWrapBack .fillInput {width: 100%; padding: 15px; border-radius: 5px; border: 1px solid #7EB693; margin-top: 10px;}
-.signInWrapBack .logIn {width: 100%; padding: 15px; border-radius: 5px; background-color: #5B62FF; color: #fff; box-shadow: 1px 4px 5px rgb(0 0 0 / 20%); }
+.signInWrapBack .logIn {width: 100%; padding: 15px; border-radius: 5px; background-color: #5B62FF; color: #fff; box-shadow: 1px 4px 5px rgba(0,0,0,0.2); }
 .signInWrapBack .formWrap.login {margin-top: 30px;}
 .signInWrapBack .orLine {padding: 0px 40px;}
 .signInWrapBack .line {margin: 15px 0px; background-color: #eee; color: #eee; height: 2px; width: 100%; position: relative; }
 .signInWrapBack .line::before {content: 'or'; color: #555; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 30px; height: 20px; text-align: center; background-color: #fff;}
 .signInWrapBack .SubWrap { padding: 0px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; width: 100%; }
-.signInWrapBack .loginBtn {width: 48%; padding: 15px 0px; margin-bottom: 15px; border-radius: 5px; box-shadow: 1px 4px 5px rgb(0 0 0 / 20%);}
+.signInWrapBack .loginBtn {width: 48%; padding: 15px 0px; margin-bottom: 15px; border-radius: 5px; box-shadow: 1px 4px 5px rgba(0,0,0,0.2);}
 .signInWrapBack .loginBtn.git {background-color: #333230; color: #fff;}
 .signInWrapBack .loginBtn.kakao {background-color: #FEE500; color: #3C1E1E;}
 .signInWrapBack .loginBtn.google { background-color: #fff; color: #7A736C; margin-bottom: 0px;}
 .signInWrapBack .loginBtn.naver {background-color: #03C75A; color: #fff; margin-bottom: 0px;}
-.signInWrapBack .join {width: 100%; padding: 15px; border-radius: 5px; background-color: #279F55; color: #fff; box-shadow: 1px 4px 5px rgb(0 0 0 / 20%);}
+.signInWrapBack .join {width: 100%; padding: 15px; border-radius: 5px; background-color: #279F55; color: #fff; box-shadow: 1px 4px 5px rgba(0,0,0,0.2);}
 .signInWrapBack .SubWrap.joinWrap { padding: 0px 40px; width: 100%; margin-bottom: 60px;}
-.signInWrapBack .imgBox {width: 50%; height: auto; overflow: hidden; border-radius: 0px 30px 30px 0px; background: url(../assets/images/image\ 14.png) no-repeat right; background-size: cover;}
+.signInWrapBack .imgBox {width: 50%; height: auto; overflow: hidden; border-radius: 0px 30px 30px 0px; background: url(../assets/images/image14.png) no-repeat right; background-size: cover;}
 // .signInWrapBack .imgBox img {width: 105%; height: 100%;}
 
 
@@ -248,3 +248,10 @@ button.badge:hover{background:#fff; color:#101010;}
     }
     } 
 
+
+    .edit-modal {position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;}
+    .edit-modal form {background: #fff; padding: 20px; border-radius: 5px; width: 400px; max-width: 100%;}
+    .edit-modal textarea {width: 100%; height: 100px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px;}
+    .edit-modal-buttons {display: flex; justify-content: flex-end;}
+    .edit-modal-buttons button {margin-left: 10px;}
+    
