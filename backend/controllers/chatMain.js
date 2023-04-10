@@ -308,47 +308,56 @@ const chatDelete = async (req, res, next) => {
 // api/chatmain/:type/like/:ticket , {type:'chatApp' or 'chatSam', id:redux에 있는 id} 
 
 const chatLike = async (req, res, next) => {
-    try {
-        const ticket = req.params.ticket;
-        const type = req.params.type || 'none';
-        const nowMyId = await chatMainJwtValidatorToID(req); // jwt 검증해서 id로 만들기
+  try {
+    const ticket = req.params.ticket;
+    const type = req.params.type || 'none';
+    const nowMyId = await chatMainJwtValidatorToID(req); // jwt 검증해서 id로 만들기
 
-        if (nowMyId.stat === false) { // jwt 유효하지 않은 경우
-            res.status(401).send(nowMyId);
-        } else { // 유효한 경우
-            let post;
+    if (nowMyId.stat === false) { // jwt 유효하지 않은 경우
+      res.status(401).send(nowMyId);
+    } else { // 유효한 경우
+      let Model;
+      if (type === 'app') {
+        Model = ChatApp;
+      } else if (type === 'sam') {
+        Model = ChatSam;
+      } else {
+        res.status(404).send({ stat: false, message: '잘못된 요청 타입입니다.' });
+        return;
+      }
 
-            if (type === 'app') {
-                post = await ChatApp.findOne({ ticket: ticket });
-            } else if (type === 'sam') {
-                post = await ChatSam.findOne({ ticket: ticket });
-            } else {
-                res.status(404).send({ stat: false, message: '잘못된 요청 타입입니다.' });
-                return;
-            }
+      const post = await Model.findOne({ ticket: ticket });
+      if (!post) {
+        res.status(404).send({ stat: false, message: '채팅이 존재하지 않습니다.' });
+        return;
+      }
 
-            if (!post) {
-                res.status(404).send({ stat: false, message: '채팅이 존재하지 않습니다.' });
-                return;
-            }
+      const likeIndex = post.likes.indexOf(nowMyId);
 
-            const likeIndex = post.likes.indexOf(nowMyId);
-
-            if (likeIndex === -1) { // 좋아요를 누르지 않은 상태
-                post.likes.push(nowMyId);
-                post.like += 1;
-            } else { // 이미 좋아요를 누른 상태
-                post.likes.splice(likeIndex, 1);
-                post.like -= 1;
-            }
-
-            await post.save();
-            res.status(200).send({ stat: true, message: '좋아요 상태가 변경되었습니다.' });
-        }
-    } catch (err) {
-        console.error(`likePost에서 ${err}`);
-        res.status(500).send({ stat: false, message: '예상치 못한 에러가 발생했습니다. 다음 번에는 잘 해보겠습니다.' });
+      if (likeIndex === -1) { // 좋아요를 누르지 않은 상태
+        await Model.findOneAndUpdate(
+          { ticket: ticket },
+          {
+            $addToSet: { likes: nowMyId },
+            $inc: { like: 1 },
+          }
+        );
+        res.send({stat:true, message : '좋아요가 올라갔어요'})
+      } else { // 이미 좋아요를 누른 상태
+        await Model.findOneAndUpdate(
+          { ticket: ticket },
+          {
+            $pull: { likes: nowMyId },
+            $inc: { like: -1 },
+          }
+        );
+        res.send({stat:true, message : '좋아요를 취소했어요'})
+      }
     }
+  } catch (err) {
+    console.error(`likePost에서 ${err}`);
+    res.status(500).send({ stat: false, message: '예상치 못한 에러가 발생했습니다. 다음 번에는 잘 해보겠습니다.' });
+  }
 };
 
 

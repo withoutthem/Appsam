@@ -120,6 +120,7 @@ const MainChats = ({ allData }) => {
         
         updatedChatData[idx].like = updatedChatData[idx].like + 1; // 좋아요 수 증가
         setChatData(updatedChatData);
+        console.log(response.data.message)
       })
       .catch((error) => {
         console.error(error);
