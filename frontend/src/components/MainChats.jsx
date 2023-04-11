@@ -363,10 +363,9 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
       snackBarTime.current = null;
     }, 2000);
   };
-
   return (
     <li className='chat'>
-      <div className='chatDate'></div>
+      <div className='chatDate'>{chatData.ticket}</div>
       <div className='chat_left'>
         <div className='profileWrap'>
           <img className='profileImg' src={profileIMG} alt='바인딩 해야함' />
