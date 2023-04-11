@@ -27,16 +27,21 @@ const getProductList = async (req, res, next) =>{
 
 // POST요청, 제품추가 : /api/product/add 
 const addProduct = async (req, res, next) => { //관리자용
-  const token = req.headers.cookie.substring(4);
   try{
-    if(!token){ //admin만 접근 허용
-      throw {stat:false, status:401, message:'Unauthorized'}
+    if (!req.headers.cookie || req.headers.cookie.length === 0) { // 쿠키가 아무것도 없는 경우
+      throw {stat: false, status: 401, message: 'No Cookie in Storage'};
     }
-    else{
-      const {id} = await checkJWT(token);
-      if(id !== 'admin'){
-        throw {stat:false, status:401, message:'you are not ADMIN'}
-      }
+
+    const jwtCookieRegex = /jwt=([^;]+)/;
+    const match = req.headers.cookie.match(jwtCookieRegex);
+    if (!match) { // jwt를 찾을 수 없는 경우
+      throw {stat: false, status: 401, message: 'No JWT in Cookie'};
+    }
+
+    const token = match[1];
+    const {id} = await checkJWT(token);
+    if (id !== 'admin') { //admin이 아닌 경우
+      throw {stat: false, status: 401, message: 'You are not ADMIN(UnAuthorized)'};
     }
 
     const {
@@ -156,19 +161,24 @@ const getOneProduct = async (req, res) =>{
 
 const patchOneProduct = async (req, res)=>{ //관리자용
   try{
-      const token = req.headers.cookie.substring(4);
-      if(!token){ //admin만 접근 허용
-        throw {stat:false, status:401, message:'Unauthorized'}
-      }
-      else{
-        const {id} = await checkJWT(token);
-        if(id !== 'admin'){
-          throw {stat:false, status:401, message:'you are not ADMIN'}
-        }
-      }
+    if (!req.headers.cookie || req.headers.cookie.length === 0) { // 쿠키가 아무것도 없는 경우
+      throw {stat: false, status: 401, message: 'No Cookie in Storage'};
+    }
+
+    const jwtCookieRegex = /jwt=([^;]+)/;
+    const match = req.headers.cookie.match(jwtCookieRegex);
+    if (!match) { // jwt를 찾을 수 없는 경우
+      throw {stat: false, status: 401, message: 'No JWT in Cookie'};
+    }
+
+    const token = match[1];
+    const {id} = await checkJWT(token);
+    if (id !== 'admin') { //admin이 아닌 경우
+      throw {stat: false, status: 401, message: 'You are not ADMIN(UnAuthorized)'};
+    }
 
     const product = await Product.findOne({productName : req.body.productName})
-    if(!product){
+    if(!product){// 제품이 없는 경우
       throw {status : 500, stat:false, message:'제품이 없는디요?'}
     }
     //필드 업데이트

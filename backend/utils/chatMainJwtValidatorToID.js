@@ -4,9 +4,21 @@ const {checkJWT} = require('./jwtController')
 const chatMainJwtValidatorToID = async (req) => { 
     try {
       if (req.headers.cookie && req.headers.cookie.length > 0) { //jwt가 있는 경우 검사
-        const nowJWT = req.headers.cookie.substring(4); // 쿠키에서 토큰 파싱
-        const result = await checkJWT(nowJWT); // 쿠키 검증
-        return result.id //나의 아이디를 리턴
+        const jwtCookieRegex = /jwt=([^;]+)/;
+        const match = req.headers.cookie.match(jwtCookieRegex);
+        if(match){
+          const nowJWT = match[1];
+          const result = await checkJWT(nowJWT);
+          if(result){
+            return result.id
+          }
+          else{
+            return {stat:false, message: 'jwt가 유효하지 않습니다.'}
+          }
+        }
+        else{
+          return {stat:false, message: 'jwt가 없습니다.'}
+        }
       } else { //jwt 없는 경우
         return {stat:false, message: 'jwt가 없습니다.'}
       }
