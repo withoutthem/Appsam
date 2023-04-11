@@ -52,7 +52,8 @@ const MainChats = ({ allData }) => {
   const [refresh, setRefresh] = useState(false);
   const MAX_LENGTH = 100; // 최대 글자수
   // 수정레이어팝업 state
-  const [isEditing, setIsEditing] = useState(false); 
+  const [isEditing, setIsEditing] = useState(false);
+  const [chatTicket, setChatTicket] = useState();
   // 글쓰기를 누르면 post 요청
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -130,10 +131,23 @@ const MainChats = ({ allData }) => {
       });
   };
 
-  // 글숴정버튼을 누르면 update 요청
-  const handleEdit = (id, text) => {
-    // 수정된 채팅 데이터를 서버로 전송하는 코드
-    setIsEditing(false);
+  // 글숴정버튼을 누르면 put 요청
+  const handleEdit = async (text) => {
+    try {
+      console.log(chatTicket, text);
+      const idx = chatData.findIndex((chat) => chat.ticket === chatTicket);
+      const data = { type: "chatApp", text: text, id: storeState.id };
+      const url = `/api/chatmain/app/update/${chatTicket}`;
+      const response = await axios.put(url, data);
+      const updatedChatData = [...chatData];
+      updatedChatData[idx].text = text;
+      setChatData(updatedChatData);
+      setIsEditing(false);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      setIsEditing(false);
+    }
   };
 
   // 최대 글자수를 초과하면 입력을 막음
@@ -257,7 +271,7 @@ const MainChats = ({ allData }) => {
   };
 
   return (
-    <> 
+    <>
       <div className={`phoneWrap ${allData.type}`}>
         <img className='background' src={allData.background} alt='' />
         <div className='chatsWrap'>
@@ -282,6 +296,7 @@ const MainChats = ({ allData }) => {
                     handleSendLike={handleSendLike}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
+                    setChatTicket={setChatTicket}
                   />
                 );
               })}
@@ -324,22 +339,16 @@ const MainChats = ({ allData }) => {
             </div>
           </form>
         </div>
-      
       </div>
       {isEditing && (
-        <EditModal
-          chatData={chatData}
-          handleEdit={handleEdit}
-          setIsEditing={setIsEditing}
-        />
+        <EditModal chatData={chatData} handleEdit={handleEdit} setIsEditing={setIsEditing} />
       )}
     </>
-    
   );
 };
 
 //개별 chat
-const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike,setIsEditing}) => {
+const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTicket }) => {
   const dispatch = useDispatch();
 
   const snackBarTime = useRef(null);
@@ -369,7 +378,12 @@ const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike,set
         </div>
       </div>
       <div className='chat_right'>
-      <button onClick={() => setIsEditing(true)}>
+        <button
+          onClick={() => {
+            setIsEditing(true);
+            setChatTicket(chatData.ticket);
+          }}
+        >
           <img src={editIcon} alt='' />
         </button>
         <button
@@ -392,27 +406,32 @@ const Chat = ({ chatData, message, currentTime, handleDelete, handleSendLike,set
   );
 };
 
-const EditModal = ({ chatData, handleEdit }) => {
+const EditModal = ({ chatData, handleEdit, setIsEditing }) => {
   const [text, setText] = useState(chatData.text);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleEdit(chatData._id, text);
+    handleEdit(text);
   };
 
   const handleCancel = () => {
-    handleEdit(false);
+    setIsEditing(false);
   };
 
   return (
-    <div className="edit-modal">
-      <form onSubmit={handleSubmit}>
-        <textarea value={text} onChange={(e) => setText(e.target.value)} />
-        <div className="edit-modal-buttons">
-          <button type="submit">수정</button>
-          <button type="button" onClick={handleCancel}>
-            취소
-          </button>
+    <div className='edit-modal'>
+      <form>
+        <h2>수정하기</h2>
+        <div className='inner'>
+          <textarea value={text} onChange={(e) => setText(e.target.value)} />
+          <div className='edit-modal-buttons'>
+            <button type='submit' className='submit_btn' onClick={handleSubmit}>
+              수정
+            </button>
+            <button type='button' onClick={handleCancel} className='cancel_btn'>
+              취소
+            </button>
+          </div>
         </div>
       </form>
     </div>

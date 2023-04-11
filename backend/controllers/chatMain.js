@@ -228,8 +228,10 @@ const chatUpdate = async (req, res, next) => {
                         post.aors = userData.aors;
                         await post.save();
                         res.status(200).send({ stat: true, message: '채팅 수정 완료되었습니다.' });
+                       
                     } else {
                         res.status(403).send({ stat: false, message: '채팅 수정 권한이 없습니다.' });
+                        console.log(post.id,nowMyId )
                     }
                 } else if (type === 'sam' && req.body.type === 'chatSam') {
                     const post = await ChatSam.findOne({ ticket: ticket });
@@ -251,7 +253,7 @@ const chatUpdate = async (req, res, next) => {
             }
 
         }
-    } catch (err) {
+    } catch (err) { 
         logEvents(`chatUpdate에서 ${err}\t${req.url}\t${req.headers.origin}\t ${req.ip}`, "errLog.log");
         res.status(500).send({ stat: false, message: '예상치도 못한 에러가 발생했는데요. 다음번에는 좀 잘해보겠습니다.' });
     }
