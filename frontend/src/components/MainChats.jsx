@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeSnackBar, openSnackBar } from "../store";
 import axios from "axios";
 import debounce from "lodash.debounce";
-import { openPop } from "../store";
 import deleteIcon from "../assets/images/icons/delete_24.png";
 import editIcon from "../assets/images/icons/edit_24.png";
 import like_no from "../assets/images/icons/like_no.png";
@@ -297,6 +296,7 @@ const MainChats = ({ allData }) => {
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
                     setChatTicket={setChatTicket}
+                    storeState={storeState}
                   />
                 );
               })}
@@ -348,7 +348,7 @@ const MainChats = ({ allData }) => {
 };
 
 //개별 chat
-const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTicket }) => {
+const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTicket,storeState }) => {
   const dispatch = useDispatch();
 
   const snackBarTime = useRef(null);
@@ -363,9 +363,14 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
       snackBarTime.current = null;
     }, 2000);
   };
+  // chatData.createdAt 문자열을 Date 객체로 변환하고, KST로 변환
+  const date = new Date(chatData.createdAt);
+  date.setHours(date.getHours() + 9); // UTC 시간에 9시간을 더해서 KST로 변환
+  // 날짜 객체를 원하는 형식의 문자열로 변환
+  const dateString = date.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(/\. /g, "-");
   return (
     <li className='chat'>
-      <div className='chatDate'>{chatData.ticket}</div>
+      <div className='chatDate'>{dateString}</div>
       <div className='chat_left'>
         <div className='profileWrap'>
           <img className='profileImg' src={profileIMG} alt='바인딩 해야함' />
@@ -377,6 +382,7 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
         </div>
       </div>
       <div className='chat_right'>
+        {storeState.id === chatData.id ? 
         <button
           onClick={() => {
             setIsEditing(true);
@@ -384,14 +390,16 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
           }}
         >
           <img src={editIcon} alt='' />
-        </button>
-        <button
-          onClick={() => {
-            handleDelete(chatData.ticket);
-          }}
-        >
-          <img src={deleteIcon} alt='' />
-        </button>
+        </button> : null}
+        {storeState.id === chatData.id ?
+         <button
+         onClick={() => {
+           handleDelete(chatData.ticket);
+         }}
+       >
+         <img src={deleteIcon} alt='' />
+       </button> : null  
+      }
         <button
           onClick={(e) => {
             handleSendLike(chatData.ticket);
@@ -407,12 +415,10 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
 
 const EditModal = ({ chatData, handleEdit, setIsEditing }) => {
   const [text, setText] = useState(chatData.text);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     handleEdit(text);
   };
-
   const handleCancel = () => {
     setIsEditing(false);
   };
