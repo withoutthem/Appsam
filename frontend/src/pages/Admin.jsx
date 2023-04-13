@@ -14,6 +14,7 @@ const Admin = () =>{
       alert('admin 로그인을 해야합니다.');
       navigate('/')
     }
+    console.log('Jenkins CI pipeline 구축을 위한 commit 테스트')
   },[storeState.user.id, navigate])
 
   const initialProduct = //제품정보 초기상태
@@ -49,13 +50,12 @@ const Admin = () =>{
   //제품하나 불러오기 name state
   const [oneProductName, setOneProductName] = useState('')
 
-  const inputChange = useCallback((e, key) => { //1뎁스 change
-    setProductInfo(state => {
-      let tempInfo = { ...state };
-      tempInfo[key] = e; //스펙의 값
-      return tempInfo;
-    });
-  }, [setProductInfo]);
+  const inputChange = useCallback((e, key) => {
+    setProductInfo(state => ({
+      ...state,
+      [key]: e
+    }));
+  }, []);
 
   const specChange = useCallback((e, key) => { //spec depth 값 change
     setProductInfo(state => {
