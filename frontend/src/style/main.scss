@@ -142,8 +142,8 @@ button.badge:hover{background:#fff; color:#101010;}
 .phoneWrap .chatsWrap .tabMenu button.active{font-weight:700; color:#7D31DD; border-bottom:2px solid #7D31DD}
 .phoneWrap .chatsWrap .chatsList{margin-top:5px; overflow-y: scroll; flex:1; position: relative;}
 .phoneWrap .chatsWrap .chatsList li.chat{ position:relative; display:flex; margin:35px 0px}
-.phoneWrap .chatsWrap .chatsList li.chat .chatDate{position:absolute; top:-16px; right:16px; font-size:9px; text-align: right;}
-.phoneWrap .chatsWrap .chatsList li.chat .chat_left{height:117px; background:#fff; border-radius:10px; padding:16px;}
+.phoneWrap .chatsWrap .chatsList li.chat .chatDate{position:absolute; top:-16px; right:20px; font-size:9px; text-align: right;}
+.phoneWrap .chatsWrap .chatsList li.chat .chat_left{flex:1; height:117px; background:#fff; border-radius:10px; padding:16px;}
 .phoneWrap .chatsWrap .chatsList li.chat .chat_right{margin-right:10px;}
 .phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap{@include flexAlign(); margin-bottom:14px;}
 .phoneWrap .chatsWrap .chatsList li.chat .chat_left .profileWrap .profileImg{width:25px; height:25px; border-radius:50%;}

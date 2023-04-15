@@ -53,101 +53,121 @@ const MainChats = ({ allData }) => {
   // 수정레이어팝업 state
   const [isEditing, setIsEditing] = useState(false);
   const [chatTicket, setChatTicket] = useState();
+
   // 글쓰기를 누르면 post 요청
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    const data = { type: "chatApp", text: message, id: storeState.id };
-    console.log("전송 데이터:", data); // 추가
-    const url = "/api/chatmain/app/post";
-    axios
-      .post(url, data)
-      .then((response) => {
-        const newData = response.data;
-        console.log(newData);
-        setMessage("");
-        setRefresh(!refresh);
-        if (activeIndex !== 1) {
-          setActiveIndex(1);
+  const handleSendMessage = async (e) => {
+      e.preventDefault(); // 이벤트의 기본 동작을 막음
+      const data = { type: "chatApp", text: message, id: storeState.id }; // 전송할 데이터 생성
+      console.log("전송 데이터:", data);
+      const url = "/api/chatmain/app/post"; // 요청을 보낼 URL
+      try {
+        const response = await axios.post(url, data); // POST 요청 전송, 응답 받기
+        const newData = response.data; // 응답 데이터 저장
+        setMessage(""); // 입력창 초기화
+        setRefresh(!refresh); // 화면 새로고침
+      if (activeIndex !== 1) { // 채팅 탭이 활성화되어 있지 않으면
+        setActiveIndex(1); // 채팅 탭을 활성화
         } else {
-          setRefresh(!refresh);
+        setRefresh(!refresh); // 채팅 탭이 이미 활성화된 경우, 화면 새로고침
         }
+        // chatData 배열에 새로운 데이터를 추가
         setChatData((prev) =>
-          Array.isArray(prev)
-            ? [...prev, ...(Array.isArray(newData) ? newData : [newData])]
-            : newData
-        );
-      })
-      .catch((error) => {
-        console.error(error);
-        console.log(error);
-        alert("메시지를 보내는 동안 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-      });
-  };
+        Array.isArray(prev) ? [...prev, ...(Array.isArray(newData) ? newData : [newData])] : newData);
+      } catch (error) { // 오류 발생 시
+      console.error(error);
+      alert("메시지를 보내는 동안 오류가 발생했습니다. 잠시 후 다시 시도해주세요."); // 사용자에게 알림
+      }
+    };
+
+  // 스크롤을 내리면 get 요청
+  const getPosts = useCallback(async () => {
+    if (preventRef.current) {
+    setLoad(false); // 이미 더 이상 데이터를 가져오지 않는 경우 로딩 중인 것을 표시 X
+    return;
+    }
+    setLoad(true);
+    const url = `/api/chatmain/app/recent?start=${page}&count=4`; // 가져올 데이터 범위 지정
+    try {
+      const res = await axios.get(url);
+    if (res.data.end) { // 가져올 데이터가 더 이상 없는 경우, preventRef.current를 true로 설정
+      endRef.current = true;
+    } else {
+    if (res.data.stat) { // 가져온 데이터가 존재하는 경우, 기존 데이터 배열에 새로운 데이터를 추가
+      const newData = res.data.data;
+      setChatData((prev) =>
+      Array.isArray(prev) ? [...prev, ...(Array.isArray(newData) ? newData : [newData])] : newData);
+      preventRef.current = true; // 이후의 get 요청 X
+    setNoData(false); // 더 이상 데이터가 없는 것이 아님을 나타냄
+    } else { // 가져온 데이터가 없는 경우, 더 이상 데이터가 없다는 메시지를 표시
+      setNoData(true);
+      obsRef.current.textContent = "더 이상 데이터가 없습니다.";
+    }
+    }
+    } catch (error) { // 에러가 발생한 경우 콘솔에 로그를 출력
+      console.error(error);
+    } finally { // 로딩 중 표시를 해제
+      setLoad(false);
+    }
+    }, [page]);
 
   // 글 삭제버튼을 누르면 delete 요청
-  const handleDelete = (ticket) => {
-    const idx = chatData.findIndex((chat) => chat.ticket === ticket);
-    const data = { type: "chatApp", id: storeState.id };
-    const url = `/api/chatmain/app/delete/${ticket}`;
-    axios
-      .delete(url, { data: data })
-      .then((response) => {
-        const newData = response.data;
-        console.log(newData);
-        // 삭제한 데이터를 chatData 배열에서 제거
-        const updatedChatData = [...chatData];
-        updatedChatData.splice(idx, 1);
-        setChatData(updatedChatData);
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("삭제할 권한이 없습니다.");
-      });
+const handleDelete = async (ticket) => {
+  const idx = chatData.findIndex((chat) => chat.ticket === ticket);  // 선택한 게시물의 인덱스 찾기
+  const data = { type: "chatApp", id: storeState.id }; // 요청 데이터 설정
+  const url = `/api/chatmain/app/delete/${ticket}`; // 요청 url 설정 
+  try {
+  const response = await axios.delete(url, { data: data });  // delete 요청 보내기
+  const newData = response.data;
+  const updatedChatData = [...chatData]; // chatData 배열에서 선택한 게시물 삭제하기
+  updatedChatData.splice(idx, 1);
+  setChatData(updatedChatData);
+  } catch (error) {
+  console.error(error);
+  alert("삭제할 권한이 없습니다."); // 권한이 없는 경우 알림창 띄우기
+  }
   };
 
-  // 좋아요버튼을 누르면 patch 요청
-  const handleSendLike = (ticket) => {
-    const idx = chatData.findIndex((chat) => chat.ticket === ticket);
-    const data = { type: "chatApp", id: storeState.id };
-    const url = `/api/chatmain/app/like/${ticket}`;
-    axios
-      .patch(url, { data: data })
-      .then((response) => {
-        const newData = response.data;
-        const updatedChatData = [...chatData];
-        if (newData.stat === false) {
-          updatedChatData[idx].like = updatedChatData[idx].like - 1;
-          updatedChatData[idx].isLike = false;
-          setChatData(updatedChatData);
-        } else {
-          updatedChatData[idx].like = updatedChatData[idx].like + 1; // 좋아요 수 증가
-          updatedChatData[idx].isLike = true;
-          setChatData(updatedChatData);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  // 글숴정버튼을 누르면 put 요청
-  const handleEdit = async (text) => {
+  // 좋아요 버튼을 누르면 해당 채팅방에 대한 좋아요를 서버로 보내는 함수
+const handleSendLike = async (ticket) => {
+    
+    const idx = chatData.findIndex((chat) => chat.ticket === ticket); // 현재 클릭된 채팅방의 인덱스를 찾음
+    const data = { type: "chatApp", id: storeState.id };  // 서버로 보낼 데이터 생성 
+    const url = `/api/chatmain/app/like/${ticket}`; // 요청할 API URL
     try {
-      console.log(chatTicket, text);
-      const idx = chatData.findIndex((chat) => chat.ticket === chatTicket);
-      const data = { type: "chatApp", text: text, id: storeState.id };
-      const url = `/api/chatmain/app/update/${chatTicket}`;
-      const response = await axios.put(url, data);
+      const response = await axios.patch(url, { data: data }); // API 요청을 async/await 구문으로 변경
+      const newData = response.data;
       const updatedChatData = [...chatData];
-      updatedChatData[idx].text = text;
+    if (newData.stat === false) { // 새로운 좋아요 상태에 따라 채팅방 데이터 갱신
+      updatedChatData[idx].like = updatedChatData[idx].like - 1;
+      updatedChatData[idx].isLike = false;
       setChatData(updatedChatData);
-      setIsEditing(false);
-      console.log(response);
+    } else {
+      updatedChatData[idx].like = updatedChatData[idx].like + 1;
+      updatedChatData[idx].isLike = true;
+      setChatData(updatedChatData);
+    }
     } catch (error) {
       console.error(error);
-      setIsEditing(false);
     }
-  };
+};
+
+  // 글수정버튼을 누르면 put 요청
+const handleEdit = async (text) => {
+  try {
+    
+    const idx = chatData.findIndex((chat) => chat.ticket === chatTicket); // 수정할 게시물의 인덱스를 찾음
+    const data = { type: "chatApp", text: text, id: storeState.id };   // 수정할 데이터와 함께 요청 보냄
+    const url = `/api/chatmain/app/update/${chatTicket}`;
+    const response = await axios.put(url, data);
+    const updatedChatData = [...chatData]; // 수정된 데이터를 chatData 배열에 반영
+    updatedChatData[idx].text = text;
+    setChatData(updatedChatData);
+    setIsEditing(false); // 팝업 닫기
+  } catch (error) {
+    console.error(error);
+    setIsEditing(false); // 팝업 닫기
+  }
+};
 
   // 최대 글자수를 초과하면 입력을 막음
   const handleTextareaChange = (event) => {
@@ -166,46 +186,6 @@ const MainChats = ({ allData }) => {
       setPage((prev) => prev + 4);
     }
   };
-
-  //get 통신으로 데이터 4개씩 가져오기
-  const getPosts = useCallback(() => {
-    //page추가
-    if (preventRef.current) {
-      setLoad(false);
-      return;
-    }
-    setLoad(true);
-    const url = `/api/chatmain/app/recent?start=${page}&count=4`;
-    axios
-      .get(url)
-      .then((res) => {
-        if (res.data.end) {
-          endRef.current = true;
-          console.log(res.data);
-        } else {
-          if (res.data.stat) {
-            const newData = res.data.data;
-            setChatData((prev) =>
-              Array.isArray(prev)
-                ? [...prev, ...(Array.isArray(newData) ? newData : [newData])]
-                : newData
-            );
-            preventRef.current = true;
-            setNoData(false);
-          } else {
-            setNoData(true);
-            obsRef.current.textContent = "더 이상 데이터가 없습니다.";
-          }
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-      })
-      .finally(() => {
-        setLoad(false);
-      });
-  }, [page]);
-
   // 무한스크롤 활성화
   const debouncedGetPosts = useCallback(
     debounce(() => {
