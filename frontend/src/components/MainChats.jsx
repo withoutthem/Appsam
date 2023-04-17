@@ -345,7 +345,7 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
   };
   // chatData.createdAt 문자열을 Date 객체로 변환하고, KST로 변환
   const date = new Date(chatData.createdAt);
-  date.setHours(date.getHours() + 9); // UTC 시간에 9시간을 더해서 KST로 변환
+  date.setHours(date.getHours()); // UTC 시간에 9시간을 더해서 KST로 변환
   // 날짜 객체를 원하는 형식의 문자열로 변환
   const dateString = date.toLocaleString("ko-KR", { timeZone: "Asia/Seoul", hour12: false, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(/\. /g, "-");
   return (
