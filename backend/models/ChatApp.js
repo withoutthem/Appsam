@@ -48,16 +48,13 @@ const chatAppSchema = new Schema({
 },
 {
     timestamps: true, // 타임스탬프를 추가할 수 있다.
-    skipTicketIncrement: false, // 티켓 번호 증가를 건너뛰는 옵션을 추가
 }, 
 );
 
 
 chatAppSchema.pre('save', async function (next) {
-  try {
-    if (this.schema.options.skipTicketIncrement) { // 옵션을 확인하여 티켓 번호를 증가시키지 않음
-      next();
-    } else {
+  if (this.isNew) { // 새로운 문서 저장인 경우에만 실행
+    try {
       const counter = await Counter.findByIdAndUpdate(
         'ticketNumsApp',
         { $inc: { seq: 1 } },
@@ -66,10 +63,12 @@ chatAppSchema.pre('save', async function (next) {
 
       this.ticket = counter.seq;
       next();
+    } catch (error) {
+      console.error('Error in chatAppSchema pre save middleware:', error);
+      next(error);
     }
-  } catch (error) {
-    console.error('Error in chatAppSchema pre save middleware:', error);
-    next(error);
+  } else {
+    next();
   }
 });
 

@@ -226,7 +226,6 @@ const chatUpdate = async (req, res, next) => {
                         post.text = req.body.text;
                         post.profile_img = userData.profile_img;
                         post.aors = userData.aors;
-                        post.schema.options.skipTicketIncrement = true;
                         await post.save();
                         res.status(200).send({ stat: true, message: '채팅 수정 완료되었습니다.' });
                        
@@ -241,7 +240,6 @@ const chatUpdate = async (req, res, next) => {
                         post.text = req.body.text;
                         post.profile_img = userData.profile_img;
                         post.aors = userData.aors;
-                        post.schema.options.skipTicketIncrement = true;
                         await post.save();
                         res.status(200).send({ stat: true, message: '채팅 수정 완료되었습니다.' });
                     } else {
