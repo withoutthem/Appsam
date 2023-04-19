@@ -1,19 +1,25 @@
 const app = require('./app');
-const http = require('http');
-const mongooseConnect = require('./db');
 const mongoose = require('mongoose');
-const { logEvents, logger } = require('./middleware/logger')
-const server = http.createServer(app);
+const mongooseConnect = require('./db');
+const { logEvents } = require('./middleware/logger');
 
-mongooseConnect(); //db 연결 호출
+const port = process.env.PORT || 3000;
 
-mongoose.connection.once('open', ()=>{ //mongoose eventListener
-    server.listen(process.env.PORT, ()=>{
-        console.log('server.js에서'+process.env.PORT)
-    })
-})
+const startServer = () => {
+  app.listen(port, () => {
+    console.log(`서버가 ${port}에서 실행 중`);
+  });
+};
 
-mongoose.connection.on('error', err => { //mongoose Error log
-  console.log(err);
-  logEvents(`${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`, 'mongoErrLog.log');
-})
+const connectAndStart = async ()=>{
+  try{
+    await mongooseConnect();
+    startServer();
+  }
+  catch(error){
+    console.log('MongoDB 연결 실패:', error);
+    logEvents(`${error.name}: ${error.message}`, 'mongoErrLog.log');
+  }
+}
+
+connectAndStart();
