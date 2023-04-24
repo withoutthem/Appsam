@@ -44,7 +44,6 @@ const MainChats = ({ allData }) => {
     const data = { type: "chatApp", text: message, id: storeState.id }; // 전송할 데이터 생성
     const url = "/api/chatmain/app/post"; // 요청을 보낼 URL
     try {
-      console.log(data)
       const result = await axios.post(url, data); // POST 요청 전송, 응답 받기
       const newData = result.data; // 응답 데이터 저장
       setMessage(""); // 입력창 초기화
@@ -105,7 +104,6 @@ const MainChats = ({ allData }) => {
     const url = `/api/chatmain/app/delete/${ticket}`; // 요청 url 설정 
     try {
       const result = await axios.delete(url, { data: data });  // delete 요청 보내기
-      const newData = result.data;
       const updatedChatData = [...chatData]; // chatData 배열에서 선택한 게시물 삭제하기
       updatedChatData.splice(idx, 1);
       setChatData(updatedChatData);
@@ -156,6 +154,7 @@ const MainChats = ({ allData }) => {
       updatedChatData[idx].text = text;
       setChatData(updatedChatData);
       setIsEditing(false); // 팝업 닫기
+      
     } 
     catch (error) {
       console.error(error);
@@ -295,7 +294,7 @@ const MainChats = ({ allData }) => {
           </ul>
           {load && <div className='spinner'></div>}
           {/* form onClick 시 로그인 안되있으면 로그인창으로 이동 */}
-          <form className='chatInputForm' onSubmit={handleSendMessage}>
+          <form className='chatInputForm' onSubmit={(e)=>{handleSendMessage(e); setTimeout(()=>{snackBar(e,'글 등록이 완료되었습니다.')},1000)}}>
             <div className='inputWrap'>
               <div className='profileWrap'>
                 {storeState.id && <img className='profileImg' src={profileIMG} alt='바인딩 해야함' /> }
@@ -319,7 +318,7 @@ const MainChats = ({ allData }) => {
           </form>
         </div>
       </div>
-      {isEditing && <EditModal chatData={chatData} handleEdit={handleEdit} setIsEditing={setIsEditing} /> }
+      {isEditing && <EditModal chatData={chatData} handleEdit={handleEdit} setIsEditing={setIsEditing} snackBar={snackBar} /> }
     </>
   );
 };
@@ -368,7 +367,7 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
         }
         {
           storeState.id === chatData.id &&
-          <button onClick={() =>{handleDelete(chatData.ticket);}}>
+          <button onClick={(e) =>{handleDelete(chatData.ticket); snackBar(e,'삭제가 완료되었습니다.')}}>
             <img src={deleteIcon} alt='' />
           </button> 
         }
@@ -381,7 +380,7 @@ const Chat = ({ chatData, handleDelete, handleSendLike, setIsEditing, setChatTic
   );
 };
 
-const EditModal = ({ chatData, handleEdit, setIsEditing }) => {
+const EditModal = ({ chatData, handleEdit, setIsEditing,snackBar }) => {
   const [text, setText] = useState(chatData.text);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -398,7 +397,7 @@ const EditModal = ({ chatData, handleEdit, setIsEditing }) => {
         <div className='inner'>
           <textarea value={text} onChange={(e) => setText(e.target.value)} />
           <div className='edit-modal-buttons'>
-            <button type='submit' className='submit_btn' onClick={handleSubmit}>
+            <button type='submit' className='submit_btn' onClick={(e)=>{handleSubmit(e); setTimeout(()=>{snackBar(e,'수정이 완료되었습니다.')},900);}}>
               수정
             </button>
             <button type='button' onClick={handleCancel} className='cancel_btn'>
